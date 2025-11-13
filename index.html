@@ -12,6 +12,14 @@
       margin: 0; /* 웹페이지 기본 여백 제거 */
     }
 
+    /* **2. 새로 추가된 컨테이너 (가운데 정렬) CSS** */
+    .container {
+        max-width: 1000px; /* 웹사이트 내용의 최대 너비 */
+        margin: 0 auto; /* 가운데 정렬 핵심 코드 */
+        background-color: white; /* 배경색을 흰색으로 설정 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    }
+
     /* 2. 네비게이션 바 (메뉴) 디자인 */
     .navbar {
       overflow: hidden;
@@ -62,22 +70,27 @@
   
 </head>
 <body>
+  <div class="container">
+    
   <h1>생물기상연구실</h1>
   <div class="navbar">
-    <a href="index.html">**JapanFlux 정보**</a>
+    <a href="index.html">**생물기상연구실 정보**</a>
     <a href="#조직">조직</a>
-    <a href="#이벤트">이벤트 정보</a>
-    <a href="#관측사이트">관측 사이트</a>
-    <a href="#소프트웨어">소프트웨어</a>
+    <a href="#관측사이트">관측 지점 정보</a>
+    <a href="#관측 장비">관측 장비</a>
     <a href="#간행물">간행물</a>
-    <a href="#링크">링크</a>
+    <a href="#자료 다운로드">자료 다운로드</a>
   </div>
   
   
   <img src="강릉원주대학교.jpeg" alt="웹사이트 메인 이미지" style="width:100%;">
+
+  <p>이 사이트는 </p>
+
   
-  <p>2025.11.12 기온 자료.</p>
+  <p>2025.11.12 기온 자료</p>
   <a href="OBS_ASOS_TIM_20251114000320.csv" download="20251112_기온.csv">2025.11.12 기온</a>
-  
+    
+ </div>
 </body>
 </html>
