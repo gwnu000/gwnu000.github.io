@@ -2,10 +2,79 @@
 <html>
 <head>
   <title>Flux다운로드</title>
+
+  <style>
+    /* 1. 전체 페이지 기본 디자인 (글꼴, 배경색 등) */
+    body {
+      background-color: #f8f8f8; /* 배경색: 밝은 회색 */
+      color: #333333; /* 기본 글자색: 어두운 회색 */
+      font-family: "Malgun Gothic", "맑은 고딕", sans-serif; /* 글꼴 지정 */
+      margin: 0; /* 웹페이지 기본 여백 제거 */
+    }
+
+    /* 2. 네비게이션 바 (메뉴) 디자인 */
+    .navbar {
+      overflow: hidden;
+      background-color: #337ab7; /* 메뉴 배경색: 파란색 계열 */
+    }
+
+    /* 3. 메뉴 링크 (a 태그) 디자인 */
+    .navbar a {
+      float: left; /* 메뉴 항목을 가로로 배치 */
+      display: block;
+      color: white; /* 글자색 */
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none; /* 밑줄 제거 */
+    }
+
+    /* 4. 메뉴 호버 디자인 (마우스 올렸을 때) */
+    .navbar a:hover {
+      background-color: #5bc0de; /* 배경색 변경 */
+      color: black;
+    }
+
+    /* 5. 제목 (H1) 디자인 및 여백 */
+    h1 {
+      color: #337ab7; /* 제목 색상 */
+      padding: 20px 20px 10px 20px; /* 상하좌우 여백 */
+      margin-top: 0;
+    }
+
+    /* 6. 본문 내용 (p, a 태그) 왼쪽 여백 추가 */
+    p, a {
+      padding-left: 20px;
+      /* 다운로드 링크가 새 줄에 표시되도록 설정 */
+      display: block; 
+      text-decoration: none;
+      color: #007bff;
+    }
+    
+    /* 7. 이미지 스타일 조정 */
+    img {
+        max-width: 800px; /* 이미지 최대 너비 제한 */
+        width: 100%; 
+        height: auto;
+        display: block; 
+        margin: 0 0 20px 20px; /* 이미지 아래 여백 */
+    }
+  </style>
+  
 </head>
 <body>
   <h1>생물기상연구실</h1>
-
+  <div class="navbar">
+    <a href="index.html">**JapanFlux 정보**</a>
+    <a href="#조직">조직</a>
+    <a href="#이벤트">이벤트 정보</a>
+    <a href="#관측사이트">관측 사이트</a>
+    <a href="#소프트웨어">소프트웨어</a>
+    <a href="#간행물">간행물</a>
+    <a href="#링크">링크</a>
+  </div>
+  
+  
+  <img src="강릉원주대학교.jpeg" alt="웹사이트 메인 이미지" style="width:100%;">
   
   <p>2025.11.12 기온 자료.</p>
   <a href="OBS_ASOS_TIM_20251114000320.csv" download="20251112_기온.csv">2025.11.12 기온</a>
