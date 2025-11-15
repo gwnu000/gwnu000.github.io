@@ -58,9 +58,10 @@
       font-weight: bold;
       font-size: 14px;
     }
-    /* Sites item (4번째 항목)을 활성 상태로 설정 */
-    .navbar-item:nth-child(4) > a {
-        background-color: var(--light-blue); 
+    
+    /* 현재 활성화된 메뉴 항목 스타일 (Sites) */
+    .navbar-item.active > a {
+        background-color: var(--light-blue);
         color: black;
     }
     .navbar-item:hover > a { /* 일반 호버 스타일 */
@@ -68,7 +69,6 @@
         color: black;
     }
     
-    /* 드롭다운 메뉴 스타일 */
     .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
     
@@ -78,8 +78,7 @@
         background-color: #f1f1f1;
         color: var(--main-blue);
     }
-    /* 중요: Sites 메뉴가 활성화되었을 때, 다른 메뉴 호버 스타일이 적용되지 않도록 재설정 */
-    .navbar-item:nth-child(4):hover > a {
+    .navbar-item.active:hover > a {
         background-color: var(--light-blue);
         color: black;
     }
@@ -97,7 +96,7 @@
         flex: 1;
         min-width: 250px;
         font-size: 14px;
-        padding-left: 20px; /* 사이드바와 메인 콘텐츠 사이 간격 확보 */
+        padding-left: 20px; 
         border-left: 1px solid #eee;
     }
     
@@ -177,7 +176,16 @@
           </div>
           
           <div class="navbar-item"><a href="#community-page">Community</a></div>
-          <div class="navbar-item"><a href="sites_info.html">Sites</a></div>
+          
+          <!-- Sites (Dropdown Menu Item) - *UPDATED & ACTIVE* -->
+          <div class="navbar-item active">
+              <a href="#sites-menu">Sites</a>
+              <div class="dropdown-content">
+                  <a href="sites_info.html">Site Summary</a>
+                  <a href="site_list.html">Site List</a>
+              </div>
+          </div>
+          
           <div class="navbar-item"><a href="#education-page">Education</a></div>
           <div class="navbar-item"><a href="#data-page">Data</a></div>
           <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
