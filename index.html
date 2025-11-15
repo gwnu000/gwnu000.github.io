@@ -1,98 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Flux다운로드</title>
-
+  <title>KoFlux</title>
+  
   <style>
-    /* 1. 전체 페이지 기본 디자인 (글꼴, 배경색 등) */
+    /* 1. 디자인 테마 색상 정의 */
+    :root {
+      --main-blue: rgba(51, 85, 127, 1); /* FLUXNET 네비게이션바 배경색 */
+      --light-blue: #5bc0de; /* 호버 시 밝은 파란색 */
+      --page-background: #f8f8f8; /* 페이지 전체 배경색 */
+      --link-color: #337ab7; /* 본문 링크 색상 */
+      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+    }
+
+    /* 2. 전체 페이지 기본 디자인 및 가운데 정렬 컨테이너 설정 */
     body {
-      background-color: #f8f8f8; /* 배경색: 밝은 회색 */
-      color: #333333; /* 기본 글자색: 어두운 회색 */
-      font-family: "Malgun Gothic", "맑은 고딕", sans-serif; /* 글꼴 지정 */
-      margin: 0; /* 웹페이지 기본 여백 제거 */
+      background-color: var(--page-background); 
+      color: #333333;
+      font-family: var(--font-family);
+      margin: 0;
     }
 
-    /* **2. 새로 추가된 컨테이너 (가운데 정렬) CSS** */
+    /* 가운데 정렬 컨테이너 */
     .container {
-        max-width: 1000px; /* 웹사이트 내용의 최대 너비 */
-        margin: 0 auto; /* 가운데 정렬 핵심 코드 */
-        background-color: white; /* 배경색을 흰색으로 설정 */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+      max-width: 1000px;
+      margin: 0 auto; /* 중앙 정렬 핵심 */
+      background-color: white; 
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+      /* container가 body의 margin을 상속하지 않도록 padding-top을 추가 */
+      padding-top: 1px;
     }
 
-    /* 2. 네비게이션 바 (메뉴) 디자인 */
+    /* 3. 제목 (H1) 디자인 및 여백 */
+    h1 {
+      color: var(--main-blue);
+      padding: 20px 20px 10px 20px;
+      margin-top: 0;
+      border-bottom: 2px solid #eeeeee;
+    }
+
+    /* 4. 본문 내용 (p, a 태그) 여백 및 스타일 */
+    .content-section p, .content-section a {
+      padding-left: 20px;
+      display: block; 
+      text-decoration: none;
+      color: var(--link-color);
+      margin-bottom: 10px;
+    }
+    
+    /* 5. 이미지 스타일 조정 */
+    .content-section img {
+        max-width: 960px; /* 컨테이너 최대 너비에 맞춤 */
+        width: calc(100% - 40px); /* 좌우 padding 20px씩 제외 */
+        height: auto;
+        display: block; 
+        margin: 0 0 20px 20px;
+    }
+
+    /* ***** 내비게이션 바 (메뉴) 스타일 ***** */
+    
     .navbar {
-      overflow: hidden;
-      background-color: #337ab7; /* 메뉴 배경색: 파란색 계열 */
+      background-color: var(--main-blue); 
+      overflow: visible; /* 드롭다운 메뉴가 나타나도록 overflow를 visible로 변경 */
+      min-height: 50px;
+      padding: 0 20px;
     }
 
-    /* 3. 메뉴 링크 (a 태그) 디자인 */
-    .navbar a {
-      float: left; /* 메뉴 항목을 가로로 배치 */
+    /* 메뉴 항목을 담는 div (주요 메뉴 항목) */
+    .navbar-item {
+      float: left;
+      position: relative; /* 드롭다운 메뉴 위치 지정을 위해 필요 */
+    }
+
+    /* 메뉴 링크 (Home, About 등) */
+    .navbar-item a {
       display: block;
-      color: white; /* 글자색 */
+      color: white;
       text-align: center;
-      padding: 14px 20px;
-      text-decoration: none; /* 밑줄 제거 */
+      padding: 15px 18px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      /* FLUXNET 메뉴처럼 왼쪽 정렬을 위해 float 제거 */
     }
 
-    /* 4. 메뉴 호버 디자인 (마우스 올렸을 때) */
-    .navbar a:hover {
-      background-color: #5bc0de; /* 배경색 변경 */
+    /* 메뉴 호버 디자인 */
+    .navbar-item:hover > a {
+      background-color: var(--light-blue);
       color: black;
     }
 
-    /* 5. 제목 (H1) 디자인 및 여백 */
-    h1 {
-      color: #337ab7; /* 제목 색상 */
-      padding: 20px 20px 10px 20px; /* 상하좌우 여백 */
-      margin-top: 0;
-      border-bottom: 2px solid #eeeeee; /* 아래쪽에 연한 구분선 추가 */
-      padding-bottom: 10px;
+    /* ***** 드롭다운 메뉴 스타일 ***** */
+
+    /* 드롭다운 내용 (세부 항목) */
+    .dropdown-content {
+      display: none; /* 평소에는 숨김 */
+      position: absolute;
+      background-color: white; /* 드롭다운 배경색 */
+      min-width: 200px; /* 너비 지정 */
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
+      left: 0; /* 부모 항목의 왼쪽 아래에 위치 */
+      top: 100%; /* 부모 항목 바로 아래에 위치 */
     }
 
-    /* 6. 본문 내용 (p, a 태그) 왼쪽 여백 추가 */
-    p, a {
-      padding-left: 20px;
-      /* 다운로드 링크가 새 줄에 표시되도록 설정 */
-      display: block; 
+    /* 드롭다운 링크 스타일 */
+    .dropdown-content a {
+      color: #333; /* 글자색 */
+      padding: 12px 16px;
       text-decoration: none;
-      color: #007bff;
+      display: block;
+      text-align: left; /* 왼쪽 정렬 */
+      float: none; /* 가로 배치 해제 */
+      font-weight: normal;
     }
-    
-    /* 7. 이미지 스타일 조정 */
-    img {
-        max-width: 950px; /* 이미지 최대 너비 제한 */
-        width: 100%; 
-        height: auto;
-        display: block; 
-        margin: 0 0 20px 20px; /* 이미지 아래 여백 */
+
+    /* 드롭다운 항목 호버 스타일 */
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+      color: var(--main-blue);
+    }
+
+    /* 마우스 올렸을 때 드롭다운 내용 표시 */
+    .navbar-item:hover .dropdown-content {
+      display: block;
     }
   </style>
   
 </head>
 <body>
+  
   <div class="container">
-    
-  <h1>생물기상연구실</h1>
-  <div class="navbar">
-    <a href="index.html">**생물기상연구실 정보**</a>
-    <a href="#조직">조직</a>
-    <a href="#관측사이트">관측 지점 정보</a>
-    <a href="#관측 장비">관측 장비</a>
-    <a href="#간행물">간행물</a>
-    <a href="#자료 다운로드">자료 다운로드</a>
+      
+      <!-- ***** 로고 및 상단 헤더 영역 (FLUXNET 상단처럼) ***** -->
+      <div style="background-color: var(--main-blue); color: white; padding: 10px 20px;">
+          <h2 style="margin: 0; font-size: 18px; display: inline-block;">FLUXNET</h2>
+          <span style="font-size: 12px;">The Data Portal serving the FLUXNET Community</span>
+      </div>
+      
+      <!-- ***** 메뉴 (내비게이션 바) 시작 ***** -->
+      <div class="navbar">
+          <!-- Home -->
+          <div class="navbar-item">
+              <a href="index.html">Home</a>
+          </div>
+
+          <!-- About (드롭다운 메뉴 항목) -->
+          <div class="navbar-item">
+              <a href="#about-page">About</a>
+              <div class="dropdown-content">
+                  <a href="#about-fluxnet">About KoFlux</a>
+                  <a href="#regional-networks">Regional Networks</a>
+                  <a href="#history">History of KoFlux</a>
+                  <!-- 세부 항목은 사진을 참고하여 임의로 추가했습니다. -->
+              </div>
+          </div>
+
+          <!-- Community -->
+          <div class="navbar-item">
+              <a href="#community-page">Community</a>
+          </div>
+
+          <!-- Sites -->
+          <div class="navbar-item">
+              <a href="#sites-page">Sites</a>
+          </div>
+          
+          <!-- Education -->
+          <div class="navbar-item">
+              <a href="#education-page">Education</a>
+          </div>
+
+          <!-- Data -->
+          <div class="navbar-item">
+              <a href="#data-page">Data</a>
+          </div>
+
+          <!-- Sign In -->
+          <div class="navbar-item" style="float: right;">
+              <a href="#signin-page">Sign In</a>
+          </div>
+      </div>
+      <!-- ***** 메뉴 (내비게이션 바) 끝 ***** -->
+      
+      <!-- ***** 본문 내용 시작 ***** -->
+      <div class="content-section">
+          <h1>KoFlux</h1>
+          
+          <img src="강릉원주대학교.jpeg" alt="웹사이트 메인 이미지">
+
+          <p>이 사이트는 2025년에 만들어졌으며 대한민국의 각 지역 별 플럭스의 자료 및 자료의 메타데이터를 공유할 수 있게 만든 사이트입니다.</p>
+          
+          <p>2025.11.12 기온 자료</p>
+          <a href="OBS_ASOS_TIM_20251114000320.csv" download="20251112_기온.csv">2025.11.12 기온</a>
+      </div>
+      <!-- ***** 본문 내용 끝 ***** -->
+      
   </div>
   
-  
-  <img src="강릉원주대학교.jpeg" alt="웹사이트 메인 이미지" style="width:100%;">
-
-  <p>이 사이트는 2025년에 만들어졌으며 대한민국의 각 지역 별 플럭스의 자료 및 자료의 메타데이터를 공유할 수 있게 만든 사이트입니다.</p>
-  
-  <p>2025.11.12 기온 자료</p>
-    
-  <a href="OBS_ASOS_TIM_20251114000320.csv" download="20251112_기온.csv">2025.11.12 기온</a>
-    
- </div>
 </body>
 </html>
