@@ -6,10 +6,10 @@
   <style>
     /* 1. FLUXNET 디자인 테마 색상 정의 */
     :root {
-      --main-blue: rgba(51, 85, 127, 1); /* FLUXNET Navigation Bar Background */
-      --light-blue: #5bc0de; /* Hover Light Blue */
-      --page-background: #f8f8f8; /* Page Background Color */
-      --link-color: #337ab7; /* Body Link Color */
+      --main-blue: rgba(51, 85, 127, 1);
+      --light-blue: #5bc0de;
+      --page-background: #f8f8f8;
+      --link-color: #337ab7;
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
 
@@ -24,7 +24,7 @@
     /* Center Alignment Container */
     .container {
       max-width: 1000px;
-      margin: 0 auto; /* Center Alignment Core */
+      margin: 0 auto;
       background-color: white; 
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
       padding-top: 1px;
@@ -69,10 +69,14 @@
       font-size: 14px;
     }
 
-    /* Menu Hover Style */
-    .navbar-item:hover > a {
-      background-color: var(--light-blue);
-      color: black;
+    /* 현재 활성화된 메뉴 항목 스타일 */
+    .navbar-item.active > a {
+        background-color: var(--light-blue);
+        color: black;
+    }
+    .navbar-item:hover > a { /* 일반 호버 스타일 */
+        background-color: var(--light-blue);
+        color: black;
     }
 
     /* ***** Dropdown Menu Styles ***** */
@@ -102,6 +106,10 @@
     .navbar-item:hover .dropdown-content {
       display: block;
     }
+    .navbar-item.active:hover > a {
+        background-color: var(--light-blue);
+        color: black;
+    }
   </style>
   
 </head>
@@ -117,14 +125,14 @@
       
       <!-- ***** Navigation Bar (Menu) Start ***** -->
       <div class="navbar">
-          <!-- Home -->
-          <div class="navbar-item">
+          <!-- Home - Active for this page -->
+          <div class="navbar-item active">
               <a href="index.html">Home</a> 
           </div>
 
           <!-- About (Dropdown Menu Item) -->
           <div class="navbar-item">
-              <a href="#about-menu">About</a> 
+              <a href="about_koflux.html">About</a> 
               <div class="dropdown-content">
                   <a href="about_koflux.html">About KoFlux</a> 
                   <a href="regional_networks.html">Regional Networks</a> 
@@ -137,9 +145,13 @@
               <a href="#community-page">Community</a>
           </div>
 
-          <!-- Sites -->
+          <!-- Sites (Dropdown Menu Item) - *UPDATED* -->
           <div class="navbar-item">
-              <a href="sites_info.html">Sites</a>
+              <a href="#sites-menu">Sites</a>
+              <div class="dropdown-content">
+                  <a href="sites_info.html">Site Summary</a>
+                  <a href="site_list.html">Site List</a>
+              </div>
           </div>
           
           <!-- Education -->
