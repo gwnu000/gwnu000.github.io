@@ -68,10 +68,15 @@
       font-size: 14px;
     }
     /* Set About item as active for this page */
-    .navbar-item:hover > a, .navbar-item:nth-child(2) > a {
-      background-color: var(--light-blue);
-      color: black;
+    .navbar-item.active > a {
+        background-color: var(--light-blue);
+        color: black;
     }
+    .navbar-item:hover > a { /* 일반 호버 스타일 */
+        background-color: var(--light-blue);
+        color: black;
+    }
+    
     .dropdown-content {
       display: none;
       position: absolute;
@@ -97,6 +102,10 @@
     }
     .navbar-item:hover .dropdown-content {
       display: block;
+    }
+    .navbar-item.active:hover > a {
+        background-color: var(--light-blue);
+        color: black;
     }
     
     /* ***** Body Content Styles ***** */
@@ -190,7 +199,16 @@
           </div>
 
           <div class="navbar-item"><a href="#community-page">Community</a></div>
-          <div class="navbar-item"><a href="sites_info.html">Sites</a></div>
+          
+          <!-- Sites (Dropdown Menu Item) - *UPDATED* -->
+          <div class="navbar-item">
+              <a href="#sites-menu">Sites</a>
+              <div class="dropdown-content">
+                  <a href="sites_info.html">Site Summary</a>
+                  <a href="site_list.html">Site List</a>
+              </div>
+          </div>
+          
           <div class="navbar-item"><a href="#education-page">Education</a></div>
           <div class="navbar-item"><a href="#data-page">Data</a></div>
           <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
@@ -226,7 +244,7 @@
               <p>Each network contributes to the global understanding of climate change impacts on terrestrial ecosystems.</p>
 
               <!-- picture3 이미지 추가 (두 번째 캡처본 밑의 그림) -->
-              <img src="picture3.png" alt="Regional Network Flux Comparison Data">
+              <img src="picture3.jpeg" alt="Regional Network Flux Comparison Data">
 
           </div>
           
@@ -242,7 +260,7 @@
               
               <h4 style="margin-top: 30px;">GLOBAL COVERAGE</h4>
               <!-- 지도 이미지 또는 Placeholder -->
-              <img src="picture2.png" alt="Global Flux Network Coverage">
+              <img src="https://placehold.co/200x150/f0f0f0/333?text=GLOBAL+MAP+PLCHLDR" alt="Global Flux Network Coverage">
               
           </div>
           
