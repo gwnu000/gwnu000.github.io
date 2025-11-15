@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KoFlux - About KoFlux</title>
+  
+  <style>
+    /* 1. FLUXNET 디자인 테마 색상 정의 */
+    :root {
+      --main-blue: rgba(51, 85, 127, 1); /* FLUXNET Navigation Bar Background */
+      --light-blue: #5bc0de; /* Hover Light Blue */
+      --page-background: #f8f8f8; /* Page Background Color */
+      --link-color: #337ab7; /* Body Link Color */
+      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+    }
+
+    /* 2. Full Page Base Design and Center Container Setup */
+    body {
+      background-color: var(--page-background); 
+      color: #333333;
+      font-family: var(--font-family);
+      margin: 0;
+    }
+
+    /* Center Alignment Container */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto; /* Center Alignment Core */
+      background-color: white; 
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+      padding-top: 1px; 
+      min-height: 100vh; 
+    }
+
+    /* 3. Logo and Top Header Area */
+    .header-top {
+      background-color: var(--main-blue); 
+      color: white; 
+      padding: 10px 20px;
+    }
+    .header-top h2 {
+        margin: 0; 
+        font-size: 18px; 
+        display: inline-block;
+    }
+    .header-top span {
+        font-size: 12px;
+    }
+
+    /* ***** Navigation Bar (Menu) Styles ***** */
+    .navbar {
+      background-color: var(--main-blue); 
+      overflow: visible; 
+      min-height: 50px;
+      padding: 0 20px;
+      margin-bottom: 20px;
+    }
+    .navbar-item {
+      float: left;
+      position: relative;
+    }
+    .navbar-item a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 15px 18px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    /* Set About item as active */
+    .navbar-item:hover > a, .navbar-item.active > a {
+      background-color: var(--light-blue);
+      color: black;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      left: 0;
+      top: 100%;
+    }
+    .dropdown-content a {
+      color: #333;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+      float: none;
+      font-weight: normal;
+    }
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+      color: var(--main-blue);
+    }
+    .navbar-item:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* ***** Body Content Styles ***** */
+    .content-area {
+        padding: 0 20px 20px 20px;
+        display: flex; 
+    }
+    .main-content {
+        flex: 3; 
+        padding-right: 20px;
+    }
+    .sidebar {
+        flex: 1; 
+        padding-left: 20px;
+        border-left: 1px solid #eee;
+        font-size: 14px;
+    }
+    .sidebar h4 {
+        color: var(--main-blue);
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-top: 0;
+    }
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+    .sidebar ul li a {
+        color: var(--link-color);
+        text-decoration: none;
+        display: block;
+        padding: 5px 0;
+    }
+    .sidebar ul li a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Heading and Subheading */
+    .main-content h1 {
+        color: #333;
+        font-size: 28px;
+        padding: 0;
+        border: none;
+    }
+    .main-content h2 {
+        color: var(--main-blue);
+        font-size: 20px;
+        margin-top: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+    .main-content p {
+        padding: 0;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+    
+    /* Image Style */
+    .main-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 20px 0;
+        display: block;
+    }
+    
+  </style>
+  
+</head>
+<body>
+  
+  <div class="container">
+      
+      <!-- ***** Logo and Top Header Area ***** -->
+      <div class="header-top">
+          <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
+          <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
+      </div>
+      
+      <!-- ***** Navigation Bar (Menu) Start - About set as active ***** -->
+      <div class="navbar">
+          <!-- Home -->
+          <div class="navbar-item">
+              <a href="index.html">Home</a>
+          </div>
+
+          <!-- About (Dropdown Menu Item) - Set as active for this page -->
+          <div class="navbar-item active">
+              <a href="about_koflux.html">About</a>
+              <div class="dropdown-content">
+                  <a href="about_koflux.html">About KoFlux</a>
+                  <a href="#regional-networks">Regional Networks</a>
+                  <a href="#history">History of KoFlux</a>
+              </div>
+          </div>
+
+          <!-- Community -->
+          <div class="navbar-item">
+              <a href="#community-page">Community</a>
+          </div>
+
+          <!-- Sites -->
+          <div class="navbar-item">
+              <a href="#sites-page">Sites</a>
+          </div>
+          
+          <!-- Education -->
+          <div class="navbar-item">
+              <a href="#education-page">Education</a>
+          </div>
+
+          <!-- Data -->
+          <div class="navbar-item">
+              <a href="#data-page">Data</a>
+          </div>
+
+          <!-- Sign In -->
+          <div class="navbar-item" style="float: right;">
+              <a href="#signin-page">Sign In</a>
+          </div>
+      </div>
+      <!-- ***** Navigation Bar (Menu) End ***** -->
+      
+      <!-- ***** Body Content Area Start ***** -->
+      <div class="content-area">
+          
+          <!-- Main Content Area (Left) -->
+          <div class="main-content">
+              
+              <p style="font-size: 13px; color: #666; padding-left: 0;">Home / About / About KoFlux</p>
+              
+              <h1>ABOUT THE KoFLUX Network</h1>
+              
+              <p>KoFLUX is an international 'network of networks' connecting regional networks established to measure and understand the exchange of carbon dioxide, water, and energy between the terrestrial ecosystem and the atmosphere. KoFLUX scientists use Eddy Covariance techniques to collect data for a better understanding of the carbon cycle, water, energy, and related trace gas dynamics.</p>
+              
+              <p>Eddy covariance is the standard method for directly measuring gas fluxes between the ecosystem and the atmosphere. It allows for non-intrusive measurement of the exchange of carbon dioxide, water, and methane. KoFLUX data is essential for improving climate change predictive models and studying the role of ecosystems.</p>
+              
+              <h2>KoFLUX Data Sharing and Activities</h2>
+              <p>Researchers collaborate to process and share data through regional network data portals. KoFLUX started in 2005 and currently operates over 50 active flux measurement sites. KoFLUX provides users with data documentation, tools, and opportunities to communicate with the FLUXNET community.</p>
+              
+              <!-- Attached picture1 image added -->
+              <img src="picture1.jpeg" alt="KoFlux Data Comparison Graph">
+
+          </div>
+          
+          <!-- Sidebar Area (Right) -->
+          <div class="sidebar">
+              <h4>USEFUL LINKS</h4>
+              <ul>
+                  <li><a href="#blog">Blog - What's New</a></li>
+                  <li><a href="#data-initiative">The KoFlux Data System Initiative</a></li>
+                  <li><a href="#dataset-2020">KoFLUX 2020 Dataset</a></li>
+                  <li><a href="#dataset-korea">Korea Dataset</a></li>
+                  <li><a href="#community-product">KoFLUX-CH4 Community Product</a></li>
+                  <li><a href="#data-submission">Submitting data to KoFLUX-CH4 V2</a></li>
+                  <li><a href="#data-change-log">Data Change Log</a></li>
+                  <li><a href="#opportunities">Opportunities</a></li>
+                  <li><a href="#contact">Contact Us</a></li>
+              </ul>
+              
+              <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
+              <!-- Map image or Placeholder -->
+              <img src="https://placehold.co/200x150/f0f0f0/333?text=SITE+MAP+PLCHLDR" alt="KoFlux Site Map Placeholder">
+              
+          </div>
+          
+      </div>
+      <!-- ***** Body Content Area End ***** -->
+      
+  </div>
+  
+</body>
+</html>
