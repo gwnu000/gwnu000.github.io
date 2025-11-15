@@ -4,7 +4,7 @@
   <title>KoFlux - Regional Networks</title>
   
   <style>
-    /* 1. FLUXNET 디자인 테마 색상 정의 */
+    /* CSS는 about_koflux.html과 동일하게 유지하여 일관성을 확보합니다. */
     :root {
       --main-blue: rgba(51, 85, 127, 1);
       --light-blue: #5bc0de;
@@ -68,7 +68,7 @@
       font-size: 14px;
     }
     /* Set About item as active for this page */
-    .navbar-item:hover > a, .navbar-item.active > a {
+    .navbar-item:hover > a, .navbar-item:nth-child(2) > a {
       background-color: var(--light-blue);
       color: black;
     }
@@ -184,8 +184,7 @@
               <a href="#about-menu">About</a>
               <div class="dropdown-content">
                   <a href="about_koflux.html">About KoFlux</a>
-                  <!-- 현재 페이지이므로 링크만 걸고 활성화는 하지 않음 -->
-                  <a href="regional_networks.html">Regional Networks</a> 
+                  <a href="regional_networks.html">Regional Networks</a>
                   <a href="#history">History of KoFlux</a>
               </div>
           </div>
