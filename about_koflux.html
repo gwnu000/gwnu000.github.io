@@ -67,11 +67,17 @@
       font-weight: bold;
       font-size: 14px;
     }
-    /* Set About item as active */
-    .navbar-item:hover > a, .navbar-item.active > a {
-      background-color: var(--light-blue);
-      color: black;
+    
+    /* 현재 활성화된 메뉴 항목 스타일 (About) */
+    .navbar-item.active > a {
+        background-color: var(--light-blue);
+        color: black;
     }
+    .navbar-item:hover > a { /* 일반 호버 스타일 */
+        background-color: var(--light-blue);
+        color: black;
+    }
+
     .dropdown-content {
       display: none;
       position: absolute;
@@ -97,6 +103,10 @@
     }
     .navbar-item:hover .dropdown-content {
       display: block;
+    }
+    .navbar-item.active:hover > a {
+        background-color: var(--light-blue);
+        color: black;
     }
     
     /* ***** Body Content Styles ***** */
@@ -192,7 +202,7 @@
               <a href="about_koflux.html">About</a>
               <div class="dropdown-content">
                   <a href="about_koflux.html">About KoFlux</a>
-                  <a href="regional_networks.html">Regional Networks</a> <!-- 링크 수정 -->
+                  <a href="regional_networks.html">Regional Networks</a>
                   <a href="#history">History of KoFlux</a>
               </div>
           </div>
@@ -202,9 +212,13 @@
               <a href="#community-page">Community</a>
           </div>
 
-          <!-- Sites -->
+          <!-- Sites (Dropdown Menu Item) - *UPDATED* -->
           <div class="navbar-item">
-              <a href="sites_info.html">Sites</a> <!-- 링크 수정 -->
+              <a href="#sites-menu">Sites</a>
+              <div class="dropdown-content">
+                  <a href="sites_info.html">Site Summary</a>
+                  <a href="site_list.html">Site List</a>
+              </div>
           </div>
           
           <!-- Education -->
@@ -241,7 +255,7 @@
               <h2>KoFLUX Data Sharing and Activities</h2>
               <p>Researchers collaborate to process and share data through regional network data portals. KoFLUX started in 2005 and currently operates over 50 active flux measurement sites. KoFLUX provides users with data documentation, tools, and opportunities to communicate with the FLUXNET community.</p>
               
-              <img src="picture1.png" alt="KoFlux Data Comparison Graph">
+              <img src="picture1.jpeg" alt="KoFlux Data Comparison Graph">
 
           </div>
           
@@ -263,7 +277,7 @@
               <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
               <!-- picture2 이미지에 Sites 페이지로 이동하는 하이퍼링크 적용 -->
               <a href="sites_info.html" class="site-map-link">
-                  <img src="picture2.png" alt="KoFlux Sites Map" style="width: 100%;">
+                  <img src="picture2.jpeg" alt="KoFlux Sites Map" style="width: 100%;">
               </a>
               
           </div>
