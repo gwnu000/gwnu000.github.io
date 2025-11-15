@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>KoFlux - Site List</title>
+  <title>KoFlux - Site Summary</title>
   
   <style>
     /* CSS는 모든 페이지에 걸쳐 일관성을 유지합니다. */
@@ -59,7 +59,7 @@
       font-size: 14px;
     }
     
-    /* 현재 활성화된 메뉴 항목 스타일 */
+    /* 현재 활성화된 메뉴 항목 스타일 (Sites) */
     .navbar-item.active > a {
         background-color: var(--light-blue);
         color: black;
@@ -69,7 +69,6 @@
         color: black;
     }
     
-    /* 드롭다운 메뉴 스타일 */
     .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
     
@@ -79,7 +78,7 @@
         background-color: #f1f1f1;
         color: var(--main-blue);
     }
-    .navbar-item.active:hover > a { /* 활성화된 항목은 호버 시에도 동일한 스타일 유지 */
+    .navbar-item.active:hover > a {
         background-color: var(--light-blue);
         color: black;
     }
@@ -87,6 +86,18 @@
     /* ***** Body Content Styles ***** */
     .content-area {
         padding: 0 20px 20px 20px;
+        display: flex;
+    }
+    .main-content {
+        flex: 3;
+        padding-right: 30px; 
+    }
+    .sidebar {
+        flex: 1;
+        min-width: 250px;
+        font-size: 14px;
+        padding-left: 20px; 
+        border-left: 1px solid #eee;
     }
     
     /* Main Content Styles */
@@ -109,63 +120,32 @@
         display: block;
     }
     
-    /* Google Map Iframe */
-    .map-container {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        margin: 20px 0;
+    /* Sidebar Styles (About KoFlux 페이지와 동일하게 설정) */
+    .sidebar h4 {
+        color: var(--main-blue);
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-top: 0;
+        font-size: 16px;
     }
-    .map-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
     }
-
-    /* Site Table Style (3번째 이미지 참고) */
-    .site-table-container {
-        margin-top: 30px;
-        font-family: Arial, sans-serif;
-    }
-    .site-entry {
-        border: 1px solid #e0e0e0;
-        margin-bottom: 15px;
-        background: #f9f9f9;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-    .site-entry-row {
-        padding: 10px 15px;
-        display: flex;
-        border-bottom: 1px solid #e0e0e0;
-    }
-    .site-entry-row:last-child {
-        border-bottom: none;
-    }
-    .site-label {
-        font-weight: bold;
-        color: #555;
-        flex: 0 0 150px; /* 고정된 너비 */
-    }
-    .site-value {
-        flex: 1;
-        color: #333;
-    }
-    .site-value a {
+    .sidebar ul li a {
         color: var(--link-color);
         text-decoration: none;
+        display: block;
+        padding: 5px 0;
     }
-    .site-value a:hover {
+    .sidebar ul li a:hover {
         text-decoration: underline;
     }
-    
-    /* Breadcrumb */
-    .breadcrumb {
-        font-size: 13px; color: #666; padding-left: 0;
+    .sidebar h4:nth-of-type(2) { /* 두 번째 H4부터 마진 추가 */
+        margin-top: 30px;
+    }
+    .sidebar .site-map-link img {
+        margin: 5px 0 10px 0;
     }
 
   </style>
@@ -183,10 +163,7 @@
       
       <!-- ***** Navigation Bar (Menu) Start ***** -->
       <div class="navbar">
-          <!-- Home -->
-          <div class="navbar-item">
-              <a href="index.html">Home</a>
-          </div>
+          <div class="navbar-item"><a href="index.html">Home</a></div>
           
           <!-- About Menu with Dropdown -->
           <div class="navbar-item">
@@ -198,12 +175,9 @@
               </div>
           </div>
           
-          <!-- Community -->
-          <div class="navbar-item">
-              <a href="#community-page">Community</a>
-          </div>
+          <div class="navbar-item"><a href="#community-page">Community</a></div>
           
-          <!-- Sites (Dropdown Menu Item) - Active for this page -->
+          <!-- Sites (Dropdown Menu Item) - *UPDATED & ACTIVE* -->
           <div class="navbar-item active">
               <a href="#sites-menu">Sites</a>
               <div class="dropdown-content">
@@ -212,96 +186,71 @@
               </div>
           </div>
           
-          <!-- Education -->
-          <div class="navbar-item">
-              <a href="#education-page">Education</a>
-          </div>
-          
-          <!-- Data -->
-          <div class="navbar-item">
-              <a href="#data-page">Data</a>
-          </div>
-          
-          <!-- Sign In -->
-          <div class="navbar-item" style="float: right;">
-              <a href="#signin-page">Sign In</a>
-          </div>
+          <div class="navbar-item"><a href="#education-page">Education</a></div>
+          <div class="navbar-item"><a href="#data-page">Data</a></div>
+          <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
       </div>
       <!-- ***** Navigation Bar (Menu) End ***** -->
       
       <!-- ***** Body Content Area Start ***** -->
       <div class="content-area">
           
-          <!-- Main Content Area -->
+          <!-- Main Content Area (Left) -->
           <div class="main-content">
               
-              <p class="breadcrumb">Home / Sites / Site List</p>
+              <p style="font-size: 13px; color: #666; padding-left: 0;">Home / Sites / Site Summary</p>
               
-              <h1>Site List</h1>
+              <h1>Site Summary</h1>
               
-              <p>As of 2025, 42 sites are currently registered in the KoFlux network. The map below shows the locations of registered observation sites.</p>
-              <p>Legend: 
-                  <span style="color: #FF6347;">■</span> Deciduous Forest
-                  <span style="color: #32CD32;">■</span> Coniferous Forest
-                  <span style="color: #FFD700;">■</span> Mixed Forest
-                  <span style="color: #4682B4;">■</span> Grassland
-                  <span style="color: #DAA520;">■</span> Cropland
-                  <span style="color: #00FFFF;">■</span> Wetland
-                  <span style="color: #8A2BE2;">■</span> Urban
-                  <span style="color: #B0E0E6;">■</span> Lake
-              </p>
+              <p>Welcome to the Site Information page. Here you can find information for tower sites that participate in the **KoFLUX Dataset**, such as the site general information, a list of site-years of data, and site documentation.</p>
               
-              <!-- Google Map Iframe (South Korea Centered, Satellite View, Cheorwon Marked) -->
-              <div class="map-container">
-                  <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3311.163777263592!2d127.2407787361873!3d38.1511993418833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3562a97e4115162d%3A0x26c079f581414a9!2sCheorwon-gun%2C%20Gangwon-do!5e1!3m2!1sen!2skr!4v1731674400000!5m2!1sen!2skr&maptype=satellite"
-                      width="600" 
-                      height="450" 
-                      style="border:0;" 
-                      allowfullscreen="" 
-                      loading="lazy" 
-                      referrerpolicy="no-referrer-when-downgrade">
-                  </iframe>
+              <p>For a comprehensive list of the historical and/or active KoFLUX sites, please refer to the KoFLUX Data Repository or individual **Regional Network** websites. Over the years, there have been more than 50 sites worldwide registered as members of the flux research community.</p>
+              
+              <p>Please note that not all registered KoFLUX sites are included in the latest KoFLUX Dataset. For data availability, please refer to the official data submission pages or contact us if you find any error in the Site Information page.</p>
+
+              <!-- Sites Summary Chart (picture3.png) -->
+              <img src="picture3.png" alt="KoFlux Site Duration and Type Histograms">
+
+          </div>
+          
+          <!-- Sidebar Area (Right) - About KoFlux 페이지와 동일하게 설정 -->
+          <div class="sidebar">
+              
+              <!-- Google 검색 placeholder -->
+              <div style="margin-bottom: 20px;">
+                  <span style="font-size: 12px; color: #999;">ENHANCED BY</span> Google
+                  <div style="border: 1px solid #ccc; padding: 5px; background-color: white;">
+                      <input type="text" placeholder="" style="width: 80%; border: none; padding: 0;">
+                      <button style="width: 15%; background-color: #4285f4; color: white; border: none; padding: 5px 0;">Q</button>
+                  </div>
               </div>
 
-              <!-- Site List Table -->
-              <div class="site-table-container">
-                  <h2>Site Details</h2>
-                  
-                  <div class="site-entry">
-                      <div class="site-entry-row">
-                          <span class="site-label">Site Code:</span>
-                          <span class="site-value">CRK</span>
-                      </div>
-                      <div class="site-entry-row">
-                          <span class="site-label">Site Name:</span>
-                          <span class="site-value">Cheorwon Rice paddy</span>
-                      </div>
-                      <div class="site-entry-row">
-                          <span class="site-label">Type:</span>
-                          <span class="site-value">Rice paddy</span>
-                      </div>
-                      <div class="site-entry-row">
-                          <span class="site-label">Status:</span>
-                          <span class="site-value">Continuous</span>
-                      </div>
-                      <div class="site-entry-row">
-                          <span class="site-label">Details:</span>
-                          <span class="site-value">
-                              <a href="https://asiaflux.net/?page_id=1392" target="_blank">https://asiaflux.net/?page_id=1392</a>
-                          </span>
-                      </div>
-                  </div>
-                  
-                  <!-- 다른 사이트 항목이 있다면 여기에 추가 -->
-                  
-              </div>
+              <h4>USEFUL LINKS</h4>
+              <ul>
+                  <li><a href="#blog">Blog - What's New</a></li>
+                  <li><a href="#data-initiative">The KoFlux Data System Initiative</a></li>
+                  <li><a href="#dataset-2020">KoFLUX 2020 Dataset</a></li>
+                  <li><a href="#dataset-korea">Korea Dataset</a></li>
+                  <li><a href="#community-product">KoFLUX-CH4 Community Product</a></li>
+                  <li><a href="#data-submission">Submitting data to KoFLUX-CH4 V2</a></li>
+                  <li><a href="#data-change-log">Data Change Log</a></li>
+                  <li><a href="#opportunities">Opportunities</a></li>
+                  <li><a href="#contact">Contact Us</a></li>
+              </ul>
+              
+              <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
+              <!-- Sites Map Image (picture2.jpeg와 동일한 레이아웃이지만 Sites Map 이미지로 간주) -->
+              <img src="picture2.png" alt="KoFlux Sites Map" style="width: 100%;">
+              
           </div>
           
       </div>
       <!-- ***** Body Content Area End ***** -->
       
   </div>
+  
+</body>
+</html>
   
 </body>
 </html>
