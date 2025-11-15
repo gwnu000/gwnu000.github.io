@@ -60,12 +60,29 @@
     }
     /* Sites item (4번째 항목)을 활성 상태로 설정 */
     .navbar-item:nth-child(4) > a {
+        background-color: var(--light-blue); 
+        color: black;
+    }
+    .navbar-item:hover > a { /* 일반 호버 스타일 */
         background-color: var(--light-blue);
         color: black;
     }
+    
+    /* 드롭다운 메뉴 스타일 */
     .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
-    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
+    
+    /* 드롭다운 호버 스타일 오버라이드 */
+    .navbar-item:hover .dropdown-content { display: block; } 
+    .navbar-item:hover .dropdown-content a:hover {
+        background-color: #f1f1f1;
+        color: var(--main-blue);
+    }
+    /* 중요: Sites 메뉴가 활성화되었을 때, 다른 메뉴 호버 스타일이 적용되지 않도록 재설정 */
+    .navbar-item:nth-child(4):hover > a {
+        background-color: var(--light-blue);
+        color: black;
+    }
 
     /* ***** Body Content Styles ***** */
     .content-area {
@@ -74,19 +91,15 @@
     }
     .main-content {
         flex: 3;
-        padding-right: 20px;
+        padding-right: 30px; 
     }
     .sidebar {
         flex: 1;
-        padding-left: 20px;
-        border-left: 1px solid #eee;
+        min-width: 250px;
         font-size: 14px;
+        padding-left: 20px; /* 사이드바와 메인 콘텐츠 사이 간격 확보 */
+        border-left: 1px solid #eee;
     }
-    /* 사이드바 스타일은 다른 페이지와 동일 */
-    .sidebar h4 { color: var(--main-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
-    .sidebar ul { list-style: none; padding: 0; }
-    .sidebar ul li a { color: var(--link-color); text-decoration: none; display: block; padding: 5px 0; }
-    .sidebar ul li a:hover { text-decoration: underline; }
     
     /* Main Content Styles */
     .main-content h1 {
@@ -108,6 +121,34 @@
         display: block;
     }
     
+    /* Sidebar Styles (About KoFlux 페이지와 동일하게 설정) */
+    .sidebar h4 {
+        color: var(--main-blue);
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-top: 0;
+        font-size: 16px;
+    }
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+    .sidebar ul li a {
+        color: var(--link-color);
+        text-decoration: none;
+        display: block;
+        padding: 5px 0;
+    }
+    .sidebar ul li a:hover {
+        text-decoration: underline;
+    }
+    .sidebar h4:nth-of-type(2) { /* 두 번째 H4부터 마진 추가 */
+        margin-top: 30px;
+    }
+    .sidebar .site-map-link img {
+        margin: 5px 0 10px 0;
+    }
+
   </style>
   
 </head>
@@ -124,13 +165,17 @@
       <!-- ***** Navigation Bar (Menu) Start ***** -->
       <div class="navbar">
           <div class="navbar-item"><a href="index.html">Home</a></div>
-          <div class="navbar-item"><a href="#about-menu">About</a>
+          
+          <!-- About Menu with Dropdown -->
+          <div class="navbar-item">
+              <a href="about_koflux.html">About</a>
               <div class="dropdown-content">
                   <a href="about_koflux.html">About KoFlux</a>
                   <a href="regional_networks.html">Regional Networks</a>
                   <a href="#history">History of KoFlux</a>
               </div>
           </div>
+          
           <div class="navbar-item"><a href="#community-page">Community</a></div>
           <div class="navbar-item"><a href="sites_info.html">Sites</a></div>
           <div class="navbar-item"><a href="#education-page">Education</a></div>
@@ -155,13 +200,23 @@
               
               <p>Please note that not all registered KoFLUX sites are included in the latest KoFLUX Dataset. For data availability, please refer to the official data submission pages or contact us if you find any error in the Site Information page.</p>
 
-              <!-- Sites Summary Chart Placeholder (실제 FLUXNET 차트와 유사한 위치) -->
-              <img src="https://placehold.co/700x400/f0f0f0/333?text=SITE+DURATION+AND+TYPE+HISTOGRAMS" alt="Site Duration and Type Histograms">
+              <!-- Sites Summary Chart (picture3.png) -->
+              <img src="picture3.png" alt="KoFlux Site Duration and Type Histograms">
 
           </div>
           
-          <!-- Sidebar Area (Right) -->
+          <!-- Sidebar Area (Right) - About KoFlux 페이지와 동일하게 설정 -->
           <div class="sidebar">
+              
+              <!-- Google 검색 placeholder -->
+              <div style="margin-bottom: 20px;">
+                  <span style="font-size: 12px; color: #999;">ENHANCED BY</span> Google
+                  <div style="border: 1px solid #ccc; padding: 5px; background-color: white;">
+                      <input type="text" placeholder="" style="width: 80%; border: none; padding: 0;">
+                      <button style="width: 15%; background-color: #4285f4; color: white; border: none; padding: 5px 0;">Q</button>
+                  </div>
+              </div>
+
               <h4>USEFUL LINKS</h4>
               <ul>
                   <li><a href="#blog">Blog - What's New</a></li>
@@ -176,8 +231,8 @@
               </ul>
               
               <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
-              <!-- Sites Map Link from About Page will direct here -->
-              <img src="https://placehold.co/200x150/f0f0f0/333?text=SITE+MAP+PLCHLDR" alt="KoFlux Site Map Placeholder">
+              <!-- Sites Map Image (picture2.jpeg와 동일한 레이아웃이지만 Sites Map 이미지로 간주) -->
+              <img src="https://placehold.co/200x150/00468c/fff?text=FLUXNET+2015" alt="KoFlux Sites Map" style="width: 100%;">
               
           </div>
           
