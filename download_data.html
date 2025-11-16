@@ -77,22 +77,33 @@
     /* 사이트 선택기 스타일 */
     .site-selector {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-between; /* 요소들 사이에 공간을 균등하게 배분 */
         align-items: center;
+        margin-top: 15px; /* 사진과 박스 사이 간격 */
+    }
+    .site-selector .site-list-wrapper { /* 개별 select 박스를 감싸는 래퍼 */
+        width: 45%; /* 전체 너비의 약 45% */
+        display: flex; /* 내부 요소(label, select)를 flex로 정렬 */
+        flex-direction: column; /* 세로로 정렬 */
+    }
+    .site-selector .site-list-wrapper label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block; /* 라벨이 블록 요소가 되도록 */
     }
     .site-selector select {
-        width: 42%;
-        height: 250px;
+        width: 100%; /* 부모 래퍼 너비에 꽉 채우기 */
+        height: 250px; /* 고정 높이 */
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 5px;
         font-family: var(--font-family);
-        /* 가로 스크롤바가 필요할 경우를 대비 (긴 이름) */
-        overflow: auto; 
+        overflow-y: auto; /* 세로 스크롤바 자동 */
     }
     .site-selector-buttons {
         display: flex;
         flex-direction: column;
+        margin: 0 10px; /* 버튼과 select 박스 사이 간격 */
     }
     .site-selector-buttons button {
         background-color: var(--main-blue);
@@ -162,6 +173,20 @@
         color: #666;
         cursor: not-allowed;
     }
+    /* Select All / Clear Site List 링크 */
+    .site-actions {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .site-actions a {
+        color: var(--link-color);
+        text-decoration: none;
+        font-size: 14px;
+    }
+    .site-actions a:hover {
+        text-decoration: underline;
+    }
 
   </style>
   
@@ -170,14 +195,12 @@
   
   <div class="container">
       
-      <!-- ***** Logo and Top Header Area ***** -->
-      <div class="header-top">
+      <!-- ***** Logo and Top Header Area ***** --><div class="header-top">
           <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
           <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
       </div>
       
-      <!-- ***** Navigation Bar (Menu) Start ***** -->
-      <div class="navbar">
+      <!-- ***** Navigation Bar (Menu) Start ***** --><div class="navbar">
           <div class="navbar-item"><a href="index.html">Home</a></div>
           <div class="navbar-item">
               <a href="#about-menu">About</a>
@@ -196,8 +219,7 @@
               </div>
           </div>
           <div class="navbar-item"><a href="#education-page">Education</a></div>
-          <!-- Data (Dropdown Menu Item) - Active for this page -->
-          <div class="navbar-item active">
+          <!-- Data (Dropdown Menu Item) - Active for this page --><div class="navbar-item active">
               <a href="#data-menu">Data</a>
               <div class="dropdown-content">
                   <a href="about_data.html">About Data</a>
@@ -206,24 +228,16 @@
           </div>
           <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
       </div>
-      <!-- ***** Navigation Bar (Menu) End ***** -->
-      
-      <!-- ***** Body Content Area Start ***** -->
-      <div class="content-area">
+      <!-- ***** Navigation Bar (Menu) End ***** --><!-- ***** Body Content Area Start ***** --><div class="content-area">
           
-          <!-- Main Content Area (Left) -->
-          <div class="main-content">
+          <!-- Main Content Area (Left) --><div class="main-content">
               
               <p style="font-size: 13px; color: #666; padding-left: 0;">Home / Data / Download Data</p>
               
               <h1>Download Data</h1>
               <p>Follow the steps below to select and download KoFlux data products.</p>
 
-              <!-- A-T-01_1.png (두 번째 사진) -->
-              <img src="httpsStorage://image-server/A-T-01_1.png" alt="Download Data Options">
-              
-              <!-- Data Product Selection -->
-              <div class="form-section">
+              <!-- REMOVED: <img src="httpsStorage://image-server/A-T-01_1.png" alt="Download Data Options"> --><!-- Data Product Selection --><div class="form-section">
                   <h3>1. Select Data Product</h3>
                   <div class="form-group radio-group">
                       <label>
@@ -237,40 +251,44 @@
                   </div>
               </div>
 
-              <!-- Site Selection -->
-              <div class="form-section">
+              <!-- Site Selection --><div class="form-section">
                   <h3>2. Select Sites</h3>
                   <div class="site-selector">
-                      <!-- All Sites List -->
-                      <div style="width: 42%;">
-                          <label for="all-sites" style="font-weight: bold;">All Sites:</label>
+                      <!-- All Sites List --><div class="site-list-wrapper">
+                          <label for="all-sites">All Sites:</label>
                           <select id="all-sites" multiple>
                               <option value="AR-SLu">AR-SLu: San Luis</option>
                               <option value="AR-Vir">AR-Vir: Virasoro</option>
+                              <option value="AT-Neu">AT-Neu: Neustift</option>
                               <option value="AU-ASM">AU-ASM: Alice Springs</option>
-                              <option value="AU-Cpr">AU-Cpr: Cape P</option>
-                              <option value="AU-How">AU-How: Howard Springs</option>
-                              <option value="AU-Stp">AU-Stp: Sturt Plains</option>
+                              <option value="AU-Ade">AU-Ade: Adelaide River</option>
+                              <option value="AU-Cpr">AU-Cpr: Calperum</option>
+                              <option value="AU-Cum">AU-Cum: Cumberland Plain</option>
+                              <option value="AU-DaP">AU-DaP: Daly River Pasture</option>
+                              <option value="AU-DaS">AU-DaS: Daly River Savannah</option>
+                              <option value="AU-Dry">AU-Dry: Dry River</option>
                               <option value="KR-CRK">KR-CRK: Cheorwon Rice paddy</option>
                               <option value="KR-SMK">KR-SMK: Seolmacheon</option>
                               <option value="US-MMS">US-MMS: Morgan Monroe State Forest</option>
                               <option value="US-Bar">US-Bar: Bartlett Experimental Forest</option>
-                              <!-- ... other sites ... -->
                           </select>
+                          <div class="site-actions">
+                              <a href="#" id="select-all-sites">Select all sites</a>
+                          </div>
                       </div>
 
-                      <!-- Buttons -->
-                      <div class="site-selector-buttons">
+                      <!-- Buttons --><div class="site-selector-buttons">
                           <button id="add-site" title="Add selected site(s)">&gt;</button>
                           <button id="remove-site" title="Remove selected site(s)">&lt;</button>
                       </div>
 
-                      <!-- Selected Sites List -->
-                      <div style="width: 42%;">
-                          <label for="selected-sites" style="font-weight: bold;">Your Selections:</label>
+                      <!-- Selected Sites List --><div class="site-list-wrapper">
+                          <label for="selected-sites">Your Selections:</label>
                           <select id="selected-sites" multiple>
-                              <!-- Selected items will go here -->
-                          </select>
+                              <!-- Selected items will go here --></select>
+                          <div class="site-actions">
+                              <a href="#" id="clear-selected-sites">Clear site list</a>
+                          </div>
                       </div>
                   </div>
                   <div class="form-group checkbox-group" style="margin-top: 20px;">
@@ -281,17 +299,17 @@
                   </div>
               </div>
 
-              <!-- Intended Use -->
-              <div class="form-section">
+              <!-- Intended Use --><div class="form-section">
                   <h3>3. Define Intended Use</h3>
                   <div class="form-group select-group">
                       <label for="intended-use">Intended Use *</label>
                       <select id="intended-use">
                           <option value="">Select an option...</option>
-                          <option value="research">Research (General)</option>
-                          <option value="modeling">Modeling Study</option>
-                          <option value="synthesis">Synthesis/Review Paper</option>
-                          <option value="education">Education</option>
+                          <option value="research-multi-site">Research - Multi-site synthesis</option>
+                          <option value="research-remote-sensing">Research - Remote sensing</option>
+                          <option value="research-land-model">Research - Land model/Earth system model</option>
+                          <option value="research-other">Research - Other</option>
+                          <option value="education">Education (Teacher or Student)</option>
                           <option value="other">Other</option>
                       </select>
                   </div>
@@ -301,8 +319,7 @@
                   </div>
               </div>
 
-              <!-- Data Policy and Download -->
-              <div class="form-section">
+              <!-- Data Policy and Download --><div class="form-section">
                   <h3>4. Agree to Policy and Download</h3>
                   <div class="form-group checkbox-group">
                       <label>
@@ -315,8 +332,7 @@
 
           </div>
           
-          <!-- Sidebar Area (Right) -->
-          <div class="sidebar">
+          <!-- Sidebar Area (Right) --><div class="sidebar">
               <h4>USEFUL LINKS</h4>
               <ul>
                   <li><a href="#blog">Blog - What's New</a></li>
@@ -336,9 +352,7 @@
           </div>
           
       </div>
-      <!-- ***** Body Content Area End ***** -->
-      
-  </div>
+      <!-- ***** Body Content Area End ***** --></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -348,42 +362,106 @@
         const selectedSites = document.getElementById('selected-sites');
         const addBtn = document.getElementById('add-site');
         const removeBtn = document.getElementById('remove-site');
+        const selectAllLink = document.getElementById('select-all-sites');
+        const clearSelectedLink = document.getElementById('clear-selected-sites');
+        const intendedUseDetails = document.getElementById('intended-use-details');
+
 
         // Move selected sites from 'All Sites' to 'Your Selections'
         addBtn.addEventListener('click', function() {
-            //
-            Array.from(allSites.selectedOptions).forEach(option => {
+            // 선택된 옵션들을 배열로 만들고
+            const selectedOptions = Array.from(allSites.selectedOptions);
+            // 각 옵션을 selectedSites로 이동
+            selectedOptions.forEach(option => {
                 selectedSites.appendChild(option);
             });
+            // allSites에서 이동한 옵션들은 제거 (selectedOptions는 원본 요소를 참조하므로 
+            // appendChild 시 자동으로 이동되어 원본에서 사라집니다)
         });
 
         // Move selected sites from 'Your Selections' back to 'All Sites'
         removeBtn.addEventListener('click', function() {
-            Array.from(selectedSites.selectedOptions).forEach(option => {
+            const selectedOptions = Array.from(selectedSites.selectedOptions);
+            selectedOptions.forEach(option => {
                 allSites.appendChild(option);
-                // (Optional:
+                // allSites에 추가된 후, 다시 정렬 (선택 해제 후 순서 유지를 위해)
+                const options = Array.from(allSites.options);
+                options.sort((a, b) => a.text.localeCompare(b.text));
+                options.forEach(opt => allSites.appendChild(opt));
             });
         });
+
+        // Select All Sites Link
+        selectAllLink.addEventListener('click', function(e) {
+            e.preventDefault(); // 기본 링크 동작 방지
+            Array.from(allSites.options).forEach(option => {
+                selectedSites.appendChild(option);
+            });
+        });
+
+        // Clear Selected Sites Link
+        clearSelectedLink.addEventListener('click', function(e) {
+            e.preventDefault(); // 기본 링크 동작 방지
+            const selectedOptions = Array.from(selectedSites.options);
+            selectedOptions.forEach(option => {
+                allSites.appendChild(option);
+            });
+            // allSites에 추가된 후, 다시 정렬
+            const options = Array.from(allSites.options);
+            options.sort((a, b) => a.text.localeCompare(b.text));
+            options.forEach(opt => allSites.appendChild(opt));
+        });
+
 
         // --- Download Button Logic ---
         const agreeCheckbox = document.getElementById('agree-policy');
         const downloadButton = document.getElementById('download-button');
+        const intendedUseSelect = document.getElementById('intended-use');
 
-        // Enable/disable download button based on checkbox
-        agreeCheckbox.addEventListener('change', function() {
-            if (this.checked) {
+        function updateDownloadButtonState() {
+            const isPolicyAgreed = agreeCheckbox.checked;
+            const isIntendedUseSelected = intendedUseSelect.value !== '';
+            const isDescriptionProvided = intendedUseDetails.value.trim() !== '' && intendedUseDetails.value !== intendedUseDetails.placeholder;
+            
+            // 모든 필수 조건을 만족해야 버튼 활성화
+            if (isPolicyAgreed && isIntendedUseSelected && isDescriptionProvided) {
                 downloadButton.disabled = false;
             } else {
                 downloadButton.disabled = true;
             }
-        });
+        }
+
+        agreeCheckbox.addEventListener('change', updateDownloadButtonState);
+        intendedUseSelect.addEventListener('change', updateDownloadButtonState);
+        intendedUseDetails.addEventListener('input', updateDownloadButtonState); // 입력할 때마다 상태 업데이트
+        
+        // Initial state update on page load
+        updateDownloadButtonState();
+
 
         // --- Textarea Placeholder Logic ---
-        // (Note: The `placeholder` attribute handles 
-        // "disappearing text" automatically, as requested.)
-        
+        intendedUseDetails.addEventListener('focus', function() {
+            if (this.value === this.placeholder) {
+                this.value = '';
+            }
+        });
+        intendedUseDetails.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.value = this.placeholder;
+            }
+            updateDownloadButtonState(); // blur 시에도 버튼 상태 업데이트
+        });
+
+        // 페이지 로드 시, 플레이스홀더가 있는 상태로 시작하도록
+        if (intendedUseDetails.value.trim() === '') {
+            intendedUseDetails.value = intendedUseDetails.placeholder;
+        }
+
     });
   </script>
+  
+</body>
+</html>
   
 </body>
 </html>
