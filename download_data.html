@@ -78,10 +78,22 @@
     .site-selector {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start; /* align-items: center; 에서 변경 */
     }
+
+    /* NEW: Container for the list */
+    .list-container {
+        flex: 1; /* Allow container to grow */
+    }
+    /* NEW: Style for the label above the list */
+    .list-container label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
     .site-selector select {
-        width: 42%;
+        width: 100%; /* width: 42%; 에서 변경 */
         height: 250px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -89,10 +101,14 @@
         font-family: var(--font-family);
         /* 가로 스크롤바가 필요할 경우를 대비 (긴 이름) */
         overflow: auto; 
+        box-sizing: border-box; /* Added */
     }
     .site-selector-buttons {
         display: flex;
         flex-direction: column;
+        justify-content: center; /* Added */
+        padding: 0 15px; /* Added spacing */
+        margin-top: 25px; /* Added margin to align with boxes */
     }
     .site-selector-buttons button {
         background-color: var(--main-blue);
@@ -242,7 +258,7 @@
                   <h3>2. Select Sites</h3>
                   <div class="site-selector">
                       <!-- All Sites List -->
-                      <div style="width: 42%;">
+                      <div class="list-container"> <!-- div style="width: 42%;" 에서 변경 -->
                           <label for="all-sites" style="font-weight: bold;">All Sites:</label>
                           <select id="all-sites" multiple>
                               <option value="AR-SLu">AR-SLu: San Luis</option>
@@ -266,7 +282,7 @@
                       </div>
 
                       <!-- Selected Sites List -->
-                      <div style="width: 42%;">
+                      <div class="list-container"> <!-- div style="width: 42%;" 에서 변경 -->
                           <label for="selected-sites" style="font-weight: bold;">Your Selections:</label>
                           <select id="selected-sites" multiple>
                               <!-- Selected items will go here -->
