@@ -6,10 +6,10 @@
   <style>
     /* 1. FLUXNET 디자인 테마 색상 정의 */
     :root {
-      --main-blue: rgba(51, 85, 127, 1);
-      --light-blue: #5bc0de;
-      --page-background: #f8f8f8;
-      --link-color: #337ab7;
+      --main-blue: rgba(51, 85, 127, 1); /* FLUXNET 네비게이션바 배경색 */
+      --light-blue: #5bc0de; /* 호버 시 밝은 파란색 */
+      --page-background: #f8f8f8; /* 페이지 전체 배경색 */
+      --link-color: #337ab7; /* 본문 링크 색상 */
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
 
@@ -24,41 +24,40 @@
     /* Center Alignment Container */
     .container {
       max-width: 1000px;
-      margin: 0 auto;
+      margin: 0 auto; /* 중앙 정렬 핵심 */
       background-color: white; 
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-      padding-top: 1px;
-      min-height: 100vh;
+      padding-top: 1px; /* container가 body의 margin을 상속하지 않도록 */
+      min-height: 100vh; /* 최소 높이 설정 (내용이 적을 때도 배경 유지) */
     }
 
-    /* 3. Heading (H1) Style */
-    h1 {
-      color: var(--main-blue);
-      padding: 20px 20px 10px 20px;
-      margin-top: 0;
-      border-bottom: 2px solid #eeeeee;
+    /* 3. Logo and Top Header Area */
+    .header-top {
+      background-color: var(--main-blue); 
+      color: white; 
+      padding: 10px 20px;
+    }
+    .header-top h2 {
+        margin: 0; 
+        font-size: 18px; 
+        display: inline-block;
+    }
+    .header-top span {
+        font-size: 12px;
     }
 
-    /* 4. Content Section Style (Empty for Home page) */
-    .content-section {
-        padding: 20px;
-    }
-    
     /* ***** Navigation Bar (Menu) Styles ***** */
     .navbar {
       background-color: var(--main-blue); 
-      overflow: visible; 
+      overflow: visible; /* 드롭다운 메뉴가 보이도록 'visible'로 설정 */
       min-height: 50px;
       padding: 0 20px;
+      margin-bottom: 20px;
     }
-
-    /* Main Menu Item Div */
     .navbar-item {
       float: left;
-      position: relative; 
+      position: relative; /* 드롭다운의 기준점이 됨 */
     }
-
-    /* Main Menu Links */
     .navbar-item a {
       display: block;
       color: white;
@@ -68,7 +67,7 @@
       font-weight: bold;
       font-size: 14px;
     }
-
+    
     /* 현재 활성화된 메뉴 항목 스타일 */
     .navbar-item.active > a {
         background-color: var(--light-blue);
@@ -78,35 +77,38 @@
         background-color: var(--light-blue);
         color: black;
     }
-
-    /* ***** Dropdown Menu Styles ***** */
+    
+    /* 드롭다운 메뉴 스타일 */
     .dropdown-content {
-      display: none; 
-      position: absolute;
-      background-color: white; 
-      min-width: 200px; 
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-      z-index: 1; 
-      left: 0; 
-      top: 100%; 
+      display: none; /* 평소에는 숨김 */
+      position: absolute; /* 상위 항목(navbar-item)에 대해 절대 위치 */
+      background-color: white;
+      min-width: 200px; /* 드롭다운 너비 */
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1; /* 다른 요소 위에 표시 */
+      left: 0; /* 상위 항목의 왼쪽 끝에 맞춤 */
+      top: 100%; /* 상위 항목의 바로 아래에 표시 */
     }
+    /* 드롭다운 내부 링크 스타일 */
     .dropdown-content a {
-      color: #333; 
+      color: #333;
       padding: 12px 16px;
       text-decoration: none;
       display: block;
-      text-align: left; 
-      float: none; 
-      font-weight: normal;
+      text-align: left;
+      float: none; /* 세로 정렬을 위해 float 해제 */
+      font-weight: normal; /* 일반 굵기 */
     }
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: var(--main-blue);
-    }
+    
+    /* 드롭다운 호버 스타일 */
     .navbar-item:hover .dropdown-content {
-      display: block;
+      display: block; /* 상위 항목에 마우스를 올리면 드롭다운 표시 */
     }
-    .navbar-item.active:hover > a {
+    .navbar-item:hover .dropdown-content a:hover {
+        background-color: #f1f1f1;
+        color: var(--main-blue);
+    }
+    .navbar-item.active:hover > a { /* 활성화된 항목은 호버 시에도 동일한 스타일 유지 */
         background-color: var(--light-blue);
         color: black;
     }
@@ -118,7 +120,7 @@
   <div class="container">
       
       <!-- ***** Logo and Top Header Area ***** -->
-      <div style="background-color: var(--main-blue); color: white; padding: 10px 20px;">
+      <div class="header-top">
           <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
           <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
       </div>
@@ -127,25 +129,25 @@
       <div class="navbar">
           <!-- Home - Active for this page -->
           <div class="navbar-item active">
-              <a href="index.html">Home</a> 
+              <a href="index.html">Home</a>
           </div>
-
-          <!-- About (Dropdown Menu Item) -->
+          
+          <!-- About Menu with Dropdown -->
           <div class="navbar-item">
-              <a href="about_koflux.html">About</a> 
+              <a href="about_koflux.html">About</a>
               <div class="dropdown-content">
-                  <a href="about_koflux.html">About KoFlux</a> 
-                  <a href="regional_networks.html">Regional Networks</a> 
+                  <a href="about_koflux.html">About KoFlux</a>
+                  <a href="regional_networks.html">Regional Networks</a>
                   <a href="#history">History of KoFlux</a>
               </div>
           </div>
-
+          
           <!-- Community -->
           <div class="navbar-item">
               <a href="#community-page">Community</a>
           </div>
-
-          <!-- Sites (Dropdown Menu Item) - *UPDATED* -->
+          
+          <!-- Sites (Dropdown Menu Item) -->
           <div class="navbar-item">
               <a href="#sites-menu">Sites</a>
               <div class="dropdown-content">
@@ -158,12 +160,16 @@
           <div class="navbar-item">
               <a href="#education-page">Education</a>
           </div>
-
-          <!-- Data -->
+          
+          <!-- Data (Dropdown Menu Item) -->
           <div class="navbar-item">
-              <a href="#data-page">Data</a>
+              <a href="#data-menu">Data</a>
+              <div class="dropdown-content">
+                  <a href="about_data.html">About Data</a>
+                  <a href="download_data.html">Download Data</a>
+              </div>
           </div>
-
+          
           <!-- Sign In -->
           <div class="navbar-item" style="float: right;">
               <a href="#signin-page">Sign In</a>
@@ -171,11 +177,13 @@
       </div>
       <!-- ***** Navigation Bar (Menu) End ***** -->
       
-      <!-- ***** Main Content Area Start (Empty) ***** -->
-      <div class="content-section">
-          <!-- Home page content is intentionally left blank as requested -->
+      <!-- ***** Body Content Area Start ***** -->
+      <div class="content-area" style="padding: 20px;">
+          <!-- Home page is menu-only. Content can be added here later. -->
+          <h1>Welcome to KoFlux</h1>
+          <p>This is the main homepage. Content will be added soon.</p>
       </div>
-      <!-- ***** Main Content Area End ***** -->
+      <!-- ***** Body Content Area End ***** -->
       
   </div>
   
