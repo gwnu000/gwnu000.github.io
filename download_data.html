@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KoFlux - Download Data</title>
+  
+  <style>
+    /* 1. 기본 스타일 (about_data.html과 동일) */
+    :root {
+      --main-blue: rgba(51, 85, 127, 1);
+      --light-blue: #5bc0de;
+      --page-background: #f8f8f8;
+      --link-color: #337ab7;
+      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+    }
+    body { background-color: var(--page-background); color: #333333; font-family: var(--font-family); margin: 0; }
+    .container { max-width: 1000px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding-top: 1px; min-height: 100vh; }
+    .header-top { background-color: var(--main-blue); color: white; padding: 10px 20px; }
+    .header-top h2 { margin: 0; font-size: 18px; display: inline-block; }
+    .header-top span { font-size: 12px; }
+
+    /* 2. 네비게이션 바 (about_data.html과 동일) */
+    .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
+    .navbar-item { float: left; position: relative; }
+    .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
+    .navbar-item.active > a { background-color: var(--light-blue); color: black; }
+    .navbar-item:hover > a { background-color: var(--light-blue); color: black; }
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
+    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
+    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
+    .navbar-item:hover .dropdown-content { display: block; }
+    .navbar-item.active:hover > a { background-color: var(--light-blue); color: black; }
+
+    /* 3. 본문 및 사이드바 (about_data.html과 동일) */
+    .content-area { padding: 0 20px 20px 20px; display: flex; }
+    .main-content { flex: 3; padding-right: 20px; }
+    .sidebar { flex: 1; padding-left: 20px; border-left: 1px solid #eee; font-size: 14px; }
+    .sidebar h4 { color: var(--main-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li a { color: var(--link-color); text-decoration: none; display: block; padding: 5px 0; }
+    .sidebar ul li a:hover { text-decoration: underline; }
+    .sidebar .site-map-link img { margin: 5px 0 10px 0; }
+    .sidebar h4:nth-of-type(2) { margin-top: 30px; }
+
+    /* 4. Download Data 페이지 전용 스타일 */
+    .main-content h1 { color: #333; font-size: 28px; padding: 0; border: none; }
+    .main-content h2 { color: var(--main-blue); font-size: 20px; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    .main-content p { padding: 0; margin-bottom: 15px; line-height: 1.6; }
+
+    .form-section {
+        margin-bottom: 25px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .form-section h3 {
+        margin-top: 0;
+        color: var(--main-blue);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    /* 라디오 버튼 스타일 */
+    .radio-group input[type="radio"] {
+        margin-right: 5px;
+    }
+    .radio-group label {
+        margin-right: 15px;
+        font-weight: normal;
+    }
+
+    /* 사이트 선택기 스타일 */
+    .site-selector {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .site-selector select {
+        width: 42%;
+        height: 250px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+        font-family: var(--font-family);
+        /* 가로 스크롤바가 필요할 경우를 대비 (긴 이름) */
+        overflow: auto; 
+    }
+    .site-selector-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+    .site-selector-buttons button {
+        background-color: var(--main-blue);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        margin: 5px 0;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .site-selector-buttons button:hover {
+        background-color: var(--light-blue);
+        color: black;
+    }
+
+    /* 체크박스 스타일 */
+    .checkbox-group input[type="checkbox"] {
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+    .checkbox-group label {
+        font-weight: normal;
+    }
+
+    /* 드롭다운 (Select) 스타일 */
+    .select-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: white;
+        font-family: var(--font-family);
+    }
+
+    /* 텍스트 입력 영역 (Textarea) 스타일 */
+    .textarea-group textarea {
+        width: 100%;
+        height: 100px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: var(--font-family);
+        line-height: 1.5;
+        box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+    }
+
+    /* 다운로드 버튼 */
+    #download-button {
+        background-color: #5cb85c;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #download-button:hover {
+        background-color: #449d44;
+    }
+    /* 비활성화된 버튼 스타일 */
+    #download-button:disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
+    }
+
+  </style>
+  
+</head>
+<body>
+  
+  <div class="container">
+      
+      <!-- ***** Logo and Top Header Area ***** -->
+      <div class="header-top">
+          <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
+          <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
+      </div>
+      
+      <!-- ***** Navigation Bar (Menu) Start ***** -->
+      <div class="navbar">
+          <div class="navbar-item"><a href="index.html">Home</a></div>
+          <div class="navbar-item">
+              <a href="#about-menu">About</a>
+              <div class="dropdown-content">
+                  <a href="about_koflux.html">About KoFlux</a>
+                  <a href="regional_networks.html">Regional Networks</a>
+                  <a href="#history">History of KoFlux</a>
+              </div>
+          </div>
+          <div class="navbar-item"><a href="#community-page">Community</a></div>
+          <div class="navbar-item">
+              <a href="#sites-menu">Sites</a>
+              <div class="dropdown-content">
+                  <a href="sites_info.html">Site Summary</a>
+                  <a href="site_list.html">Site List</a>
+              </div>
+          </div>
+          <div class="navbar-item"><a href="#education-page">Education</a></div>
+          <!-- Data (Dropdown Menu Item) - Active for this page -->
+          <div class="navbar-item active">
+              <a href="#data-menu">Data</a>
+              <div class="dropdown-content">
+                  <a href="about_data.html">About Data</a>
+                  <a href="download_data.html">Download Data</a>
+              </div>
+          </div>
+          <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
+      </div>
+      <!-- ***** Navigation Bar (Menu) End ***** -->
+      
+      <!-- ***** Body Content Area Start ***** -->
+      <div class="content-area">
+          
+          <!-- Main Content Area (Left) -->
+          <div class="main-content">
+              
+              <p style="font-size: 13px; color: #666; padding-left: 0;">Home / Data / Download Data</p>
+              
+              <h1>Download Data</h1>
+              <p>Follow the steps below to select and download KoFlux data products.</p>
+
+              <!-- A-T-01_1.png (두 번째 사진) -->
+              <img src="httpsStorage://image-server/A-T-01_1.png" alt="Download Data Options">
+              
+              <!-- Data Product Selection -->
+              <div class="form-section">
+                  <h3>1. Select Data Product</h3>
+                  <div class="form-group radio-group">
+                      <label>
+                          <input type="radio" name="data_product" value="koflux2025" checked>
+                          KoFlux2025 Dataset
+                      </label>
+                      <label>
+                          <input type="radio" name="data_product" value="legacy">
+                          Legacy Data (pre-2020)
+                      </label>
+                  </div>
+              </div>
+
+              <!-- Site Selection -->
+              <div class="form-section">
+                  <h3>2. Select Sites</h3>
+                  <div class="site-selector">
+                      <!-- All Sites List -->
+                      <div style="width: 42%;">
+                          <label for="all-sites" style="font-weight: bold;">All Sites:</label>
+                          <select id="all-sites" multiple>
+                              <option value="AR-SLu">AR-SLu: San Luis</option>
+                              <option value="AR-Vir">AR-Vir: Virasoro</option>
+                              <option value="AU-ASM">AU-ASM: Alice Springs</option>
+                              <option value="AU-Cpr">AU-Cpr: Cape P</option>
+                              <option value="AU-How">AU-How: Howard Springs</option>
+                              <option value="AU-Stp">AU-Stp: Sturt Plains</option>
+                              <option value="KR-CRK">KR-CRK: Cheorwon Rice paddy</option>
+                              <option value="KR-SMK">KR-SMK: Seolmacheon</option>
+                              <option value="US-MMS">US-MMS: Morgan Monroe State Forest</option>
+                              <option value="US-Bar">US-Bar: Bartlett Experimental Forest</option>
+                              <!-- ... other sites ... -->
+                          </select>
+                      </div>
+
+                      <!-- Buttons -->
+                      <div class="site-selector-buttons">
+                          <button id="add-site" title="Add selected site(s)">&gt;</button>
+                          <button id="remove-site" title="Remove selected site(s)">&lt;</button>
+                      </div>
+
+                      <!-- Selected Sites List -->
+                      <div style="width: 42%;">
+                          <label for="selected-sites" style="font-weight: bold;">Your Selections:</label>
+                          <select id="selected-sites" multiple>
+                              <!-- Selected items will go here -->
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group checkbox-group" style="margin-top: 20px;">
+                      <label>
+                          <input type="checkbox" id="badm-zip">
+                          BADM Zip File For All KoFlux Dataset Sites
+                      </label>
+                  </div>
+              </div>
+
+              <!-- Intended Use -->
+              <div class="form-section">
+                  <h3>3. Define Intended Use</h3>
+                  <div class="form-group select-group">
+                      <label for="intended-use">Intended Use *</label>
+                      <select id="intended-use">
+                          <option value="">Select an option...</option>
+                          <option value="research">Research (General)</option>
+                          <option value="modeling">Modeling Study</option>
+                          <option value="synthesis">Synthesis/Review Paper</option>
+                          <option value="education">Education</option>
+                          <option value="other">Other</option>
+                      </select>
+                  </div>
+                  <div class="form-group textarea-group">
+                      <label for="intended-use-details">Please describe your intended use (required):</label>
+                      <textarea id="intended-use-details" placeholder="This intended-use statement will be shared with the KoFlux data providers and the KoFlux website."></textarea>
+                  </div>
+              </div>
+
+              <!-- Data Policy and Download -->
+              <div class="form-section">
+                  <h3>4. Agree to Policy and Download</h3>
+                  <div class="form-group checkbox-group">
+                      <label>
+                          <input type="checkbox" id="agree-policy">
+                          I acknowledge that I have read and agree to the <strong>KoFlux Data Policy</strong>.
+                      </label>
+                  </div>
+                  <button id="download-button" disabled>Download All Files</button>
+              </div>
+
+          </div>
+          
+          <!-- Sidebar Area (Right) -->
+          <div class="sidebar">
+              <h4>USEFUL LINKS</h4>
+              <ul>
+                  <li><a href="#blog">Blog - What's New</a></li>
+                  <li><a href="#data-initiative">The KoFlux Data System Initiative</a></li>
+                  <li><a href="#dataset-2020">KoFLUX 2020 Dataset</a></li>
+                  <li><a href="#dataset-korea">Korea Dataset</a></li>
+                  <li><a href="#community-product">KoFLUX-CH4 Community Product</a></li>
+                  <li><a href="#data-submission">Submitting data to KoFLUX-CH4 V2</a></li>
+                  <li><a href="#data-change-log">Data Change Log</a></li>
+                  <li><a href="#opportunities">Opportunities</a></li>
+                  <li><a href="#contact">Contact Us</a></li>
+              </ul>
+              <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
+              <a href="site_list.html" class="site-map-link">
+                  <img src="picture 2.png" alt="KoFlux Sites Map" style="width: 100%;">
+              </a>
+          </div>
+          
+      </div>
+      <!-- ***** Body Content Area End ***** -->
+      
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- Site Selector Logic ---
+        const allSites = document.getElementById('all-sites');
+        const selectedSites = document.getElementById('selected-sites');
+        const addBtn = document.getElementById('add-site');
+        const removeBtn = document.getElementById('remove-site');
+
+        // Move selected sites from 'All Sites' to 'Your Selections'
+        addBtn.addEventListener('click', function() {
+            //
+            Array.from(allSites.selectedOptions).forEach(option => {
+                selectedSites.appendChild(option);
+            });
+        });
+
+        // Move selected sites from 'Your Selections' back to 'All Sites'
+        removeBtn.addEventListener('click', function() {
+            Array.from(selectedSites.selectedOptions).forEach(option => {
+                allSites.appendChild(option);
+                // (Optional:
+            });
+        });
+
+        // --- Download Button Logic ---
+        const agreeCheckbox = document.getElementById('agree-policy');
+        const downloadButton = document.getElementById('download-button');
+
+        // Enable/disable download button based on checkbox
+        agreeCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                downloadButton.disabled = false;
+            } else {
+                downloadButton.disabled = true;
+            }
+        });
+
+        // --- Textarea Placeholder Logic ---
+        // (Note: The `placeholder` attribute handles 
+        // "disappearing text" automatically, as requested.)
+        
+    });
+  </script>
+  
+</body>
+</html>
