@@ -4,7 +4,7 @@
   <title>KoFlux - Regional Networks</title>
   
   <style>
-    /* CSS는 about_koflux.html과 동일하게 유지하여 일관성을 확보합니다. */
+    /* 1. FLUXNET 디자인 테마 색상 정의 */
     :root {
       --main-blue: rgba(51, 85, 127, 1);
       --light-blue: #5bc0de;
@@ -37,14 +37,8 @@
       color: white; 
       padding: 10px 20px;
     }
-    .header-top h2 {
-        margin: 0; 
-        font-size: 18px; 
-        display: inline-block;
-    }
-    .header-top span {
-        font-size: 12px;
-    }
+    .header-top h2 { margin: 0; font-size: 18px; display: inline-block; }
+    .header-top span { font-size: 12px; }
 
     /* ***** Navigation Bar (Menu) Styles ***** */
     .navbar {
@@ -77,32 +71,10 @@
         color: black;
     }
     
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: white;
-      min-width: 200px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
-      left: 0;
-      top: 100%;
-    }
-    .dropdown-content a {
-      color: #333;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      text-align: left;
-      float: none;
-      font-weight: normal;
-    }
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: var(--main-blue);
-    }
-    .navbar-item:hover .dropdown-content {
-      display: block;
-    }
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
+    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
+    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
+    .navbar-item:hover .dropdown-content { display: block; }
     .navbar-item.active:hover > a {
         background-color: var(--light-blue);
         color: black;
@@ -170,7 +142,7 @@
         margin: 20px 0;
         display: block;
     }
-    /* 사이드바 이미지 링크 스타일 */
+    /* Sidebar image link style */
     .sidebar .site-map-link img {
         margin: 5px 0 10px 0;
     }
@@ -204,7 +176,7 @@
 
           <div class="navbar-item"><a href="#community-page">Community</a></div>
           
-          <!-- Sites (Dropdown Menu Item) - *UPDATED* -->
+          <!-- Sites (Dropdown Menu Item) -->
           <div class="navbar-item">
               <a href="#sites-menu">Sites</a>
               <div class="dropdown-content">
@@ -214,7 +186,16 @@
           </div>
           
           <div class="navbar-item"><a href="#education-page">Education</a></div>
-          <div class="navbar-item"><a href="#data-page">Data</a></div>
+          
+          <!-- Data (Dropdown Menu Item) -->
+          <div class="navbar-item">
+              <a href="#data-menu">Data</a>
+              <div class="dropdown-content">
+                  <a href="about_data.html">About Data</a>
+                  <a href="download_data.html">Download Data</a>
+              </div>
+          </div>
+          
           <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
       </div>
       <!-- ***** Navigation Bar (Menu) End ***** -->
@@ -247,12 +228,12 @@
               
               <p>Each network contributes to the global understanding of climate change impacts on terrestrial ecosystems.</p>
 
-              <!-- picture3 이미지 추가 -->
+              <!-- picture3.png 추가 -->
               <img src="picture3.png" alt="Regional Network Flux Comparison Data">
 
           </div>
           
-          <!-- 사이드바 영역 (오른쪽) - about_koflux.html과 동일 -->
+          <!-- Sidebar Area (Right) - about_koflux.html과 동일하게 수정됨 -->
           <div class="sidebar">
               <h4>USEFUL LINKS</h4>
               <ul>
@@ -268,7 +249,7 @@
               </ul>
               
               <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
-              <!-- picture2.png 이미지 사용 -->
+              <!-- picture 2.png (공백 포함) 이미지 사용 -->
               <a href="sites_info.html" class="site-map-link">
                   <img src="picture 2.png" alt="KoFlux Sites Map" style="width: 100%;">
               </a>
@@ -279,9 +260,6 @@
       <!-- ***** Body Content Area End ***** -->
       
   </div>
-  
-</body>
-</html>
   
 </body>
 </html>
