@@ -27,8 +27,8 @@
       margin: 0 auto;
       background-color: white; 
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-      padding-top: 1px; 
-      min-height: 100vh; 
+      padding-top: 1px;
+      min-height: 100vh;
     }
 
     /* 3. Logo and Top Header Area */
@@ -37,14 +37,8 @@
       color: white; 
       padding: 10px 20px;
     }
-    .header-top h2 {
-        margin: 0; 
-        font-size: 18px; 
-        display: inline-block;
-    }
-    .header-top span {
-        font-size: 12px;
-    }
+    .header-top h2 { margin: 0; font-size: 18px; display: inline-block; }
+    .header-top span { font-size: 12px; }
 
     /* ***** Navigation Bar (Menu) Styles ***** */
     .navbar {
@@ -67,8 +61,7 @@
       font-weight: bold;
       font-size: 14px;
     }
-    
-    /* 현재 활성화된 메뉴 항목 스타일 (About) */
+    /* Set About item as active for this page */
     .navbar-item.active > a {
         background-color: var(--light-blue);
         color: black;
@@ -77,33 +70,12 @@
         background-color: var(--light-blue);
         color: black;
     }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: white;
-      min-width: 200px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
-      left: 0;
-      top: 100%;
-    }
-    .dropdown-content a {
-      color: #333;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      text-align: left;
-      float: none;
-      font-weight: normal;
-    }
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: var(--main-blue);
-    }
-    .navbar-item:hover .dropdown-content {
-      display: block;
-    }
+    
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
+    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
+    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
+    .navbar-item:hover .dropdown-content { display: block; }
+    /* Keep active menu highlighted even when hovering dropdown */
     .navbar-item.active:hover > a {
         background-color: var(--light-blue);
         color: black;
@@ -112,14 +84,14 @@
     /* ***** Body Content Styles ***** */
     .content-area {
         padding: 0 20px 20px 20px;
-        display: flex; 
+        display: flex; /* 2단 레이아웃 */
     }
     .main-content {
-        flex: 3; 
+        flex: 3; /* 75% 너비 */
         padding-right: 20px;
     }
     .sidebar {
-        flex: 1; 
+        flex: 1; /* 25% 너비 */
         padding-left: 20px;
         border-left: 1px solid #eee;
         font-size: 14px;
@@ -171,8 +143,7 @@
         margin: 20px 0;
         display: block;
     }
-
-    /* 사이드바 이미지 링크 스타일 */
+    /* Sidebar image link style */
     .sidebar .site-map-link img {
         margin: 5px 0 10px 0;
     }
@@ -190,16 +161,13 @@
           <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
       </div>
       
-      <!-- ***** Navigation Bar (Menu) Start - About set as active ***** -->
+      <!-- ***** Navigation Bar (Menu) Start ***** -->
       <div class="navbar">
-          <!-- Home -->
-          <div class="navbar-item">
-              <a href="index.html">Home</a>
-          </div>
+          <div class="navbar-item"><a href="index.html">Home</a></div>
 
-          <!-- About (Dropdown Menu Item) - Set as active for this page -->
+          <!-- About (Dropdown Menu Item) - Active for this page -->
           <div class="navbar-item active">
-              <a href="about_koflux.html">About</a>
+              <a href="#about-menu">About</a>
               <div class="dropdown-content">
                   <a href="about_koflux.html">About KoFlux</a>
                   <a href="regional_networks.html">Regional Networks</a>
@@ -207,12 +175,9 @@
               </div>
           </div>
 
-          <!-- Community -->
-          <div class="navbar-item">
-              <a href="#community-page">Community</a>
-          </div>
-
-          <!-- Sites (Dropdown Menu Item) - *UPDATED* -->
+          <div class="navbar-item"><a href="#community-page">Community</a></div>
+          
+          <!-- Sites (Dropdown Menu Item) -->
           <div class="navbar-item">
               <a href="#sites-menu">Sites</a>
               <div class="dropdown-content">
@@ -221,20 +186,18 @@
               </div>
           </div>
           
-          <!-- Education -->
+          <div class="navbar-item"><a href="#education-page">Education</a></div>
+          
+          <!-- Data (Dropdown Menu Item) -->
           <div class="navbar-item">
-              <a href="#education-page">Education</a>
+              <a href="#data-menu">Data</a>
+              <div class="dropdown-content">
+                  <a href="about_data.html">About Data</a>
+                  <a href="download_data.html">Download Data</a>
+              </div>
           </div>
-
-          <!-- Data -->
-          <div class="navbar-item">
-              <a href="#data-page">Data</a>
-          </div>
-
-          <!-- Sign In -->
-          <div class="navbar-item" style="float: right;">
-              <a href="#signin-page">Sign In</a>
-          </div>
+          
+          <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
       </div>
       <!-- ***** Navigation Bar (Menu) End ***** -->
       
@@ -246,16 +209,20 @@
               
               <p style="font-size: 13px; color: #666; padding-left: 0;">Home / About / About KoFlux</p>
               
-              <h1>ABOUT THE KoFLUX Network</h1>
+              <h1>About the KoFlux Network</h1>
               
-              <p>KoFLUX is an international 'network of networks' connecting regional networks established to measure and understand the exchange of carbon dioxide, water, and energy between the terrestrial ecosystem and the atmosphere. KoFLUX scientists use Eddy Covariance techniques to collect data for a better understanding of the carbon cycle, water, energy, and related trace gas dynamics.</p>
+              <p>KoFlux is an international "network of networks," tying together regional networks of earth system scientists. KoFlux scientists use the eddy covariance technique to measure the cycling of carbon, water, and energy between the biosphere and atmosphere. Scientists use these data to better understand ecosystem functioning, trace gas dynamics, and air pollution.</p>
               
-              <p>Eddy covariance is the standard method for directly measuring gas fluxes between the ecosystem and the atmosphere. It allows for non-intrusive measurement of the exchange of carbon dioxide, water, and methane. KoFLUX data is essential for improving climate change predictive models and studying the role of ecosystems.</p>
+              <p>Eddy covariance is the standard method that ecosystem scientists use to measure trace gas fluxes between ecosystems and the atmosphere. A key benefit of the eddy covariance method is its ability to measure fluxes directly (in situ), without disturbing the ecosystem. Gas exchanges of carbon dioxide, methane, water vapor, and more are measured at each individual site. Some eddy covariance sites have been collecting data for several decades, providing opportunities to study how ecosystems are changing over time.</p>
               
-              <h2>KoFLUX Data Sharing and Activities</h2>
-              <p>Researchers collaborate to process and share data through regional network data portals. KoFLUX started in 2005 and currently operates over 50 active flux measurement sites. KoFLUX provides users with data documentation, tools, and opportunities to communicate with the FLUXNET community.</p>
+              <p>Researchers working within regional networks process and analyze eddy covariance data, and then offer their data through regional network data portals. KoFlux links these regional networks together, collecting their datasets to create processed and harmonized eddy covariance data products.</p>
               
-              <img src="picture1.png" alt="KoFlux Data Comparison Graph">
+              <p>The most recent KoFlux product, KoFlux2025, is hosted by the Seoul National University (SNU) and is publicly available for download. Currently there are over 1000 active and historic flux measurement sites, dispersed across most climate spaces and representative biomes.</p>
+              
+              <p>The KoFlux website offers documentation and support to KoFlux data users, and tools that enable idea sharing and engaging with the KoFlux community. KoFlux is one of the largest ecosystem networks in the world. The high level of collaboration among KoFlux scientists ensures the robustness of data, and optimizes the usefulness of this resource.</p>
+
+              <!-- picture1.png 추가 -->
+              <img src="picture1.png" alt="KoFlux Network Details">
 
           </div>
           
@@ -275,7 +242,7 @@
               </ul>
               
               <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
-              <!-- picture2 이미지에 Sites 페이지로 이동하는 하이퍼링크 적용 -->
+              <!-- picture 2.png (공백 포함) 이미지 및 링크 -->
               <a href="sites_info.html" class="site-map-link">
                   <img src="picture 2.png" alt="KoFlux Sites Map" style="width: 100%;">
               </a>
@@ -286,9 +253,6 @@
       <!-- ***** Body Content Area End ***** -->
       
   </div>
-  
-</body>
-</html>
   
 </body>
 </html>
