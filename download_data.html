@@ -289,7 +289,7 @@
                           </select>
                       </div>
                   </div>
-                  <div class="form-group checkbox-group" style="margin-top: 20px;">
+                  <div class.form-group checkbox-group" style="margin-top: 20px;">
                       <label>
                           <input type="checkbox" id="badm-zip">
                           BADM Zip File For All KoFlux Dataset Sites
@@ -370,18 +370,33 @@
     // --- Firebase Initialization ---
     let app, auth, db, userId;
     // Use the global __app_id variable provided by the environment
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'project0-a0afb'; // <-- 'default-app-id'를 실제 프로젝트 ID로 변경
+
+    // Your web app's Firebase configuration
+    // (이전에 공유해주신 정보입니다)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
+      authDomain: "project0-a0afb.firebaseapp.com",
+      projectId: "project0-a0afb",
+      storageBucket: "project0-a0afb.firebasestorage.app",
+      messagingSenderId: "498452008968",
+      appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
+      measurementId: "G-M542BRK99Z"
+    };
 
     // Async function to initialize Firebase
     async function initializeFirebase() {
       try {
         // Use the global __firebase_config variable
-        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
-        if (firebaseConfigStr === '{}') {
-            console.warn("Firebase config is missing.");
-        }
-        const firebaseConfig = JSON.parse(firebaseConfigStr);
+        /* REMOVED: GitHub Pages에는 __firebase_config가 없으므로 이 로직을 삭제합니다.
+          const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
+          if (firebaseConfigStr === '{}') {
+              console.warn("Firebase config is missing.");
+          }
+          const firebaseConfig = JSON.parse(firebaseConfigStr); 
+        */
 
+        // ADDED: 대신 위에서 정의한 firebaseConfig 객체를 직접 사용합니다.
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
         db = getFirestore(app);
@@ -398,17 +413,35 @@
     async function signInToFirebase() {
       try {
         // Use the global __initial_auth_token
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          // Fallback to anonymous sign-in if no token is provided
-          await signInAnonymously(auth);
-        }
+        /* REMOVED: GitHub Pages에는 __initial_auth_token이 없습니다.
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+        */
+        
+        // ADDED: GitHub Pages에서는 항상 '익명 로그인'을 사용합니다.
+        await signInAnonymously(auth);
+        
+        /* REMOVED:
+          } 
+        */
+
         // Get the user ID for storing data
         userId = auth.currentUser?.uid || crypto.randomUUID();
         console.log("Firebase signed in. UserID:", userId);
       } catch (error) {
         console.error("Firebase sign-in error:", error);
+        
+        // --- ADDED: More specific error handling ---
+        // Check if the error is the one the user reported
+        if (error.code === 'auth/configuration-not-found') {
+            console.error("---[FIX REQUIRED]---\n'Anonymous Sign-in' is not enabled in your Firebase project.\n1. Go to Firebase Console -> project0-a0afb\n2. Build -> Authentication\n3. Sign-in method (tab)\n4. Click 'Anonymous' (익명)\n5. Enable the toggle switch and Save.\n--------------------");
+            
+            // Also display this error to the user on the page
+            // We need to wait for DOMContentLoaded, so we'll set a global flag
+            window.firebaseAuthError = "Error: 'Anonymous Sign-in' (익명 로그인) is not enabled in the Firebase Project. Please contact the site administrator.";
+        }
+        // --- END ADDED ---
       }
     }
 
@@ -417,6 +450,21 @@
         
         // Initialize Firebase on page load
         await initializeFirebase();
+
+        // --- ADDED: Check for auth error flag ---
+        if (window.firebaseAuthError) {
+            let statusEl = document.getElementById('form-status');
+            if (!statusEl) {
+                statusEl = document.createElement('div');
+                statusEl.id = 'form-status';
+                const downloadButton = document.getElementById('download-button');
+                downloadButton.parentElement.insertBefore(statusEl, downloadButton);
+            }
+            statusEl.textContent = window.firebaseAuthError;
+            statusEl.style.color = 'red';
+            statusEl.style.marginTop = '10px';
+        }
+        // --- END ADDED ---
 
         // --- Site Selector Logic (Original logic) ---
         const allSites = document.getElementById('all-sites');
@@ -474,6 +522,15 @@
                 downloadButton.parentElement.insertBefore(statusEl, downloadButton);
             }
 
+            // --- ADDED: Check for auth error before proceeding ---
+            if (window.firebaseAuthError) {
+                 statusEl.textContent = window.firebaseAuthError;
+                 statusEl.style.color = 'red';
+                 statusEl.style.marginTop = '10px';
+                 return;
+            }
+            // --- END ADDED ---
+
             if (!intendedUse || !useDetails.trim()) {
                 statusEl.textContent = "Please select an 'Intended Use' and fill in the 'Description' before downloading.";
                 statusEl.style.color = 'red';
@@ -484,6 +541,10 @@
             // Check if Firebase is ready
             if (!db || !appId || !userId) {
                 console.error("Firestore is not initialized or user is not signed in. Cannot save data.");
+                // appId가 'default-app-id'가 아닌지 확인합니다.
+                if (appId === 'default-app-id') {
+                     console.error("appId is still 'default-app-id'. Make sure it's set to your actual projectId.");
+                }
                 statusEl.textContent = "Error: Could not connect to database. Please try again.";
                 statusEl.style.color = 'red';
                 statusEl.style.marginTop = '10px';
