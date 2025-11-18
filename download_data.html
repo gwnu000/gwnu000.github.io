@@ -614,8 +614,8 @@
                 // 4. Iterate and trigger download for each file
                 if (sitesToDownload.length > 0) {
                     sitesToDownload.forEach((siteValue, index) => {
-                        // Construct file name using site value and underscore (e.g., "AR-SLu_2025.csv")
-                        const fileName = `${siteValue}_${yearSuffix}.csv`;
+                        // Construct file name using site value and underscore (e.g., "AR-SLu_2025.zip")
+                        const fileName = `${siteValue}_${yearSuffix}.zip`; // <-- .csv에서 .zip으로 수정됨
                         const fileUrl = `${DATA_BASE_URL}${fileName}`;
                         
                         console.log(`Attempting to download: ${fileUrl}`);
@@ -630,10 +630,17 @@
                     statusEl.style.color = 'blue';
                 }
 
-                // (TODO: Add logic for BADM Zip File download if needed)
+                // --- MODIFIED: BADM Zip File download logic implemented ---
                 if (badmZip) {
-                    // Example: triggerDownload(DATA_BASE_URL + "BADM_ALL_SITES.zip", "BADM_ALL_SITES.zip");
-                    console.log("BADM Zip file download logic needs to be added here.");
+                    const badmFileName = "BADM_ALL_SITES.zip"; // (다운로드할 BADM zip 파일 이름)
+                    const badmFileUrl = `${DATA_BASE_URL}${badmFileName}`;
+                    console.log(`Attempting to download: ${badmFileUrl}`);
+                    
+                    // 다른 사이트 파일 다운로드가 끝난 후(1초*사이트 수) 다운로드 시작
+                    const delay = (sitesToDownload.length > 0 ? sitesToDownload.length : 0) * 1000;
+                    setTimeout(() => {
+                        triggerDownload(badmFileUrl, badmFileName);
+                    }, delay);
                 }
                 
                 // For demonstration, re-enable after 3 seconds
