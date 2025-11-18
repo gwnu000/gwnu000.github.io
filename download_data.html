@@ -471,6 +471,21 @@
         const selectedSites = document.getElementById('selected-sites');
         const addBtn = document.getElementById('add-site');
         const removeBtn = document.getElementById('remove-site');
+
+        // --- FIXED: ADDED MISSING EVENT LISTENERS ---
+        addBtn.addEventListener('click', function() {
+            Array.from(allSites.selectedOptions).forEach(option => {
+                selectedSites.appendChild(option);
+            });
+        });
+
+        removeBtn.addEventListener('click', function() {
+            Array.from(selectedSites.selectedOptions).forEach(option => {
+                allSites.appendChild(option);
+            });
+        });
+        // --- END OF FIX ---
+
         // --- ADDED: Helper function to trigger file downloads ---
         function triggerDownload(fileUrl, fileName) {
             // Create a temporary link element
@@ -645,9 +660,6 @@
         
     });
   </script>
-  
-</body>
-</html>
   
 </body>
 </html>
