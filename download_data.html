@@ -235,6 +235,9 @@
               <h1>Download Data</h1>
               <p>Follow the steps below to select and download KoFlux data products.</p>
 
+              <!-- A-T-01_1.png (두 번째 사진) - REMOVED -->
+              <!-- <img src="httpsStorage://image-server/A-T-01_1.png" alt="Download Data Options"> -->
+              
               <!-- Data Product Selection -->
               <div class="form-section">
                   <h3>1. Select Data Product</h3>
@@ -468,18 +471,18 @@
         const selectedSites = document.getElementById('selected-sites');
         const addBtn = document.getElementById('add-site');
         const removeBtn = document.getElementById('remove-site');
-
-        addBtn.addEventListener('click', function() {
-            Array.from(allSites.selectedOptions).forEach(option => {
-                selectedSites.appendChild(option);
-            });
-        });
-
-        removeBtn.addEventListener('click', function() {
-            Array.from(selectedSites.selectedOptions).forEach(option => {
-                allSites.appendChild(option);
-            });
-        });
+        // --- ADDED: Helper function to trigger file downloads ---
+        function triggerDownload(fileUrl, fileName) {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = fileName; // Set the file name for download
+            
+            // Append to the document, click, and then remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         // --- Download Button Logic (Original logic) ---
         const agreeCheckbox = document.getElementById('agree-policy');
@@ -579,9 +582,44 @@
                 downloadButton.textContent = "Submitted!";
                 
                 //
-                // *** PLACE YOUR ACTUAL FILE DOWNLOAD LOGIC HERE ***
-                // (e.g., window.location.href = 'path/to/your/zipfile.zip';)
+                // *** NEW: ACTUAL FILE DOWNLOAD LOGIC ***
                 //
+                
+                // 1. Define the base URL where your files are stored.
+                // IMPORTANT: You MUST upload your files to this folder on your GitHub site.
+                const DATA_BASE_URL = "httpsci://gwnu000.github.io/data/"; // (Example path)
+
+                // 2. Get the selected data product to determine the year suffix
+                const selectedDataProduct = document.querySelector('input[name="data_product"]:checked').value;
+                const yearSuffix = selectedDataProduct === 'koflux2025' ? '2025' : '2020'; // Based on your examples
+
+                // 3. Get the list of selected site *values* (e.g., "AR-SLu")
+                const sitesToDownload = selectedSiteValues.map(opt => opt.value); // e.g., ["AR-SLu", "AR-Vir"]
+
+                // 4. Iterate and trigger download for each file
+                if (sitesToDownload.length > 0) {
+                    sitesToDownload.forEach((siteValue, index) => {
+                        // Construct file name using site value and underscore (e.g., "AR-SLu_2025.csv")
+                        const fileName = `${siteValue}_${yearSuffix}.csv`;
+                        const fileUrl = `${DATA_BASE_URL}${fileName}`;
+                        
+                        console.log(`Attempting to download: ${fileUrl}`);
+                        
+                        // Use a small delay between downloads to ensure stability
+                        setTimeout(() => {
+                            triggerDownload(fileUrl, fileName);
+                        }, index * 1000); // 1-second delay between each file
+                    });
+                } else if (!badmZip) {
+                    statusEl.textContent = "Submission successful. (No sites selected for download).";
+                    statusEl.style.color = 'blue';
+                }
+
+                // (TODO: Add logic for BADM Zip File download if needed)
+                if (badmZip) {
+                    // Example: triggerDownload(DATA_BASE_URL + "BADM_ALL_SITES.zip", "BADM_ALL_SITES.zip");
+                    console.log("BADM Zip file download logic needs to be added here.");
+                }
                 
                 // For demonstration, re-enable after 3 seconds
                 setTimeout(() => {
@@ -607,6 +645,9 @@
         
     });
   </script>
+  
+</body>
+</html>
   
 </body>
 </html>
