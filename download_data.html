@@ -234,9 +234,6 @@
               
               <h1>Download Data</h1>
               <p>Follow the steps below to select and download KoFlux data products.</p>
-
-              <!-- A-T-01_1.png (두 번째 사진) - REMOVED -->
-              <!-- <img src="httpsStorage://image-server/A-T-01_1.png" alt="Download Data Options"> -->
               
               <!-- Data Product Selection -->
               <div class="form-section">
@@ -258,20 +255,29 @@
                   <h3>2. Select Sites</h3>
                   <div class="site-selector">
                       <!-- All Sites List -->
-                      <div class="list-container"> <!-- div style="width: 42%;" 에서 변경 -->
+                      <div class="list-container">
                           <label for="all-sites" style="font-weight: bold;">All Sites:</label>
                           <select id="all-sites" multiple>
-                              <option value="AR-SLu">AR-SLu: San Luis</option>
-                              <option value="AR-Vir">AR-Vir: Virasoro</option>
-                              <option value="AU-ASM">AU-ASM: Alice Springs</option>
-                              <option value="AU-Cpr">AU-Cpr: Cape P</option>
-                              <option value="AU-How">AU-How: Howard Springs</option>
-                              <option value="AU-Stp">AU-Stp: Sturt Plains</option>
-                              <option value="KR-CRK">KR-CRK: Cheorwon Rice paddy</option>
-                              <option value="KR-SMK">KR-SMK: Seolmacheon</option>
-                              <option value="US-MMS">US-MMS: Morgan Monroe State Forest</option>
-                              <option value="US-Bar">US-Bar: Bartlett Experimental Forest</option>
-                              <!-- ... other sites ... -->
+                              <option value="AMD">AMD: Anmyeondo Coniferous forest</option>
+                              <option value="CFK">CFK: Cheongmicheon Farmland</option>
+                              <option value="GBK">GBK: Gimje Soybean Field</option>
+                              <option value="GCK">GCK: Gwangreung Coniferous forest</option>
+                              <option value="GDK">GDK: Gwangreung Deciduous forest</option>
+                              <option value="GRK">GRK: Gimje Rice Paddy</option>
+                              <option value="GRK">GRK: Gimje Rice-barley double cropping Paddy Field</option>
+                              <option value="HC">HC: Hongcheon Mixed forest</option>
+                              <option value="HFK">HFK: Haenam Farmland</option>
+                              <option value="HPK">HPK: Haenam Paddy-field</option>
+                              <option value="JJ">JJ: Jeju Mixed forest</option>
+                              <option value="NRK1, 2">NRK1, 2: Naju Rice Paddy</option>
+                              <option value="PYC">PYC: Pyeongchang Deciduous forest</option>
+                              <option value="SC">SC: Samcheok Coniferous forest</option>
+                              <option value="SMK">SMK: Seolmacheon Mixed forest</option>
+                              <option value="SRK">SRK: Seocheon Reservoir</option>
+                              <option value="TBK">TBK: Taehwa Broadleaf forest</option>
+                              <option value="TCK">TCK: Taehwa Coniferous forest</option>
+                              <option value="UOK">UOK: Uiseong Apple Orchard</option>
+                              <option value="WD">WD: Wando Evergreen broadleaf forest</option>
                           </select>
                       </div>
 
@@ -282,14 +288,14 @@
                       </div>
 
                       <!-- Selected Sites List -->
-                      <div class="list-container"> <!-- div style="width: 42%;" 에서 변경 -->
+                      <div class="list-container">
                           <label for="selected-sites" style="font-weight: bold;">Your Selections:</label>
                           <select id="selected-sites" multiple>
                               <!-- Selected items will go here -->
                           </select>
                       </div>
                   </div>
-                  <div class.form-group checkbox-group" style="margin-top: 20px;">
+                  <div class="form-group checkbox-group" style="margin-top: 20px;">
                       <label>
                           <input type="checkbox" id="badm-zip">
                           BADM Zip File For All KoFlux Dataset Sites
@@ -356,11 +362,6 @@
       
   </div>
 
-  <!-- 
-    REPLACE: 
-    The old <script> tag should be completely replaced 
-    with this new <script type="module"> tag.
-  -->
   <script type="module">
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -387,15 +388,6 @@
     // Async function to initialize Firebase
     async function initializeFirebase() {
       try {
-        // Use the global __firebase_config variable
-        /* REMOVED: GitHub Pages에는 __firebase_config가 없으므로 이 로직을 삭제합니다.
-          const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
-          if (firebaseConfigStr === '{}') {
-              console.warn("Firebase config is missing.");
-          }
-          const firebaseConfig = JSON.parse(firebaseConfigStr); 
-        */
-
         // ADDED: 대신 위에서 정의한 firebaseConfig 객체를 직접 사용합니다.
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
@@ -412,20 +404,9 @@
     // Async function to sign in
     async function signInToFirebase() {
       try {
-        // Use the global __initial_auth_token
-        /* REMOVED: GitHub Pages에는 __initial_auth_token이 없습니다.
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-        */
-        
         // ADDED: GitHub Pages에서는 항상 '익명 로그인'을 사용합니다.
         await signInAnonymously(auth);
         
-        /* REMOVED:
-          } 
-        */
-
         // Get the user ID for storing data
         userId = auth.currentUser?.uid || crypto.randomUUID();
         console.log("Firebase signed in. UserID:", userId);
