@@ -179,6 +179,15 @@
         cursor: not-allowed;
     }
 
+    /* NEW: 글자수 제한 경고 메시지 스타일 */
+    #char-count-warning {
+        color: red;
+        font-size: 13px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        display: none; /* 초기에는 숨김 */
+    }
+
   </style>
   
 </head>
@@ -318,8 +327,9 @@
                       </select>
                   </div>
                   <div class="form-group textarea-group">
-                      <label for="intended-use-details">Please describe your intended use (required):</label>
+                      <label for="intended-use-details">Please describe your affiliation and intended use in detail (required):</label>
                       <textarea id="intended-use-details" placeholder="This intended-use statement will be shared with the KoFlux data providers and the KoFlux website."></textarea>
+                      <div id="char-count-warning">Please enter at least 20 characters (currently: 0).</div>
                   </div>
               </div>
 
@@ -370,11 +380,8 @@
 
     // --- Firebase Initialization ---
     let app, auth, db, userId;
-    // Use the global __app_id variable provided by the environment
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'project0-a0afb'; // <-- 'default-app-id'를 실제 프로젝트 ID로 변경
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'project0-a0afb';
 
-    // Your web app's Firebase configuration
-    // (이전에 공유해주신 정보입니다)
     const firebaseConfig = {
       apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
       authDomain: "project0-a0afb.firebaseapp.com",
@@ -385,54 +392,66 @@
       measurementId: "G-M542BRK99Z"
     };
 
-    // Async function to initialize Firebase
     async function initializeFirebase() {
       try {
-        // ADDED: 대신 위에서 정의한 firebaseConfig 객체를 직접 사용합니다.
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
         db = getFirestore(app);
-        setLogLevel('Debug'); // Enable detailed logs for debugging
-        
-        // Sign in the user (anonymously or with token)
+        setLogLevel('Debug');
         await signInToFirebase();
       } catch (e) {
         console.error("Firebase init failed:", e);
       }
     }
 
-    // Async function to sign in
     async function signInToFirebase() {
       try {
-        // ADDED: GitHub Pages에서는 항상 '익명 로그인'을 사용합니다.
         await signInAnonymously(auth);
-        
-        // Get the user ID for storing data
         userId = auth.currentUser?.uid || crypto.randomUUID();
         console.log("Firebase signed in. UserID:", userId);
       } catch (error) {
         console.error("Firebase sign-in error:", error);
-        
-        // --- ADDED: More specific error handling ---
-        // Check if the error is the one the user reported
         if (error.code === 'auth/configuration-not-found') {
             console.error("---[FIX REQUIRED]---\n'Anonymous Sign-in' is not enabled in your Firebase project.\n1. Go to Firebase Console -> project0-a0afb\n2. Build -> Authentication\n3. Sign-in method (tab)\n4. Click 'Anonymous' (익명)\n5. Enable the toggle switch and Save.\n--------------------");
-            
-            // Also display this error to the user on the page
-            // We need to wait for DOMContentLoaded, so we'll set a global flag
             window.firebaseAuthError = "Error: 'Anonymous Sign-in' (익명 로그인) is not enabled in the Firebase Project. Please contact the site administrator.";
         }
-        // --- END ADDED ---
       }
     }
+
+    // --- UPDATED: Validation Function for Download Eligibility ---
+    const MIN_CHAR_LENGTH = 20;
+
+    function checkDownloadEligibility() {
+        // 1. Policy agreement checkbox
+        const agree = document.getElementById('agree-policy').checked;
+        
+        // 2. Intended Use dropdown (must not be the default empty option)
+        const intendedUseSelected = document.getElementById('intended-use').value !== "";
+        
+        // 3. Intended Use Details textarea (must not be empty AND must meet minimum length)
+        const detailsTextarea = document.getElementById('intended-use-details');
+        const detailsFilled = detailsTextarea.value.trim().length >= MIN_CHAR_LENGTH;
+        
+        // Update warning message based on character count
+        const warningEl = document.getElementById('char-count-warning');
+        if (detailsTextarea.value.trim().length > 0 && detailsTextarea.value.trim().length < MIN_CHAR_LENGTH) {
+            warningEl.textContent = `Please enter at least ${MIN_CHAR_LENGTH} characters (currently: ${detailsTextarea.value.trim().length}).`;
+            warningEl.style.display = 'block';
+        } else {
+            warningEl.style.display = 'none';
+        }
+        
+        // Download button is enabled ONLY if all three conditions are met.
+        document.getElementById('download-button').disabled = !(agree && intendedUseSelected && detailsFilled);
+    }
+    // --- END UPDATED FUNCTION ---
+
 
     // --- Main App Logic ---
     document.addEventListener('DOMContentLoaded', async function() {
         
-        // Initialize Firebase on page load
         await initializeFirebase();
 
-        // --- ADDED: Check for auth error flag ---
         if (window.firebaseAuthError) {
             let statusEl = document.getElementById('form-status');
             if (!statusEl) {
@@ -445,15 +464,13 @@
             statusEl.style.color = 'red';
             statusEl.style.marginTop = '10px';
         }
-        // --- END ADDED ---
 
-        // --- Site Selector Logic (Original logic) ---
+        // --- Site Selector Logic ---
         const allSites = document.getElementById('all-sites');
         const selectedSites = document.getElementById('selected-sites');
         const addBtn = document.getElementById('add-site');
         const removeBtn = document.getElementById('remove-site');
 
-        // --- FIXED: ADDED MISSING EVENT LISTENERS ---
         addBtn.addEventListener('click', function() {
             Array.from(allSites.selectedOptions).forEach(option => {
                 selectedSites.appendChild(option);
@@ -465,36 +482,32 @@
                 allSites.appendChild(option);
             });
         });
-        // --- END OF FIX ---
+        
+        // --- ADDED: Attach checkDownloadEligibility to all relevant fields ---
+        document.getElementById('agree-policy').addEventListener('change', checkDownloadEligibility);
+        document.getElementById('intended-use').addEventListener('change', checkDownloadEligibility);
+        // ADDED: Use 'input' event for real-time character counting
+        document.getElementById('intended-use-details').addEventListener('input', checkDownloadEligibility);
+        
+        // Initial check to set the button state correctly
+        checkDownloadEligibility();
+        // --- END ATTACHMENT ---
 
         // --- ADDED: Helper function to trigger file downloads ---
         function triggerDownload(fileUrl, fileName) {
-            // Create a temporary link element
             const link = document.createElement('a');
             link.href = fileUrl;
-            link.download = fileName; // Set the file name for download
-            
-            // Append to the document, click, and then remove
+            link.download = fileName; 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        // --- Download Button Logic (Original logic) ---
-        const agreeCheckbox = document.getElementById('agree-policy');
+        // --- Download Button Logic (Modified to use eligibility check) ---
         const downloadButton = document.getElementById('download-button');
-
-        agreeCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                downloadButton.disabled = false;
-            } else {
-                downloadButton.disabled = true;
-            }
-        });
-
-        // --- ADDED: New Click Handler to Save Data ---
+        
         downloadButton.addEventListener('click', async function(event) {
-            event.preventDefault(); // Stop any default form submission
+            event.preventDefault();
 
             // 1. Get all form data
             const intendedUse = document.getElementById('intended-use').value;
@@ -508,39 +521,31 @@
                  text: opt.text 
             }));
 
-            // 2. Validate required fields
-            // Find or create a status message element
+            // 2. Re-validate required fields immediately before submission
             let statusEl = document.getElementById('form-status');
             if (!statusEl) {
                 statusEl = document.createElement('div');
                 statusEl.id = 'form-status';
-                // Insert status message before the download button
                 downloadButton.parentElement.insertBefore(statusEl, downloadButton);
             }
 
-            // --- ADDED: Check for auth error before proceeding ---
+            // Check eligibility one last time
+            if (downloadButton.disabled === true) {
+                 statusEl.textContent = "Please complete all required fields (Use, Details, and Policy Agreement) before downloading. (Details require minimum 20 characters).";
+                 statusEl.style.color = 'red';
+                 statusEl.style.marginTop = '10px';
+                 return;
+            }
+
             if (window.firebaseAuthError) {
                  statusEl.textContent = window.firebaseAuthError;
                  statusEl.style.color = 'red';
                  statusEl.style.marginTop = '10px';
                  return;
             }
-            // --- END ADDED ---
 
-            if (!intendedUse || !useDetails.trim()) {
-                statusEl.textContent = "Please select an 'Intended Use' and fill in the 'Description' before downloading.";
-                statusEl.style.color = 'red';
-                statusEl.style.marginTop = '10px';
-                return; // Stop execution
-            }
-
-            // Check if Firebase is ready
             if (!db || !appId || !userId) {
                 console.error("Firestore is not initialized or user is not signed in. Cannot save data.");
-                // appId가 'default-app-id'가 아닌지 확인합니다.
-                if (appId === 'default-app-id') {
-                     console.error("appId is still 'default-app-id'. Make sure it's set to your actual projectId.");
-                }
                 statusEl.textContent = "Error: Could not connect to database. Please try again.";
                 statusEl.style.color = 'red';
                 statusEl.style.marginTop = '10px';
@@ -550,13 +555,13 @@
             // 3. Disable button, show loading
             downloadButton.disabled = true;
             downloadButton.textContent = "Submitting...";
-            statusEl.textContent = ""; // Clear old errors
+            statusEl.textContent = "";
 
             // 4. Create data object to save
             const downloadRequest = {
-                userId: userId, // Store who made the request
+                userId: userId, 
                 intendedUse: intendedUse,
-                useDetails: useDetails,
+                useDetails: useDetails, 
                 dataProduct: dataProduct,
                 wantsBadmZip: badmZip,
                 selectedSites: selectedSiteValues,
@@ -565,7 +570,6 @@
 
             // 5. Save to Firestore
             try {
-                // Save data to a public collection (as per security rules)
                 const collectionPath = `artifacts/${appId}/public/data/download_requests`;
                 const docRef = await addDoc(collection(db, collectionPath), downloadRequest);
                 
@@ -574,50 +578,32 @@
                 // Success!
                 statusEl.textContent = "Submission successful! Starting download...";
                 statusEl.style.color = 'green';
-                statusEl.style.marginTop = '10px';
-                downloadButton.textContent = "Submitted!";
                 
-                //
-                // *** NEW: ACTUAL FILE DOWNLOAD LOGIC ***
-                //
-                
-                // 1. Define the base URL where your files are stored.
-                // IMPORTANT: You MUST upload your files to this folder on your GitHub site.
-                const DATA_BASE_URL = "https://gwnu000.github.io/data/"; // (FIXED: 'httpsci://' typo corrected)
-
-                // 2. Get the selected data product to determine the year suffix
+                // *** ACTUAL FILE DOWNLOAD LOGIC ***
+                const DATA_BASE_URL = "https://gwnu000.github.io/data/";
                 const selectedDataProduct = document.querySelector('input[name="data_product"]:checked').value;
-                const yearSuffix = selectedDataProduct === 'koflux2025' ? '2025' : '2020'; // Based on your examples
+                const yearSuffix = selectedDataProduct === 'koflux2025' ? '2025' : '2020';
 
-                // 3. Get the list of selected site *values* (e.g., "AR-SLu")
-                const sitesToDownload = selectedSiteValues.map(opt => opt.value); // e.g., ["AR-SLu", "AR-Vir"]
+                const sitesToDownload = selectedSiteValues.map(opt => opt.value);
 
-                // 4. Iterate and trigger download for each file
                 if (sitesToDownload.length > 0) {
                     sitesToDownload.forEach((siteValue, index) => {
-                        // Construct file name using site value and underscore (e.g., "AR-SLu_2025.zip")
-                        const fileName = `${siteValue}_${yearSuffix}.zip`; // <-- .csv에서 .zip으로 수정됨
+                        const fileName = `${siteValue}_${yearSuffix}.zip`;
                         const fileUrl = `${DATA_BASE_URL}${fileName}`;
-                        
                         console.log(`Attempting to download: ${fileUrl}`);
-                        
-                        // Use a small delay between downloads to ensure stability
                         setTimeout(() => {
                             triggerDownload(fileUrl, fileName);
-                        }, index * 1000); // 1-second delay between each file
+                        }, index * 1000); 
                     });
                 } else if (!badmZip) {
                     statusEl.textContent = "Submission successful. (No sites selected for download).";
                     statusEl.style.color = 'blue';
                 }
 
-                // --- MODIFIED: BADM Zip File download logic implemented ---
                 if (badmZip) {
-                    const badmFileName = "BADM_ALL_SITES.zip"; // (다운로드할 BADM zip 파일 이름)
+                    const badmFileName = "BADM_ALL_SITES.zip";
                     const badmFileUrl = `${DATA_BASE_URL}${badmFileName}`;
                     console.log(`Attempting to download: ${badmFileUrl}`);
-                    
-                    // 다른 사이트 파일 다운로드가 끝난 후(1초*사이트 수) 다운로드 시작
                     const delay = (sitesToDownload.length > 0 ? sitesToDownload.length : 0) * 1000;
                     setTimeout(() => {
                         triggerDownload(badmFileUrl, badmFileName);
@@ -627,21 +613,16 @@
                 // For demonstration, re-enable after 3 seconds
                 setTimeout(() => {
                     downloadButton.textContent = "Download All Files";
-                    if (agreeCheckbox.checked) {
-                        downloadButton.disabled = false;
-                    }
+                    checkDownloadEligibility(); // Re-check eligibility to enable if conditions are met
                 }, 3000);
 
             } catch (e) {
                 console.error("Error adding document: ", e);
                 statusEl.textContent = "Error: Could not save submission. Please try again.";
                 statusEl.style.color = 'red';
-                statusEl.style.marginTop = '10px';
                 
-                // Re-enable button on failure
-                if (agreeCheckbox.checked) {
-                    downloadButton.disabled = false;
-                }
+                // Re-enable button on failure by re-checking eligibility
+                checkDownloadEligibility();
                 downloadButton.textContent = "Download All Files";
             }
         });
