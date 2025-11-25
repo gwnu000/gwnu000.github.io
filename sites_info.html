@@ -29,13 +29,24 @@
       min-height: 100vh;
     }
 
+    /* 3. Logo and Top Header Area */
     .header-top {
       background-color: var(--main-blue); 
       color: white; 
       padding: 10px 20px;
     }
-    .header-top h2 { margin: 0; font-size: 18px; display: inline-block; }
-    .header-top span { font-size: 12px; }
+    /* ***** 수정된 부분: 로고 텍스트 크기 증가 ***** */
+    .header-top h2 { 
+        margin: 0; 
+        font-size: 28px; /* 18px -> 28px로 변경 */
+        display: inline-block; 
+    }
+    .header-top span { 
+        font-size: 14px; /* 12px -> 14px로 변경 */
+        margin-left: 10px; /* 간격 추가 */
+    }
+    /* ******************************************* */
+
 
     /* ***** Navigation Bar (Menu) Styles ***** */
     .navbar {
@@ -120,29 +131,13 @@
         display: block;
     }
     
-    /* Sidebar Styles (about_koflux.html과 동일하게 설정) */
+    /* Sidebar Styles (USEFUL LINKS 삭제로 인해 정리됨) */
     .sidebar h4 {
         color: var(--main-blue);
         border-bottom: 1px solid #eee;
         padding-bottom: 5px;
-        margin-top: 0;
+        margin-top: 0; /* USEFUL LINKS 삭제로 인해 margin-top 조정 */
         font-size: 16px;
-    }
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
-    .sidebar ul li a {
-        color: var(--link-color);
-        text-decoration: none;
-        display: block;
-        padding: 5px 0;
-    }
-    .sidebar ul li a:hover {
-        text-decoration: underline;
-    }
-    .sidebar h4:nth-of-type(2) { /* 두 번째 H4부터 마진 추가 */
-        margin-top: 30px;
     }
     .sidebar .site-map-link img {
         margin: 5px 0 10px 0;
@@ -157,8 +152,8 @@
       
       <!-- ***** Logo and Top Header Area ***** -->
       <div class="header-top">
-          <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
-          <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
+          <h2>KoFlux</h2>
+          <span>The Data Portal serving the KoFlux Community</span>
       </div>
       
       <!-- ***** Navigation Bar (Menu) Start ***** -->
@@ -187,8 +182,6 @@
           </div>
           
           <div class="navbar-item"><a href="#education-page">Education</a></div>
-
-          <!-- Data (Dropdown Menu Item) - *UPDATED* -->
           <div class="navbar-item">
               <a href="#data-menu">Data</a>
               <div class="dropdown-content">
@@ -196,7 +189,6 @@
                   <a href="download_data.html">Download Data</a>
               </div>
           </div>
-
           <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
       </div>
       <!-- ***** Navigation Bar (Menu) End ***** -->
@@ -218,33 +210,21 @@
               <p>Please note that not all registered KoFLUX sites are included in the latest KoFLUX Dataset. For data availability, please refer to the official data submission pages or contact us if you find any error in the Site Information page.</p>
 
               <!-- Sites Summary Chart (picture3.png) -->
-              <img src="picture3.png" alt="KoFlux Site Duration and Type Histograms"
-                   onerror="this.onerror=null; this.src='https://placehold.co/700x400/eee/ccc?text=Image+Not+Found'">
+              <img src="picture3.png" alt="KoFlux Site Duration and Type Histograms">
 
           </div>
           
-          <!-- Sidebar Area (Right) - about_koflux.html과 동일 -->
+          <!-- Sidebar Area (Right) -->
           <div class="sidebar">
-              <h4>USEFUL LINKS</h4>
-              <ul>
-                  <li><a href="#blog">Blog - What's New</a></li>
-                  <li><a href="#data-initiative">The KoFlux Data System Initiative</a></li>
-                  <li><a href="#dataset-2020">KoFLUX 2020 Dataset</a></li>
-                  <li><a href="#dataset-korea">Korea Dataset</a></li>
-                  <li><a href="#community-product">KoFLUX-CH4 Community Product</a></li>
-                  <li><a href="#data-submission">Submitting data to KoFLUX-CH4 V2</a></li>
-                  <li><a href="#data-change-log">Data Change Log</a></li>
-                  <li><a href="#opportunities">Opportunities</a></li>
-                  <li><a href="#contact">Contact Us</a></li>
-              </ul>
+              <!-- REMOVED: USEFUL LINKS SECTION -->
               
-              <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
-              <!-- Sites Map Image (picture2.png) -->
+              <!-- ***** 수정된 부분: 사이트맵 제목 및 이미지/링크 수정 ***** -->
+              <h4 style="margin-top: 0;">KoFlux Sites</h4>
+              <!-- Sites Map Image (picture4.png) -->
               <a href="site_list.html" class="site-map-link">
-                  <img src="picture 2.png" alt="KoFlux Sites Map" style="width: 100%;"
-                       onerror="this.onerror=null; this.src='https://placehold.co/250x200/eee/ccc?text=Image+Not+Found'">
+                  <img src="picture4.png" alt="KoFlux Sites Map" style="width: 100%;">
               </a>
-              
+              <!-- ************************************************* -->
           </div>
           
       </div>
