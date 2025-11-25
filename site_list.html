@@ -34,13 +34,24 @@
       min-height: 100vh;
     }
 
+    /* 3. Logo and Top Header Area */
     .header-top {
       background-color: var(--main-blue); 
       color: white; 
       padding: 10px 20px;
     }
-    .header-top h2 { margin: 0; font-size: 18px; display: inline-block; }
-    .header-top span { font-size: 12px; }
+    /* ***** 수정된 부분: 로고 텍스트 크기 증가 ***** */
+    .header-top h2 { 
+        margin: 0; 
+        font-size: 28px; /* 18px -> 28px로 변경 */
+        display: inline-block; 
+    }
+    .header-top span { 
+        font-size: 14px; /* 12px -> 14px로 변경 */
+        margin-left: 10px; /* 간격 추가 */
+    }
+    /* ******************************************* */
+
 
     /* ***** Navigation Bar (Menu) Styles ***** */
     .navbar {
@@ -178,8 +189,8 @@
       
       <!-- ***** Logo and Top Header Area ***** -->
       <div class="header-top">
-          <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
-          <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
+          <h2>KoFlux</h2>
+          <span>The Data Portal serving the KoFlux Community</span>
       </div>
       
       <!-- ***** Navigation Bar (Menu) Start ***** -->
@@ -290,7 +301,7 @@
     // 2. Initialize Leaflet Map
     const map = L.map('map').setView([36.5, 127.8], 7); // Center on South Korea
 
-    // ** 변경된 부분: Esri World Imagery 위성 지도 레이어 사용 **
+    // ** 위성 지도 레이어 사용 **
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     }).addTo(map);
