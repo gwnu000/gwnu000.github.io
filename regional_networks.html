@@ -37,8 +37,18 @@
       color: white; 
       padding: 10px 20px;
     }
-    .header-top h2 { margin: 0; font-size: 18px; display: inline-block; }
-    .header-top span { font-size: 12px; }
+    /* ***** 수정된 부분: 로고 텍스트 크기 증가 ***** */
+    .header-top h2 { 
+        margin: 0; 
+        font-size: 28px; /* 18px -> 28px로 변경 */
+        display: inline-block; 
+    }
+    .header-top span { 
+        font-size: 14px; /* 12px -> 14px로 변경 */
+        margin-left: 10px; /* 간격 추가 */
+    }
+    /* ******************************************* */
+
 
     /* ***** Navigation Bar (Menu) Styles ***** */
     .navbar {
@@ -101,19 +111,7 @@
         padding-bottom: 5px;
         margin-top: 0;
     }
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
-    .sidebar ul li a {
-        color: var(--link-color);
-        text-decoration: none;
-        display: block;
-        padding: 5px 0;
-    }
-    .sidebar ul li a:hover {
-        text-decoration: underline;
-    }
+    /* REMOVED: .sidebar ul, li, a styles (USEFUL LINKS 섹션 삭제됨) */
     
     /* Heading and Subheading */
     .main-content h1 {
@@ -156,8 +154,8 @@
       
       <!-- ***** Logo and Top Header Area ***** -->
       <div class="header-top">
-          <h2 style="margin: 0; font-size: 18px; display: inline-block;">KoFlux</h2>
-          <span style="font-size: 12px;">The Data Portal serving the KoFlux Community</span>
+          <h2>KoFlux</h2>
+          <span>The Data Portal serving the KoFlux Community</span>
       </div>
       
       <!-- ***** Navigation Bar (Menu) Start ***** -->
@@ -187,7 +185,7 @@
           
           <div class="navbar-item"><a href="#education-page">Education</a></div>
           
-          <!-- Data (Dropdown Menu Item) - *UPDATED* -->
+          <!-- Data (Dropdown Menu Item) -->
           <div class="navbar-item">
               <a href="#data-menu">Data</a>
               <div class="dropdown-content">
@@ -229,33 +227,21 @@
               <p>Each network contributes to the global understanding of climate change impacts on terrestrial ecosystems.</p>
 
               <!-- picture3.png 추가 -->
-              <img src="picture3.png" alt="Regional Network Flux Comparison Data"
-                   onerror="this.onerror=null; this.src='https://placehold.co/700x400/eee/ccc?text=Image+Not+Found'">
+              <img src="picture3.png" alt="Regional Network Flux Comparison Data">
 
           </div>
           
-          <!-- Sidebar Area (Right) - about_koflux.html과 동일하게 수정됨 -->
+          <!-- Sidebar Area (Right) -->
           <div class="sidebar">
-              <h4>USEFUL LINKS</h4>
-              <ul>
-                  <li><a href="#blog">Blog - What's New</a></li>
-                  <li><a href="#data-initiative">The KoFlux Data System Initiative</a></li>
-                  <li><a href="#dataset-2020">KoFLUX 2020 Dataset</a></li>
-                  <li><a href="#dataset-korea">Korea Dataset</a></li>
-                  <li><a href="#community-product">KoFLUX-CH4 Community Product</a></li>
-                  <li><a href="#data-submission">Submitting data to KoFLUX-CH4 V2</a></li>
-                  <li><a href="#data-change-log">Data Change Log</a></li>
-                  <li><a href="#opportunities">Opportunities</a></li>
-                  <li><a href="#contact">Contact Us</a></li>
-              </ul>
-              
-              <h4 style="margin-top: 30px;">KoFLUX SITES MAP</h4>
-              <!-- picture 2.png (공백 포함) 이미지 사용 -->
-              <a href="sites_info.html" class="site-map-link">
-                  <img src="picture 2.png" alt="KoFlux Sites Map" style="width: 100%;"
-                       onerror="this.onerror=null; this.src='https://placehold.co/250x200/eee/ccc?text=Image+Not+Found'">
+              <!-- REMOVED: USEFUL LINKS SECTION -->
+
+              <!-- ***** 수정된 부분: 사이트맵 제목 및 이미지/링크 수정 ***** -->
+              <h4 style="margin-top: 0;">KoFlux Sites</h4>
+              <!-- picture4.png 이미지 및 site_list.html 링크 -->
+              <a href="site_list.html" class="site-map-link">
+                  <img src="picture4.png" alt="KoFlux Sites Map" style="width: 100%;">
               </a>
-              
+              <!-- ************************************************* -->
           </div>
           
       </div>
