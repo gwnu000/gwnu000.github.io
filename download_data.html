@@ -247,9 +247,12 @@
                       <div class="list-container">
                           <label for="all-sites" style="font-weight: bold;">All Sites:</label>
                           <select id="all-sites" multiple>
-                              <!-- IMPORTANT: Value contains unique identifier for duplicate codes -->
+                              <!-- IMPORTANT: Value is now set to CODE_NAME for clean file naming -->
+                              <!-- Sites with duplicate code are included as separate options -->
                               <option value="AMD">AMD: Anmyeondo Coniferous forest</option>
                               <option value="CFK">CFK: Cheongmicheon Farmland</option>
+                              <!-- CRK: Cheorwon Rice paddy 항목 추가 -->
+                              <option value="CRK">CRK: Cheorwon Rice paddy</option>
                               <option value="GBK">GBK: Gimje Soybean Field</option>
                               <option value="GCK">GCK: Gwangreung Coniferous forest</option>
                               <option value="GDK">GDK: Gwangreung Deciduous forest</option>
@@ -541,8 +544,15 @@
 
                 if (sitesToDownload.length > 0) {
                     sitesToDownload.forEach((siteUniqueId, index) => {
-                        // The file name uses the full unique ID (e.g., GRK_1 or GRK_2)
-                        const fileName = `FLX_KR-${siteUniqueId}_KoFlux.zip`;
+                        // Use the unique ID from the option value to construct the file name
+                        // Example: AMD -> FLX_KR-AMD_KoFlux.zip
+                        // Example: GRK_2 -> FLX_KR-GRK_KoFlux.zip (assuming GRK_2 uses the GRK prefix in the file name)
+                        
+                        // Extract the base site code (e.g., GRK_2 -> GRK)
+                        const baseCode = siteUniqueId.split('_')[0]; 
+                        
+                        // Construct the requested file name format
+                        const fileName = `FLX_KR-${baseCode}_KoFlux.zip`;
                         const fileUrl = `${DATA_BASE_URL}${fileName}`;
 
                         console.log(`Attempting to download: ${fileUrl}`);
