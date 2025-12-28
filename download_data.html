@@ -2,591 +2,188 @@
 <html>
 <head>
   <title>KoFlux - Download Data</title>
-  
   <style>
-    /* 1. 기본 스타일 */
     :root {
       --main-blue: rgba(51, 85, 127, 1);
       --light-blue: #5bc0de;
       --page-background: #f8f8f8;
-      --link-color: #337ab7;
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
     body { background-color: var(--page-background); color: #333333; font-family: var(--font-family); margin: 0; }
     .container { max-width: 1000px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding-top: 1px; min-height: 100vh; }
     .header-top { background-color: var(--main-blue); color: white; padding: 10px 20px; }
-    
-    /* ***** KoFlux 로고 텍스트 크기 증가 ***** */
     .header-top h2 { margin: 0; font-size: 28px; display: inline-block; }
     .header-top span { font-size: 14px; margin-left: 10px; }
-    /* ************************************************* */
 
-    /* 2. 네비게이션 바 */
     .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
     .navbar-item { float: left; position: relative; }
     .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
     .navbar-item.active > a { background-color: var(--light-blue); color: black; }
     .navbar-item:hover > a { background-color: var(--light-blue); color: black; }
-    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; left: 0; top: 100%; }
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
-    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
     .navbar-item:hover .dropdown-content { display: block; }
-    .navbar-item.active:hover > a { background-color: var(--light-blue); color: black; }
 
-    /* 3. 본문 및 사이드바 */
     .content-area { padding: 0 20px 20px 20px; display: flex; }
     .main-content { flex: 3; padding-right: 20px; }
     .sidebar { flex: 1; padding-left: 20px; border-left: 1px solid #eee; font-size: 14px; }
     .sidebar h4 { color: var(--main-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
-    .sidebar .site-map-link img { margin: 5px 0 10px 0; }
+    .sidebar .site-map-link img { width: 100%; margin: 5px 0; }
 
-    /* 4. Download Data 페이지 전용 스타일 */
-    .main-content h1 { color: #333; font-size: 28px; padding: 0; border: none; }
-    .main-content h2 { color: var(--main-blue); font-size: 20px; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-    .main-content p { padding: 0; margin-bottom: 15px; line-height: 1.6; }
-
-    .form-section {
-        margin-bottom: 25px;
-        border: 1px solid #ddd;
-        padding: 15px;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-    .form-section h3 {
-        margin-top: 0;
-        color: var(--main-blue);
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-    /* 라디오 버튼 스타일 */
-    .radio-group input[type="radio"] {
-        margin-right: 5px;
-    }
-    .radio-group label {
-        margin-right: 15px;
-        font-weight: normal;
-    }
-
-    /* 사이트 선택기 스타일 */
-    .site-selector {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-    .list-container {
-        flex: 1;
-    }
-    .list-container label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .site-selector select {
-        width: 100%;
-        height: 250px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 5px;
-        font-family: var(--font-family);
-        overflow: auto; 
-        box-sizing: border-box;
-    }
-    .site-selector-buttons {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 0 15px;
-        margin-top: 25px;
-    }
-    .site-selector-buttons button {
-        background-color: var(--main-blue);
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        margin: 5px 0;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 16px;
-    }
-    .site-selector-buttons button:hover {
-        background-color: var(--light-blue);
-        color: black;
-    }
-
-    /* 체크박스 스타일 */
-    .checkbox-group input[type="checkbox"] {
-        margin-right: 8px;
-        vertical-align: middle;
-    }
-    .checkbox-group label {
-        font-weight: normal;
-    }
-
-    /* 드롭다운 (Select) 스타일 */
-    .select-group select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: white;
-        font-family: var(--font-family);
-    }
-
-    /* 텍스트 입력 영역 (Textarea) 스타일 */
-    .textarea-group textarea {
-        width: 100%;
-        height: 100px;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-family: var(--font-family);
-        line-height: 1.5;
-        box-sizing: border-box;
-    }
-
-    /* 다운로드 버튼 */
-    #download-button {
-        background-color: #5cb85c;
-        color: white;
-        font-weight: bold;
-        font-size: 16px;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    #download-button:hover {
-        background-color: #449d44;
-    }
-    /* 비활성화된 버튼 스타일 */
-    #download-button:disabled {
-        background-color: #ccc;
-        color: #666;
-        cursor: not-allowed;
-    }
-
-    /* 글자수 제한 경고 메시지 스타일 */
-    #char-count-warning {
-        color: red;
-        font-size: 13px;
-        margin-top: -10px;
-        margin-bottom: 10px;
-        display: none;
-    }
-
+    .form-section { margin-bottom: 25px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; }
+    .site-selector { display: flex; justify-content: space-between; align-items: flex-start; }
+    .list-container { flex: 1; }
+    .site-selector select { width: 100%; height: 250px; border: 1px solid #ccc; border-radius: 4px; padding: 5px; font-family: var(--font-family); }
+    .site-selector-buttons { display: flex; flex-direction: column; justify-content: center; padding: 0 15px; margin-top: 25px; }
+    .site-selector-buttons button { background-color: var(--main-blue); color: white; border: none; padding: 8px 12px; margin: 5px 0; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    
+    #download-button { background-color: #5cb85c; color: white; font-weight: bold; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; }
+    #download-button:disabled { background-color: #ccc; cursor: not-allowed; }
+    #char-count-warning { color: red; font-size: 13px; display: none; }
   </style>
-  
 </head>
 <body>
-  
   <div class="container">
-      
-      <!-- ***** Logo and Top Header Area ***** -->
-      <div class="header-top">
-          <h2>KoFlux</h2>
-          <span>The Data Portal serving the KoFlux Community</span>
+    <div class="header-top">
+      <h2>KoFlux</h2>
+      <span>The Data Portal serving the KoFlux Community</span>
+    </div>
+    
+    <div class="navbar">
+      <div class="navbar-item"><a href="index.html">Home</a></div>
+      <div class="navbar-item">
+        <a href="about_koflux.html">About</a>
+        <div class="dropdown-content">
+          <a href="about_koflux.html">About KoFlux</a>
+          <a href="regional_networks.html">Regional Networks</a>
+        </div>
       </div>
-      
-      <!-- ***** Navigation Bar (Menu) Start ***** -->
-      <div class="navbar">
-          <div class="navbar-item"><a href="index.html">Home</a></div>
-          <div class="navbar-item">
-              <a href="#about-menu">About</a>
-              <div class="dropdown-content">
-                  <a href="about_koflux.html">About KoFlux</a>
-                  <a href="regional_networks.html">Regional Networks</a>
-                  <a href="#history">History of KoFlux</a>
-              </div>
-          </div>
-          <div class="navbar-item"><a href="#community-page">Community</a></div>
-          <div class="navbar-item">
-              <a href="#sites-menu">Sites</a>
-              <div class="dropdown-content">
-                  <a href="sites_info.html">Site Summary</a>
-                  <a href="site_list.html">Site List</a>
-              </div>
-          </div>
-          <div class="navbar-item"><a href="#education-page">Education</a></div>
-          <!-- Data (Dropdown Menu Item) - Active for this page -->
-          <div class="navbar-item active">
-              <a href="#data-menu">Data</a>
-              <div class="dropdown-content">
-                  <a href="about_data.html">About Data</a>
-                  <a href="download_data.html">Download Data</a>
-              </div>
-          </div>
-          <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
+      <div class="navbar-item"><a href="community.html">Community</a></div>
+      <div class="navbar-item">
+        <a href="#">Sites</a>
+        <div class="dropdown-content">
+          <a href="sites_info.html">Site Summary</a>
+          <a href="site_list.html">Site List</a>
+        </div>
       </div>
-      <!-- ***** Navigation Bar (Menu) End ***** -->
-      
-      <!-- ***** Body Content Area Start ***** -->
-      <div class="content-area">
-          
-          <!-- Main Content Area (Left) -->
-          <div class="main-content">
-              
-              <p style="font-size: 13px; color: #666; padding-left: 0;">Home / Data / Download Data</p>
-              
-              <h1>Download Data</h1>
-              <p>Follow the steps below to select and download KoFlux data products.</p>
-              
-              <!-- Site Selection (Now Section 1) -->
-              <div class="form-section">
-                  <h3>1. Select Sites</h3>
-                  <div class="site-selector">
-                      <!-- All Sites List -->
-                      <div class="list-container">
-                          <label for="all-sites" style="font-weight: bold;">All Sites:</label>
-                          <select id="all-sites" multiple>
-                              <!-- IMPORTANT: Value is now set to CODE_NAME for clean file naming -->
-                              <!-- Sites with duplicate code are included as separate options -->
-                              <option value="AMD">AMD: Anmyeondo Coniferous forest</option>
-                              <option value="CFK">CFK: Cheongmicheon Farmland</option>
-                              <!-- CRK: Cheorwon Rice paddy 항목 추가 -->
-                              <option value="CRK">CRK: Cheorwon Rice paddy</option>
-                              <option value="GBK">GBK: Gimje Soybean Field</option>
-                              <option value="GCK">GCK: Gwangreung Coniferous forest</option>
-                              <option value="GDK">GDK: Gwangreung Deciduous forest</option>
-                              <option value="GRK_1">GRK: Gimje Rice Paddy</option>
-                              <option value="GRK_2">GRK: Gimje Rice-barley double cropping Paddy Field</option>
-                              <option value="HC">HC: Hongcheon Mixed forest</option>
-                              <option value="HFK">HFK: Haenam Farmland</option>
-                              <option value="HPK">HPK: Haenam Paddy-field</option>
-                              <option value="JJ">JJ: Jeju Mixed forest</option>
-                              <option value="NRK1_2">NRK1, 2: Naju Rice Paddy</option>
-                              <option value="PYC">PYC: Pyeongchang Deciduous forest</option>
-                              <option value="SC">SC: Samcheok Coniferous forest</option>
-                              <option value="SMK">SMK: Seolmacheon Mixed forest</option>
-                              <option value="SRK">SRK: Seocheon Reservoir</option>
-                              <option value="TBK">TBK: Taehwa Broadleaf forest</option>
-                              <option value="TCK">TCK: Taehwa Coniferous forest</option>
-                              <option value="UOK">UOK: Uiseong Apple Orchard</option>
-                              <option value="WD">WD: Wando Evergreen broadleaf forest</option>
-                          </select>
-                      </div>
-
-                      <!-- Buttons -->
-                      <div class="site-selector-buttons">
-                          <button id="add-site" title="Add selected site(s)">&gt;</button>
-                          <button id="remove-site" title="Remove selected site(s)">&lt;</button>
-                      </div>
-
-                      <!-- Selected Sites List -->
-                      <div class="list-container">
-                          <label for="selected-sites" style="font-weight: bold;">Your Selections:</label>
-                          <select id="selected-sites" multiple>
-                              <!-- Selected items will go here -->
-                          </select>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Intended Use (Now Section 2) -->
-              <div class="form-section">
-                  <h3>2. Define Intended Use</h3>
-                  <div class="form-group select-group">
-                      <label for="intended-use">Intended Use *</label>
-                      <select id="intended-use">
-                          <option value="">Select an option...</option>
-                          <option value="research">Research (General)</option>
-                          <option value="modeling">Modeling Study</option>
-                          <option value="synthesis">Synthesis/Review Paper</option>
-                          <option value="education">Education</option>
-                          <option value="other">Other</option>
-                      </select>
-                  </div>
-                  <div class="form-group textarea-group">
-                      <label for="intended-use-details">Please describe your affiliation and intended use in detail (required):</label>
-                      <textarea id="intended-use-details" placeholder="This intended-use statement will be shared with the KoFlux data providers and the KoFlux website."></textarea>
-                      <div id="char-count-warning">Please enter at least 20 characters (currently: 0).</div>
-                  </div>
-              </div>
-
-              <!-- Data Policy and Download (Now Section 3) -->
-              <div class="form-section">
-                  <h3>3. Agree to Policy and Download</h3>
-                  <div class="form-group checkbox-group">
-                      <label>
-                          <input type="checkbox" id="agree-policy">
-                          I acknowledge that I have read and agree to the <strong>KoFlux Data Policy</strong>.
-                      </label>
-                  </div>
-                  <button id="download-button" disabled>Download All Files</button>
-              </div>
-
-          </div>
-          
-          <!-- Sidebar Area (Right) -->
-          <div class="sidebar">
-              <!-- H4 태그의 텍스트 수정 및 margin-top 제거 -->
-              <h4 style="margin-top: 0;">KoFlux Sites</h4>
-              <a href="site_list.html" class="site-map-link">
-                  <!-- 이미지 파일 이름 및 링크 수정 -->
-                  <img src="picture4.png" alt="KoFlux Sites Map" style="width: 100%;">
-              </a>
-          </div>
-          
+      <div class="navbar-item"><a href="#">Education</a></div>
+      <div class="navbar-item active">
+        <a href="#">Data</a>
+        <div class="dropdown-content">
+          <a href="about_data.html">About Data</a>
+          <a href="download_data.html">Download Data</a>
+        </div>
       </div>
-      <!-- ***** Body Content Area End ***** -->
-      
+      <div class="navbar-item" style="float: right;"><a href="signin.html" id="nav-auth-text">Sign In</a></div>
+    </div>
+
+    <div class="content-area">
+      <div class="main-content">
+        <h1>Download Data</h1>
+        <!-- Form Structure... (As per previous design) -->
+        <div class="form-section">
+          <h3>1. Select Sites</h3>
+          <div class="site-selector">
+            <div class="list-container">
+              <select id="all-sites" multiple>
+                <option value="AMD">AMD: Anmyeondo Coniferous forest</option>
+                <option value="CRK">CRK: Cheorwon Rice paddy</option>
+                <option value="GRK_1">GRK: Gimje Rice Paddy</option>
+                <option value="GRK_2">GRK: Gimje Rice-barley double cropping Paddy Field</option>
+              </select>
+            </div>
+            <div class="site-selector-buttons">
+              <button id="add-site">&gt;</button>
+              <button id="remove-site">&lt;</button>
+            </div>
+            <div class="list-container">
+              <select id="selected-sites" multiple></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>2. Define Intended Use</h3>
+          <select id="intended-use"><option value="">Select...</option><option value="research">Research</option></select>
+          <textarea id="intended-use-details" placeholder="Min 20 chars" style="width:100%; height:100px; margin-top:10px;"></textarea>
+          <div id="char-count-warning">Please enter at least 20 characters.</div>
+        </div>
+
+        <div class="form-section">
+          <h3>3. Agree to Policy</h3>
+          <input type="checkbox" id="agree-policy"> Agree to Policy
+          <button id="download-button" disabled style="display:block; margin-top:15px;">Download All Files</button>
+          <div id="form-status" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <h4>KoFlux Sites</h4>
+        <a href="site_list.html" class="site-map-link">
+          <img src="picture4.png" alt="KoFlux Sites Map">
+        </a>
+      </div>
+    </div>
   </div>
 
   <script type="module">
-    // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, addDoc, collection, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // --- Firebase Initialization ---
-    let app, auth, db, userId;
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'project0-a0afb';
+    const firebaseConfig = { authDomain: "project0-a0afb.firebaseapp.com", projectId: "project0-a0afb" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const appId = "project0-a0afb";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
-      authDomain: "project0-a0afb.firebaseapp.com",
-      projectId: "project0-a0afb",
-      storageBucket: "project0-a0afb.firebasestorage.app",
-      messagingSenderId: "498452008968",
-      appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
-      measurementId: "G-M542BRK99Z"
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById('nav-auth-text').textContent = user ? "Profile" : "Sign In";
+    });
+
+    // Validation & Download Logic...
+    const downloadBtn = document.getElementById('download-button');
+    const details = document.getElementById('intended-use-details');
+    const agree = document.getElementById('agree-policy');
+    const use = document.getElementById('intended-use');
+
+    function validate() {
+      downloadBtn.disabled = !(agree.checked && use.value && details.value.trim().length >= 20);
+      document.getElementById('char-count-warning').style.display = (details.value.trim().length > 0 && details.value.trim().length < 20) ? 'block' : 'none';
+    }
+    details.oninput = validate;
+    agree.onchange = validate;
+    use.onchange = validate;
+
+    // Site Move Logic
+    document.getElementById('add-site').onclick = () => {
+      Array.from(document.getElementById('all-sites').selectedOptions).forEach(opt => document.getElementById('selected-sites').appendChild(opt));
+    };
+    document.getElementById('remove-site').onclick = () => {
+      Array.from(document.getElementById('selected-sites').selectedOptions).forEach(opt => document.getElementById('all-sites').appendChild(opt));
     };
 
-    async function initializeFirebase() {
+    downloadBtn.onclick = async () => {
+      if (!auth.currentUser) await signInAnonymously(auth);
+      const sites = Array.from(document.getElementById('selected-sites').options).map(o => o.value);
       try {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        setLogLevel('Debug');
-        await signInToFirebase();
-      } catch (e) {
-        console.error("Firebase init failed:", e);
-      }
-    }
-
-    async function signInToFirebase() {
-      try {
-        await signInAnonymously(auth);
-        userId = auth.currentUser?.uid || crypto.randomUUID();
-        console.log("Firebase signed in. UserID:", userId);
-      } catch (error) {
-        console.error("Firebase sign-in error:", error);
-        if (error.code === 'auth/configuration-not-found') {
-            console.error("---[FIX REQUIRED]---\n'Anonymous Sign-in' is not enabled in your Firebase project.\n1. Go to Firebase Console -> project0-a0afb\n2. Build -> Authentication\n3. Sign-in method (tab)\n4. Click 'Anonymous' (익명)\n5. Enable the toggle switch and Save.\n--------------------");
-            window.firebaseAuthError = "Error: 'Anonymous Sign-in' (익명 로그인) is not enabled in the Firebase Project. Please contact the site administrator.";
-        }
-      }
-    }
-
-    // --- Validation Function for Download Eligibility ---
-    const MIN_CHAR_LENGTH = 20;
-
-    function checkDownloadEligibility() {
-        // 1. Policy agreement checkbox
-        const agree = document.getElementById('agree-policy').checked;
-        
-        // 2. Intended Use dropdown (must not be the default empty option)
-        const intendedUseSelected = document.getElementById('intended-use').value !== "";
-        
-        // 3. Intended Use Details textarea (must not be empty AND must meet minimum length)
-        const detailsTextarea = document.getElementById('intended-use-details');
-        const detailsFilled = detailsTextarea.value.trim().length >= MIN_CHAR_LENGTH;
-        
-        // Update warning message based on character count
-        const warningEl = document.getElementById('char-count-warning');
-        if (detailsTextarea.value.trim().length > 0 && detailsTextarea.value.trim().length < MIN_CHAR_LENGTH) {
-            warningEl.textContent = `Please enter at least ${MIN_CHAR_LENGTH} characters (currently: ${detailsTextarea.value.trim().length}).`;
-            warningEl.style.display = 'block';
-        } else {
-            warningEl.style.display = 'none';
-        }
-        
-        // Download button is enabled ONLY if all three conditions are met.
-        document.getElementById('download-button').disabled = !(agree && intendedUseSelected && detailsFilled);
-    }
-    // --- END VALIDATION FUNCTION ---
-
-
-    // --- Main App Logic ---
-    document.addEventListener('DOMContentLoaded', async function() {
-        
-        await initializeFirebase();
-
-        if (window.firebaseAuthError) {
-            let statusEl = document.getElementById('form-status');
-            if (!statusEl) {
-                statusEl = document.createElement('div');
-                statusEl.id = 'form-status';
-                const downloadButton = document.getElementById('download-button');
-                downloadButton.parentElement.insertBefore(statusEl, downloadButton);
-            }
-            statusEl.textContent = window.firebaseAuthError;
-            statusEl.style.color = 'red';
-            statusEl.style.marginTop = '10px';
-        }
-
-        // --- Site Selector Logic ---
-        const allSites = document.getElementById('all-sites');
-        const selectedSites = document.getElementById('selected-sites');
-        const addBtn = document.getElementById('add-site');
-        const removeBtn = document.getElementById('remove-site');
-
-        addBtn.addEventListener('click', function() {
-            Array.from(allSites.selectedOptions).forEach(option => {
-                // IMPORTANT: Append the option to the selected list
-                selectedSites.appendChild(option);
-            });
-            // Ensure the download button eligibility is checked after modification
-            checkDownloadEligibility(); 
+        await addDoc(collection(db, `artifacts/${appId}/public/data/download_requests`), {
+          userId: auth.currentUser.uid,
+          sites: sites,
+          details: details.value,
+          timestamp: new Date().toISOString()
         });
-
-        removeBtn.addEventListener('click', function() {
-            Array.from(selectedSites.selectedOptions).forEach(option => {
-                // IMPORTANT: Append the option back to the allSites list
-                allSites.appendChild(option);
-            });
-            // Ensure the download button eligibility is checked after modification
-            checkDownloadEligibility(); 
+        document.getElementById('form-status').innerHTML = "<span style='color:green'>Success! Starting downloads...</span>";
+        sites.forEach((code, i) => {
+          setTimeout(() => {
+            const a = document.createElement('a');
+            a.href = `https://gwnu000.github.io/data/FLX_KR-${code.split('_')[0]}_KoFlux.zip`;
+            a.download = `FLX_KR-${code.split('_')[0]}_KoFlux.zip`;
+            a.click();
+          }, i * 1000);
         });
-        
-        // --- Attach checkDownloadEligibility to all relevant fields ---
-        document.getElementById('agree-policy').addEventListener('change', checkDownloadEligibility);
-        document.getElementById('intended-use').addEventListener('change', checkDownloadEligibility);
-        document.getElementById('intended-use-details').addEventListener('input', checkDownloadEligibility);
-        
-        // Initial check to set the button state correctly
-        checkDownloadEligibility();
-        // --- END ATTACHMENT ---
-
-        // --- Helper function to trigger file downloads ---
-        function triggerDownload(fileUrl, fileName) {
-            const link = document.createElement('a');
-            link.href = fileUrl;
-            link.download = fileName; 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // --- Download Button Logic (Modified to use new file naming) ---
-        const downloadButton = document.getElementById('download-button');
-        
-        downloadButton.addEventListener('click', async function(event) {
-            event.preventDefault();
-
-            // 1. Get all form data
-            const intendedUse = document.getElementById('intended-use').value;
-            const useDetails = document.getElementById('intended-use-details').value;
-            
-            const selectedSiteOptions = Array.from(document.querySelectorAll('#selected-sites option'));
-            const selectedSiteValues = selectedSiteOptions.map(opt => ({
-                 // IMPORTANT: Use the value (Site Code/Unique ID) for file naming
-                 value: opt.value, 
-                 text: opt.text 
-            }));
-
-            // 2. Re-validate and check required fields
-            let statusEl = document.getElementById('form-status');
-            if (!statusEl) {
-                statusEl = document.createElement('div');
-                statusEl.id = 'form-status';
-                downloadButton.parentElement.insertBefore(statusEl, downloadButton);
-            }
-
-            // [Validation checks omitted for brevity, but they are performed by checkDownloadEligibility]
-
-            if (!db || !appId || !userId) {
-                console.error("Firestore is not initialized or user is not signed in. Cannot save data.");
-                statusEl.textContent = "Error: Could not connect to database. Please try again.";
-                statusEl.style.color = 'red';
-                statusEl.style.marginTop = '10px';
-                return;
-            }
-
-            // 3. Disable button, show loading
-            downloadButton.disabled = true;
-            downloadButton.textContent = "Submitting...";
-            statusEl.textContent = "";
-
-            // 4. Create data object to save
-            const downloadRequest = {
-                userId: userId, 
-                intendedUse: intendedUse,
-                useDetails: useDetails, 
-                dataProduct: 'FLX_KR_KoFlux_Data (fixed)', // Fixed logging value
-                selectedSites: selectedSiteValues,
-                timestamp: new Date().toISOString()
-            };
-
-            // 5. Save to Firestore
-            try {
-                const collectionPath = `artifacts/${appId}/public/data/download_requests`;
-                const docRef = await addDoc(collection(db, collectionPath), downloadRequest);
-                
-                console.log("Data saved with ID: ", docRef.id);
-                
-                // Success!
-                statusEl.textContent = "Submission successful! Starting download...";
-                statusEl.style.color = 'green';
-                
-                // *** UPDATED FILE DOWNLOAD LOGIC ***
-                const DATA_BASE_URL = "https://gwnu000.github.io/data/";
-                const sitesToDownload = selectedSiteValues.map(opt => opt.value);
-                let downloadCount = 0;
-
-                if (sitesToDownload.length > 0) {
-                    sitesToDownload.forEach((siteUniqueId, index) => {
-                        // Use the unique ID from the option value to construct the file name
-                        // Example: AMD -> FLX_KR-AMD_KoFlux.zip
-                        // Example: GRK_2 -> FLX_KR-GRK_KoFlux.zip (assuming GRK_2 uses the GRK prefix in the file name)
-                        
-                        // Extract the base site code (e.g., GRK_2 -> GRK)
-                        const baseCode = siteUniqueId.split('_')[0]; 
-                        
-                        // Construct the requested file name format
-                        const fileName = `FLX_KR-${baseCode}_KoFlux.zip`;
-                        const fileUrl = `${DATA_BASE_URL}${fileName}`;
-
-                        console.log(`Attempting to download: ${fileUrl}`);
-                        setTimeout(() => {
-                            triggerDownload(fileUrl, fileName);
-                        }, index * 1000); 
-                        downloadCount++;
-                    });
-                }
-
-                if (downloadCount === 0) {
-                    statusEl.textContent = "Submission successful. (No sites selected for download).";
-                    statusEl.style.color = 'blue';
-                }
-                
-                // For demonstration, re-enable after 3 seconds
-                setTimeout(() => {
-                    downloadButton.textContent = "Download All Files";
-                    checkDownloadEligibility(); // Re-check eligibility to enable if conditions are met
-                }, 3000);
-
-            } catch (e) {
-                console.error("Error adding document: ", e);
-                statusEl.textContent = "Error: Could not save submission. Please try again.";
-                statusEl.style.color = 'red';
-                
-                // Re-enable button on failure by re-checking eligibility
-                checkDownloadEligibility();
-                downloadButton.textContent = "Download All Files";
-            }
-        });
-        
-    });
+      } catch (e) { console.error(e); }
+    };
   </script>
-  
 </body>
 </html>
