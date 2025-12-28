@@ -16,7 +16,6 @@
     .header-top h2 { margin: 0; font-size: 28px; display: inline-block; }
     .header-top span { font-size: 14px; margin-left: 10px; }
 
-    /* 네비게이션 바 */
     .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
     .navbar-item { float: left; position: relative; }
     .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
@@ -26,29 +25,26 @@
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
     .navbar-item:hover .dropdown-content { display: block; }
 
-    /* 로그인/회원가입 폼 스타일 */
-    .auth-container { max-width: 500px; margin: 40px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff; }
-    .auth-tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 25px; }
-    .auth-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-weight: bold; color: #777; }
-    .auth-tab.active { color: var(--main-blue); border-bottom: 2px solid var(--main-blue); }
-    
+    /* Auth Form Styles */
+    .auth-card { max-width: 400px; margin: 60px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .auth-card h1 { color: var(--main-blue); font-size: 24px; margin-top: 0; margin-bottom: 20px; text-align: center; }
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    
+    .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     .btn-auth { width: 100%; padding: 12px; background-color: var(--main-blue); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
     .btn-auth:hover { background-color: #264161; }
     
-    .auth-footer { margin-top: 20px; text-align: center; font-size: 13px; color: #666; }
-    .auth-footer a { color: var(--link-color); text-decoration: none; }
+    .auth-links { margin-top: 20px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
+    .auth-links a { color: var(--link-color); text-decoration: none; font-weight: bold; }
+    .auth-links p { margin: 8px 0; }
 
-    .status-msg { margin-top: 15px; padding: 10px; border-radius: 4px; display: none; font-size: 14px; }
+    .status-msg { margin-top: 15px; padding: 10px; border-radius: 4px; display: none; font-size: 14px; text-align: center; }
     .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; display: block; }
     .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; display: block; }
 
-    /* 로그인 후 상태 */
-    #user-info-panel { display: none; text-align: center; padding: 20px; }
-    .user-avatar { width: 80px; height: 80px; background: #ddd; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #666; }
+    /* Profile View */
+    #profile-view { display: none; text-align: center; }
+    .user-avatar { width: 80px; height: 80px; background: #eee; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #888; border: 2px solid #ddd; }
   </style>
 </head>
 <body>
@@ -67,7 +63,7 @@
           <a href="regional_networks.html">Regional Networks</a>
         </div>
       </div>
-      <div class="navbar-item"><a href="#">Community</a></div>
+      <div class="navbar-item"><a href="community.html">Community</a></div>
       <div class="navbar-item">
         <a href="#">Sites</a>
         <div class="dropdown-content">
@@ -86,190 +82,90 @@
       <div class="navbar-item active" style="float: right;"><a href="signin.html" id="nav-auth-text">Sign In</a></div>
     </div>
 
-    <div class="auth-container">
-      <!-- 탭 섹션 -->
-      <div id="auth-forms-wrapper">
-        <div class="auth-tabs">
-          <div class="auth-tab active" id="tab-signin">Sign In</div>
-          <div class="auth-tab" id="tab-signup">Register</div>
+    <!-- Login Form Section -->
+    <div id="login-section" class="auth-card">
+      <h1>Sign In</h1>
+      <form id="signin-form">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" required>
         </div>
-
-        <!-- 로그인 폼 -->
-        <form id="form-signin">
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="login-email" required>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="login-password" required>
-          </div>
-          <button type="submit" class="btn-auth">Sign In</button>
-        </form>
-
-        <!-- 회원가입 폼 -->
-        <form id="form-signup" style="display: none;">
-          <div class="form-group">
-            <label>Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="First and Last Name">
-          </div>
-          <div class="form-group">
-            <label>Email Address *</label>
-            <input type="email" id="reg-email" required>
-          </div>
-          <div class="form-group">
-            <label>Password *</label>
-            <input type="password" id="reg-password" required minlength="6">
-          </div>
-          <div class="form-group">
-            <label>Affiliation / Institution *</label>
-            <input type="text" id="reg-affiliation" required placeholder="e.g. Seoul National University">
-          </div>
-          <div class="form-group">
-            <label>Primary Role</label>
-            <select id="reg-role">
-              <option value="Researcher">Researcher</option>
-              <option value="Student">Student</option>
-              <option value="Professor">Professor</option>
-              <option value="Policy Maker">Policy Maker</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-auth">Create Account</button>
-        </form>
-        
-        <div id="status-msg" class="status-msg"></div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" class="btn-auth">Login</button>
+      </form>
+      <div id="status-msg" class="status-msg"></div>
+      
+      <div class="auth-links">
+        <p><a href="forgot_password.html">Forgot your password?</a></p>
+        <p>Don't have an account? <a href="signup.html">Register now</a></p>
       </div>
+    </div>
 
-      <!-- 로그인 완료 후 패널 -->
-      <div id="user-info-panel">
-        <div class="user-avatar" id="user-initial">?</div>
-        <h3 id="user-display-name">Welcome!</h3>
-        <p id="user-display-email" style="color: #666;"></p>
-        <p id="user-display-affiliation" style="font-style: italic;"></p>
-        <button id="btn-signout" class="btn-auth" style="background-color: #d9534f;">Sign Out</button>
-      </div>
+    <!-- Profile/Dashboard Section (Visible only when logged in) -->
+    <div id="profile-view" class="auth-card">
+      <div class="user-avatar" id="p-initial">?</div>
+      <h2 id="p-name">Loading...</h2>
+      <p id="p-email" style="color: #666; margin-bottom: 5px;"></p>
+      <p id="p-affiliation" style="font-style: italic; color: #888;"></p>
+      <button id="btn-logout" class="btn-auth" style="background-color: #d9534f; margin-top: 20px;">Sign Out</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "", // 환경에서 자동 제공
-      authDomain: "project0-a0afb.firebaseapp.com",
-      projectId: "project0-a0afb",
-      storageBucket: "project0-a0afb.firebasestorage.app",
-      messagingSenderId: "498452008968",
-      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
-    };
-
+    const firebaseConfig = { apiKey: "", authDomain: "project0-a0afb.firebaseapp.com", projectId: "project0-a0afb" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const appId = "project0-a0afb";
 
-    // UI 요소
-    const tabSignin = document.getElementById('tab-signin');
-    const tabSignup = document.getElementById('tab-signup');
-    const formSignin = document.getElementById('form-signin');
-    const formSignup = document.getElementById('form-signup');
-    const statusMsg = document.getElementById('status-msg');
-    const authWrapper = document.getElementById('auth-forms-wrapper');
-    const userPanel = document.getElementById('user-info-panel');
+    const loginSec = document.getElementById('login-section');
+    const profileSec = document.getElementById('profile-view');
+    const statusEl = document.getElementById('status-msg');
 
-    // 탭 전환 로직
-    tabSignin.onclick = () => {
-      tabSignin.classList.add('active');
-      tabSignup.classList.remove('active');
-      formSignin.style.display = 'block';
-      formSignup.style.display = 'none';
-      statusMsg.style.display = 'none';
-    };
-    tabSignup.onclick = () => {
-      tabSignup.classList.add('active');
-      tabSignin.classList.remove('active');
-      formSignup.style.display = 'block';
-      formSignin.style.display = 'none';
-      statusMsg.style.display = 'none';
-    };
-
-    function showStatus(msg, isError = false) {
-      statusMsg.textContent = msg;
-      statusMsg.className = 'status-msg ' + (isError ? 'error' : 'success');
-      statusMsg.style.display = 'block';
-    }
-
-    // 회원가입
-    formSignup.onsubmit = async (e) => {
+    // Login logic
+    document.getElementById('signin-form').onsubmit = async (e) => {
       e.preventDefault();
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
-      const password = document.getElementById('reg-password').value;
-      const affiliation = document.getElementById('reg-affiliation').value;
-      const role = document.getElementById('reg-role').value;
-
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // 1. 프로필 업데이트 (기본 이름)
-        await updateProfile(user, { displayName: name });
-
-        // 2. 추가 정보 Firestore 저장 (RULE 1 준수)
-        const userDocPath = `artifacts/${appId}/users/${user.uid}/profile/info`;
-        await setDoc(doc(db, userDocPath), {
-          name, email, affiliation, role, createdAt: new Date().toISOString()
-        });
-
-        showStatus("Account created successfully!");
-      } catch (error) {
-        showStatus(error.message, true);
-      }
-    };
-
-    // 로그인
-    formSignin.onsubmit = async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      statusEl.style.display = 'none';
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        showStatus("Signed in successfully!");
-      } catch (error) {
-        showStatus("Login failed: " + error.message, true);
+      } catch (err) {
+        statusEl.textContent = "Error: " + err.message;
+        statusEl.className = "status-msg error";
+        statusEl.style.display = "block";
       }
     };
 
-    // 로그아웃
-    document.getElementById('btn-signout').onclick = () => signOut(auth);
+    // Logout logic
+    document.getElementById('btn-logout').onclick = () => signOut(auth);
 
-    // 인증 상태 감시
+    // Auth State Observer
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        authWrapper.style.display = 'none';
-        userPanel.style.display = 'block';
+        loginSec.style.display = 'none';
+        profileSec.style.display = 'block';
         document.getElementById('nav-auth-text').textContent = "Profile";
         
-        // 유저 정보 표시
-        document.getElementById('user-display-name').textContent = `Hello, ${user.displayName || 'User'}!`;
-        document.getElementById('user-display-email').textContent = user.email;
-        document.getElementById('user-initial').textContent = (user.displayName || 'U').charAt(0).toUpperCase();
+        document.getElementById('p-name').textContent = user.displayName || "User";
+        document.getElementById('p-email').textContent = user.email;
+        document.getElementById('p-initial').textContent = (user.displayName || "U").charAt(0).toUpperCase();
 
-        // Firestore에서 상세 정보 가져오기
-        try {
-          const userDocPath = `artifacts/${appId}/users/${user.uid}/profile/info`;
-          const userDoc = await getDoc(doc(db, userDocPath));
-          if (userDoc.exists()) {
-            document.getElementById('user-display-affiliation').textContent = userDoc.data().affiliation;
-          }
-        } catch (e) { console.error(e); }
+        // Fetch affiliation from Firestore
+        const userDoc = await getDoc(doc(db, `artifacts/project0-a0afb/users/${user.uid}/profile/info`));
+        if (userDoc.exists()) {
+          document.getElementById('p-affiliation').textContent = userDoc.data().affiliation;
+        }
       } else {
-        authWrapper.style.display = 'block';
-        userPanel.style.display = 'none';
+        loginSec.style.display = 'block';
+        profileSec.style.display = 'none';
         document.getElementById('nav-auth-text').textContent = "Sign In";
       }
     });
