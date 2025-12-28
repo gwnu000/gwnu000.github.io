@@ -80,16 +80,32 @@
     <div class="content-area">
       <div class="main-content">
         <h1>Download Data</h1>
-        <!-- Form Structure... (As per previous design) -->
         <div class="form-section">
           <h3>1. Select Sites</h3>
           <div class="site-selector">
             <div class="list-container">
               <select id="all-sites" multiple>
                 <option value="AMD">AMD: Anmyeondo Coniferous forest</option>
+                <option value="CFK">CFK: Cheongmicheon Farmland</option>
                 <option value="CRK">CRK: Cheorwon Rice paddy</option>
+                <option value="GBK">GBK: Gimje Soybean Field</option>
+                <option value="GCK">GCK: Gwangreung Coniferous forest</option>
+                <option value="GDK">GDK: Gwangreung Deciduous forest</option>
                 <option value="GRK_1">GRK: Gimje Rice Paddy</option>
                 <option value="GRK_2">GRK: Gimje Rice-barley double cropping Paddy Field</option>
+                <option value="HC">HC: Hongcheon Mixed forest</option>
+                <option value="HFK">HFK: Haenam Farmland</option>
+                <option value="HPK">HPK: Haenam Paddy-field</option>
+                <option value="JJ">JJ: Jeju Mixed forest</option>
+                <option value="NRK1_2">NRK1, 2: Naju Rice Paddy</option>
+                <option value="PYC">PYC: Pyeongchang Deciduous forest</option>
+                <option value="SC">SC: Samcheok Coniferous forest</option>
+                <option value="SMK">SMK: Seolmacheon Mixed forest</option>
+                <option value="SRK">SRK: Seocheon Reservoir</option>
+                <option value="TBK">TBK: Taehwa Broadleaf forest</option>
+                <option value="TCK">TCK: Taehwa Coniferous forest</option>
+                <option value="UOK">UOK: Uiseong Apple Orchard</option>
+                <option value="WD">WD: Wando Evergreen broadleaf forest</option>
               </select>
             </div>
             <div class="site-selector-buttons">
@@ -104,7 +120,12 @@
 
         <div class="form-section">
           <h3>2. Define Intended Use</h3>
-          <select id="intended-use"><option value="">Select...</option><option value="research">Research</option></select>
+          <select id="intended-use">
+            <option value="">Select...</option>
+            <option value="research">Research</option>
+            <option value="education">Education</option>
+            <option value="other">Other</option>
+          </select>
           <textarea id="intended-use-details" placeholder="Min 20 chars" style="width:100%; height:100px; margin-top:10px;"></textarea>
           <div id="char-count-warning">Please enter at least 20 characters.</div>
         </div>
@@ -131,7 +152,16 @@
     import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const firebaseConfig = { authDomain: "project0-a0afb.firebaseapp.com", projectId: "project0-a0afb" };
+    // Firebase 구성 설정
+    const firebaseConfig = { 
+      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
+      authDomain: "project0-a0afb.firebaseapp.com", 
+      projectId: "project0-a0afb",
+      storageBucket: "project0-a0afb.firebasestorage.app",
+      messagingSenderId: "498452008968",
+      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
+    };
+    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -141,48 +171,80 @@
       document.getElementById('nav-auth-text').textContent = user ? "Profile" : "Sign In";
     });
 
-    // Validation & Download Logic...
     const downloadBtn = document.getElementById('download-button');
     const details = document.getElementById('intended-use-details');
     const agree = document.getElementById('agree-policy');
     const use = document.getElementById('intended-use');
 
     function validate() {
-      downloadBtn.disabled = !(agree.checked && use.value && details.value.trim().length >= 20);
-      document.getElementById('char-count-warning').style.display = (details.value.trim().length > 0 && details.value.trim().length < 20) ? 'block' : 'none';
+      const isDetailsValid = details.value.trim().length >= 20;
+      downloadBtn.disabled = !(agree.checked && use.value && isDetailsValid);
+      document.getElementById('char-count-warning').style.display = (details.value.trim().length > 0 && !isDetailsValid) ? 'block' : 'none';
     }
+    
     details.oninput = validate;
     agree.onchange = validate;
     use.onchange = validate;
 
-    // Site Move Logic
     document.getElementById('add-site').onclick = () => {
-      Array.from(document.getElementById('all-sites').selectedOptions).forEach(opt => document.getElementById('selected-sites').appendChild(opt));
+      Array.from(document.getElementById('all-sites').selectedOptions).forEach(opt => {
+        document.getElementById('selected-sites').appendChild(opt);
+      });
+      validate();
     };
+    
     document.getElementById('remove-site').onclick = () => {
-      Array.from(document.getElementById('selected-sites').selectedOptions).forEach(opt => document.getElementById('all-sites').appendChild(opt));
+      Array.from(document.getElementById('selected-sites').selectedOptions).forEach(opt => {
+        document.getElementById('all-sites').appendChild(opt);
+      });
+      validate();
     };
 
     downloadBtn.onclick = async () => {
-      if (!auth.currentUser) await signInAnonymously(auth);
+      if (!auth.currentUser) {
+        try {
+          await signInAnonymously(auth);
+        } catch (authErr) {
+          console.error("Anonymous auth failed:", authErr);
+          document.getElementById('form-status').innerHTML = "<span style='color:red'>Authentication Error. Please try again later.</span>";
+          return;
+        }
+      }
+
       const sites = Array.from(document.getElementById('selected-sites').options).map(o => o.value);
+      if (sites.length === 0) {
+        document.getElementById('form-status').innerHTML = "<span style='color:red'>Please select at least one site.</span>";
+        return;
+      }
+
       try {
         await addDoc(collection(db, `artifacts/${appId}/public/data/download_requests`), {
           userId: auth.currentUser.uid,
           sites: sites,
           details: details.value,
+          intendedUse: use.value,
           timestamp: new Date().toISOString()
         });
+
         document.getElementById('form-status').innerHTML = "<span style='color:green'>Success! Starting downloads...</span>";
+        
         sites.forEach((code, i) => {
           setTimeout(() => {
+            // GRK_1, GRK_2, NRK1_2 등 언더바(_) 뒤의 구분자 제거 로직
+            const baseCode = code.split('_')[0];
+            const fileName = `FLX_KR-${baseCode}_KoFlux.zip`;
             const a = document.createElement('a');
-            a.href = `https://gwnu000.github.io/data/FLX_KR-${code.split('_')[0]}_KoFlux.zip`;
-            a.download = `FLX_KR-${code.split('_')[0]}_KoFlux.zip`;
+            a.href = `https://gwnu000.github.io/data/${fileName}`;
+            a.download = fileName;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
           }, i * 1000);
         });
-      } catch (e) { console.error(e); }
+      } catch (e) { 
+        console.error("Firestore error:", e);
+        document.getElementById('form-status').innerHTML = "<span style='color:red'>Error saving request. Please check permissions.</span>";
+      }
     };
   </script>
 </body>
