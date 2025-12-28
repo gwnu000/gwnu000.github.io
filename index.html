@@ -4,16 +4,15 @@
   <title>KoFlux</title>
   
   <style>
-    /* 1. FLUXNET 디자인 테마 색상 정의 */
+    /* 1. 디자인 테마 색상 정의 */
     :root {
-      --main-blue: rgba(51, 85, 127, 1); /* FLUXNET 네비게이션바 배경색 */
-      --light-blue: #5bc0de; /* 호버 시 밝은 파란색 */
-      --page-background: #f8f8f8; /* 페이지 전체 배경색 */
-      --link-color: #337ab7; /* 본문 링크 색상 */
+      --main-blue: rgba(51, 85, 127, 1);
+      --light-blue: #5bc0de;
+      --page-background: #f8f8f8;
+      --link-color: #337ab7;
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
 
-    /* 2. Full Page Base Design and Center Container Setup */
     body {
       background-color: var(--page-background); 
       color: #333333;
@@ -21,14 +20,13 @@
       margin: 0;
     }
 
-    /* Center Alignment Container */
     .container {
       max-width: 1000px;
-      margin: 0 auto; /* 중앙 정렬 핵심 */
+      margin: 0 auto;
       background-color: white; 
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-      padding-top: 1px; /* container가 body의 margin을 상속하지 않도록 */
-      min-height: 100vh; /* 최소 높이 설정 (내용이 적을 때도 배경 유지) */
+      padding-top: 1px;
+      min-height: 100vh;
     }
 
     /* 3. Logo and Top Header Area */
@@ -37,29 +35,28 @@
       color: white; 
       padding: 10px 20px;
     }
-    /* ***** 수정된 부분: 로고 텍스트 크기 증가 ***** */
+    /* KoFlux 로고 텍스트 크기 28px 적용 */
     .header-top h2 {
         margin: 0; 
-        font-size: 28px; /* 18px -> 28px로 변경 */
+        font-size: 28px; 
         display: inline-block;
     }
     .header-top span {
-        font-size: 14px; /* 12px -> 14px로 변경 */
-        margin-left: 10px; /* 간격 추가 */
+        font-size: 14px;
+        margin-left: 10px;
     }
-    /* ******************************************* */
 
-    /* ***** Navigation Bar (Menu) Styles ***** */
+    /* Navigation Bar (Menu) Styles */
     .navbar {
       background-color: var(--main-blue); 
-      overflow: visible; /* 드롭다운 메뉴가 보이도록 'visible'로 설정 */
+      overflow: visible;
       min-height: 50px;
       padding: 0 20px;
       margin-bottom: 20px;
     }
     .navbar-item {
       float: left;
-      position: relative; /* 드롭다운의 기준점이 됨 */
+      position: relative;
     }
     .navbar-item a {
       display: block;
@@ -71,49 +68,41 @@
       font-size: 14px;
     }
     
-    /* 현재 활성화된 메뉴 항목 스타일 */
     .navbar-item.active > a {
         background-color: var(--light-blue);
         color: black;
     }
-    .navbar-item:hover > a { /* 일반 호버 스타일 */
+    .navbar-item:hover > a {
         background-color: var(--light-blue);
         color: black;
     }
     
-    /* 드롭다운 메뉴 스타일 */
     .dropdown-content {
-      display: none; /* 평소에는 숨김 */
-      position: absolute; /* 상위 항목(navbar-item)에 대해 절대 위치 */
+      display: none;
+      position: absolute;
       background-color: white;
-      min-width: 200px; /* 드롭다운 너비 */
+      min-width: 200px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1; /* 다른 요소 위에 표시 */
-      left: 0; /* 상위 항목의 왼쪽 끝에 맞춤 */
-      top: 100%; /* 상위 항목의 바로 아래에 표시 */
+      z-index: 1000;
+      left: 0;
+      top: 100%;
     }
-    /* 드롭다운 내부 링크 스타일 */
     .dropdown-content a {
       color: #333;
       padding: 12px 16px;
       text-decoration: none;
       display: block;
       text-align: left;
-      float: none; /* 세로 정렬을 위해 float 해제 */
-      font-weight: normal; /* 일반 굵기 */
+      float: none;
+      font-weight: normal;
     }
     
-    /* 드롭다운 호버 스타일 */
     .navbar-item:hover .dropdown-content {
-      display: block; /* 상위 항목에 마우스를 올리면 드롭다운 표시 */
+      display: block;
     }
     .navbar-item:hover .dropdown-content a:hover {
         background-color: #f1f1f1;
         color: var(--main-blue);
-    }
-    .navbar-item.active:hover > a { /* 활성화된 항목은 호버 시에도 동일한 스타일 유지 */
-        background-color: var(--light-blue);
-        color: black;
     }
   </style>
   
@@ -122,71 +111,62 @@
   
   <div class="container">
       
-      <!-- ***** Logo and Top Header Area ***** -->
+      <!-- Logo and Top Header Area -->
       <div class="header-top">
           <h2>KoFlux</h2>
           <span>The Data Portal serving the KoFlux Community</span>
       </div>
       
-      <!-- ***** Navigation Bar (Menu) Start ***** -->
+      <!-- Navigation Bar -->
       <div class="navbar">
-          <!-- Home - Active for this page -->
           <div class="navbar-item active">
               <a href="index.html">Home</a>
           </div>
           
-          <!-- About Menu with Dropdown -->
           <div class="navbar-item">
               <a href="about_koflux.html">About</a>
               <div class="dropdown-content">
                   <a href="about_koflux.html">About KoFlux</a>
                   <a href="regional_networks.html">Regional Networks</a>
-                  <a href="#history">History of KoFlux</a>
               </div>
           </div>
           
-          <!-- Community -->
           <div class="navbar-item">
-              <a href="#community-page">Community</a>
+              <a href="#">Community</a>
           </div>
           
-          <!-- Sites (Dropdown Menu Item) -->
           <div class="navbar-item">
-              <a href="#sites-menu">Sites</a>
+              <a href="#">Sites</a>
               <div class="dropdown-content">
                   <a href="sites_info.html">Site Summary</a>
                   <a href="site_list.html">Site List</a>
               </div>
           </div>
           
-          <!-- Education -->
           <div class="navbar-item">
-              <a href="#education-page">Education</a>
+              <a href="#">Education</a>
           </div>
           
-          <!-- Data (Dropdown Menu Item) -->
           <div class="navbar-item">
-              <a href="#data-menu">Data</a>
+              <a href="#">Data</a>
               <div class="dropdown-content">
                   <a href="about_data.html">About Data</a>
                   <a href="download_data.html">Download Data</a>
               </div>
           </div>
           
-          <!-- Sign In -->
+          <!-- 수정된 부분: signin.html로 연결 -->
           <div class="navbar-item" style="float: right;">
-              <a href="#signin-page">Sign In</a>
+              <a href="signin.html">Sign In</a>
           </div>
       </div>
-      <!-- ***** Navigation Bar (Menu) End ***** -->
       
-      <!-- ***** Body Content Area Start ***** -->
+      <!-- Body Content Area -->
       <div class="content-area" style="padding: 20px;">
-          <!-- Home page is menu-only. Content can be added here later. -->
           <h1>Welcome to KoFlux</h1>
-          <p>This is the main homepage. Content will be added soon.</p>
+          <p>The KoFlux Data Portal is designed to serve the global ecosystem research community with high-quality flux data and tools.</p>
+          <p>Please use the navigation menu to explore our sites, datasets, and community resources.</p>
       </div>
-      <!-- ***** Body Content Area End ***** -->
       
   </div>
   
