@@ -235,10 +235,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     
+    // Firebase 구성에 유효한 apiKey를 추가했습니다.
     const firebaseConfig = { 
-        apiKey: "", // 환경에서 자동 제공됨
+        apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU", 
         authDomain: "project0-a0afb.firebaseapp.com", 
-        projectId: "project0-a0afb" 
+        projectId: "project0-a0afb",
+        storageBucket: "project0-a0afb.firebasestorage.app",
+        messagingSenderId: "498452008968",
+        appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
+        measurementId: "G-M542BRK99Z"
     };
     
     const app = initializeApp(firebaseConfig);
