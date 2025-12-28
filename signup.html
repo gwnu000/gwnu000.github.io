@@ -26,9 +26,11 @@
     .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
     .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     .btn-auth { width: 100%; padding: 12px; background-color: var(--main-blue); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
-    .status-msg { margin-top: 15px; padding: 10px; border-radius: 4px; display: none; font-size: 14px; text-align: center; }
-    .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; display: block; }
-    .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; display: block; }
+    .btn-auth:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    .status-msg { margin-top: 15px; padding: 12px; border-radius: 4px; display: none; font-size: 14px; text-align: center; line-height: 1.4; }
+    .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
     .auth-links { margin-top: 20px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
   </style>
 </head>
@@ -49,15 +51,15 @@
       <form id="signup-form">
         <div class="form-group">
           <label>Full Name *</label>
-          <input type="text" id="reg-name" required>
+          <input type="text" id="reg-name" required placeholder="First and Last Name">
         </div>
         <div class="form-group">
           <label>Email Address *</label>
-          <input type="email" id="reg-email" required>
+          <input type="email" id="reg-email" required placeholder="example@email.com">
         </div>
         <div class="form-group">
           <label>Password *</label>
-          <input type="password" id="reg-password" required minlength="6">
+          <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters">
         </div>
         <div class="form-group">
           <label>Affiliation / Institution *</label>
@@ -72,8 +74,9 @@
             <option value="Other">Other</option>
           </select>
         </div>
-        <button type="submit" class="btn-auth">Create Account</button>
+        <button type="submit" id="btn-submit" class="btn-auth">Create Account</button>
       </form>
+      <!-- 알림 메시지가 표시될 공간 -->
       <div id="status-msg" class="status-msg"></div>
       <div class="auth-links">
         Already have an account? <a href="signin.html" style="color:var(--link-color); font-weight:bold; text-decoration:none;">Sign In</a>
@@ -86,38 +89,78 @@
     import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const firebaseConfig = { apiKey: "", authDomain: "project0-a0afb.firebaseapp.com", projectId: "project0-a0afb" };
+    // 고정된 API Key와 프로젝트 설정
+    const firebaseConfig = { 
+      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU", 
+      authDomain: "project0-a0afb.firebaseapp.com", 
+      projectId: "project0-a0afb",
+      storageBucket: "project0-a0afb.firebasestorage.app",
+      messagingSenderId: "498452008968",
+      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
+    };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
     const statusEl = document.getElementById('status-msg');
+    const signupForm = document.getElementById('signup-form');
+    const submitBtn = document.getElementById('btn-submit');
 
-    document.getElementById('signup-form').onsubmit = async (e) => {
+    function showMsg(msg, isError = false) {
+      statusEl.textContent = msg;
+      statusEl.className = "status-msg " + (isError ? "error" : "success");
+      statusEl.style.display = "block";
+    }
+
+    signupForm.onsubmit = async (e) => {
       e.preventDefault();
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
+      
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-password').value;
-      const affiliation = document.getElementById('reg-affiliation').value;
+      const affiliation = document.getElementById('reg-affiliation').value.trim();
       const role = document.getElementById('reg-role').value;
 
+      statusEl.style.display = "none";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Processing...";
+
       try {
+        // 1. Firebase Auth 계정 생성
         const cred = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // 2. Auth 프로필에 이름 저장
         await updateProfile(cred.user, { displayName: name });
         
-        // Save profile to Firestore
-        await setDoc(doc(db, `artifacts/project0-a0afb/users/${cred.user.uid}/profile/info`), {
-          name, email, affiliation, role, createdAt: new Date().toISOString()
+        // 3. Firestore에 상세 정보 저장 (RULE 1 준수)
+        // Path: artifacts/{appId}/users/{userId}/profile/info
+        const userDocPath = `artifacts/project0-a0afb/users/${cred.user.uid}/profile/info`;
+        await setDoc(doc(db, userDocPath), {
+          name: name,
+          email: email,
+          affiliation: affiliation,
+          role: role,
+          createdAt: new Date().toISOString()
         });
 
-        statusEl.textContent = "Account created! Redirecting to Sign In...";
-        statusEl.className = "status-msg success";
-        statusEl.style.display = "block";
-        setTimeout(() => window.location.href = "signin.html", 2000);
+        showMsg("Success! Account created. Redirecting to Sign In page...");
+        
+        // 2초 후 로그인 페이지로 이동
+        setTimeout(() => window.location.href = "signin.html", 2500);
+
       } catch (err) {
-        statusEl.textContent = "Error: " + err.message;
-        statusEl.className = "status-msg error";
-        statusEl.style.display = "block";
+        console.error("Signup Error:", err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Account";
+        
+        let errorMsg = "An error occurred during signup.";
+        if (err.code === 'auth/email-already-in-use') errorMsg = "This email is already in use.";
+        else if (err.code === 'auth/invalid-email') errorMsg = "Invalid email address.";
+        else if (err.code === 'auth/weak-password') errorMsg = "The password is too weak.";
+        else errorMsg = err.message;
+        
+        showMsg(errorMsg, true);
       }
     };
   </script>
