@@ -2,241 +2,103 @@
 <html>
 <head>
   <title>KoFlux - About Data</title>
-  
   <style>
-    /* 1. FLUXNET 디자인 테마 색상 정의 */
     :root {
       --main-blue: rgba(51, 85, 127, 1);
       --light-blue: #5bc0de;
       --page-background: #f8f8f8;
-      --link-color: #337ab7;
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
+    body { background-color: var(--page-background); color: #333333; font-family: var(--font-family); margin: 0; }
+    .container { max-width: 1000px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding-top: 1px; min-height: 100vh; }
+    .header-top { background-color: var(--main-blue); color: white; padding: 10px 20px; }
+    /* KoFlux 로고 텍스트 크기 28px 유지 */
+    .header-top h2 { margin: 0; font-size: 28px; display: inline-block; }
+    .header-top span { font-size: 14px; margin-left: 10px; }
 
-    /* 2. Full Page Base Design and Center Container Setup */
-    body {
-      background-color: var(--page-background); 
-      color: #333333;
-      font-family: var(--font-family);
-      margin: 0;
-    }
-
-    /* Center Alignment Container */
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background-color: white; 
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-      padding-top: 1px;
-      min-height: 100vh;
-    }
-
-    /* 3. Logo and Top Header Area */
-    .header-top {
-      background-color: var(--main-blue); 
-      color: white; 
-      padding: 10px 20px;
-    }
-    /* ***** 수정된 부분: 로고 텍스트 크기 증가 ***** */
-    .header-top h2 { 
-        margin: 0; 
-        font-size: 28px; /* 18px -> 28px로 변경 */
-        display: inline-block; 
-    }
-    .header-top span { 
-        font-size: 14px; /* 12px -> 14px로 변경 */
-        margin-left: 10px; /* 간격 추가 */
-    }
-    /* ******************************************* */
-
-
-    /* ***** Navigation Bar (Menu) Styles ***** */
-    .navbar {
-      background-color: var(--main-blue); 
-      overflow: visible; 
-      min-height: 50px;
-      padding: 0 20px;
-      margin-bottom: 20px;
-    }
-    .navbar-item {
-      float: left;
-      position: relative;
-    }
-    .navbar-item a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 15px 18px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    /* Set Data item as active for this page */
-    .navbar-item.active > a {
-        background-color: var(--light-blue);
-        color: black;
-    }
-    .navbar-item:hover > a { /* 일반 호버 스타일 */
-        background-color: var(--light-blue);
-        color: black;
-    }
-    
-    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
+    .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
+    .navbar-item { float: left; position: relative; }
+    .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
+    .navbar-item.active > a { background-color: var(--light-blue); color: black; }
+    .navbar-item:hover > a { background-color: var(--light-blue); color: black; }
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; left: 0; top: 100%; }
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
-    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
     .navbar-item:hover .dropdown-content { display: block; }
-    /* Keep active menu highlighted even when hovering dropdown */
-    .navbar-item.active:hover > a {
-        background-color: var(--light-blue);
-        color: black;
-    }
-    
-    /* ***** Body Content Styles ***** */
-    .content-area {
-        padding: 0 20px 20px 20px;
-        display: flex; /* 2단 레이아웃 */
-    }
-    .main-content {
-        flex: 3; /* 75% 너비 */
-        padding-right: 20px;
-    }
-    .sidebar {
-        flex: 1; /* 25% 너비 */
-        padding-left: 20px;
-        border-left: 1px solid #eee;
-        font-size: 14px;
-    }
-    .sidebar h4 {
-        color: var(--main-blue);
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-        margin-top: 0; /* USEFUL LINKS 삭제로 인해 margin-top 조정 */
-    }
-    /* REMOVED: .sidebar ul, li, a styles (USEFUL LINKS 섹션 삭제됨) */
-    
-    /* Heading and Subheading */
-    .main-content h1 {
-        color: #333;
-        font-size: 28px;
-        padding: 0;
-        border: none;
-    }
-    .main-content h2 {
-        color: var(--main-blue);
-        font-size: 20px;
-        margin-top: 30px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-    }
-    .main-content p {
-        padding: 0;
-        margin-bottom: 15px;
-        line-height: 1.6;
-    }
-    
-    /* Image Style */
-    .main-content img {
-        max-width: 100%;
-        height: auto;
-        margin: 20px 0;
-        display: block;
-    }
-    /* Sidebar image link style */
-    .sidebar .site-map-link img {
-        margin: 5px 0 10px 0;
-    }
-    
+
+    .content-area { padding: 0 20px 20px 20px; display: flex; }
+    .main-content { flex: 3; padding-right: 20px; }
+    .sidebar { flex: 1; padding-left: 20px; border-left: 1px solid #eee; font-size: 14px; }
+    .sidebar h4 { color: var(--main-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
+    .sidebar .site-map-link img { margin: 5px 0 10px 0; width: 100%; }
+    .main-content h1 { color: #333; font-size: 28px; margin-top: 0; }
+    .main-content p { line-height: 1.6; }
   </style>
-  
 </head>
 <body>
-  
   <div class="container">
-      
-      <!-- ***** Logo and Top Header Area ***** -->
-      <div class="header-top">
-          <h2>KoFlux</h2>
-          <span>The Data Portal serving the KoFlux Community</span>
+    <div class="header-top">
+      <h2>KoFlux</h2>
+      <span>The Data Portal serving the KoFlux Community</span>
+    </div>
+    
+    <div class="navbar">
+      <div class="navbar-item"><a href="index.html">Home</a></div>
+      <div class="navbar-item">
+        <a href="about_koflux.html">About</a>
+        <div class="dropdown-content">
+          <a href="about_koflux.html">About KoFlux</a>
+          <a href="regional_networks.html">Regional Networks</a>
+        </div>
       </div>
-      
-      <!-- ***** Navigation Bar (Menu) Start ***** -->
-      <div class="navbar">
-          <div class="navbar-item"><a href="index.html">Home</a></div>
-
-          <!-- About (Dropdown Menu Item) -->
-          <div class="navbar-item">
-              <a href="#about-menu">About</a>
-              <div class="dropdown-content">
-                  <a href="about_koflux.html">About KoFlux</a>
-                  <a href="regional_networks.html">Regional Networks</a>
-                  <a href="#history">History of KoFlux</a>
-              </div>
-          </div>
-
-          <div class="navbar-item"><a href="#community-page">Community</a></div>
-          
-          <!-- Sites (Dropdown Menu Item) -->
-          <div class="navbar-item">
-              <a href="#sites-menu">Sites</a>
-              <div class="dropdown-content">
-                  <a href="sites_info.html">Site Summary</a>
-                  <a href="site_list.html">Site List</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item"><a href="#education-page">Education</a></div>
-          
-          <!-- Data (Dropdown Menu Item) - Active for this page -->
-          <div class="navbar-item active">
-              <a href="#data-menu">Data</a>
-              <div class="dropdown-content">
-                  <a href="about_data.html">About Data</a>
-                  <a href="download_data.html">Download Data</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
+      <div class="navbar-item"><a href="community.html">Community</a></div>
+      <div class="navbar-item">
+        <a href="#">Sites</a>
+        <div class="dropdown-content">
+          <a href="sites_info.html">Site Summary</a>
+          <a href="site_list.html">Site List</a>
+        </div>
       </div>
-      <!-- ***** Navigation Bar (Menu) End ***** -->
-      
-      <!-- ***** Body Content Area Start ***** -->
-      <div class="content-area">
-          
-          <!-- Main Content Area (Left) -->
-          <div class="main-content">
-              
-              <p style="font-size: 13px; color: #666; padding-left: 0;">Home / Data / About Data</p>
-              
-              <h1>About KoFlux Data</h1>
-              
-              <p>This page provides information about the data products available through the KoFlux network. KoFlux integrates data from various regional networks to create harmonized, high-quality datasets for use by the earth system science community.</p>
-              
-              <p>Our data undergoes rigorous quality assurance and quality control (QA/QC) processes. We provide comprehensive metadata (BADM) files to ensure data users have all the necessary information to interpret and use the data correctly.</p>
-
-              <h2>Data Products</h2>
-              <p>The primary data product is the KoFlux2025 dataset, which includes data from over 1000 sites globally. We also provide legacy datasets and specialized community products, such as the KoFLUX-CH4 dataset.</p>
-
-              <!-- REMOVED: Image -->
-
-          </div>
-          
-          <!-- Sidebar Area (Right) -->
-          <div class="sidebar">
-              <!-- REMOVED: USEFUL LINKS SECTION -->
-
-              <!-- ***** 수정된 부분: 사이트맵 제목 및 이미지/링크 수정 ***** -->
-              <h4 style="margin-top: 0;">KoFlux Sites</h4>
-              <!-- Sites Map Image (picture4.png) -->
-              <a href="site_list.html" class="site-map-link">
-                  <img src="picture4.png" alt="KoFlux Sites Map" style="width: 100%;">
-              </a>
-              <!-- ************************************************* -->
-          </div>
-          
+      <div class="navbar-item"><a href="#">Education</a></div>
+      <div class="navbar-item active">
+        <a href="#">Data</a>
+        <div class="dropdown-content">
+          <a href="about_data.html">About Data</a>
+          <a href="download_data.html">Download Data</a>
+        </div>
       </div>
-      <!-- ***** Body Content Area End ***** -->
-      
+      <div class="navbar-item" style="float: right;"><a href="signin.html" id="nav-auth-text">Sign In</a></div>
+    </div>
+
+    <div class="content-area">
+      <div class="main-content">
+        <h1>About KoFlux Data</h1>
+        <p>This page provides information about the data products available through the KoFlux network.</p>
+      </div>
+      <div class="sidebar">
+        <h4>KoFlux Sites</h4>
+        <a href="site_list.html" class="site-map-link">
+          <img src="picture4.png" alt="KoFlux Sites Map">
+        </a>
+      </div>
+    </div>
   </div>
-  
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    
+    // Firebase 구성에 누락된 apiKey 필드를 추가했습니다.
+    const firebaseConfig = { 
+      apiKey: "", 
+      authDomain: "project0-a0afb.firebaseapp.com", 
+      projectId: "project0-a0afb" 
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById('nav-auth-text').textContent = user ? "Profile" : "Sign In";
+    });
+  </script>
 </body>
 </html>
