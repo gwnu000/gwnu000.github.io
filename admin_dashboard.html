@@ -10,7 +10,7 @@
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
     body { background-color: var(--page-background); color: #333; font-family: var(--font-family); margin: 0; }
-    .container { max-width: 1200px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); padding: 20px; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); padding: 20px; min-height: 100vh; }
     
     .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-blue); padding-bottom: 10px; margin-bottom: 20px; }
     .header h1 { color: var(--main-blue); margin: 0; font-size: 24px; }
@@ -20,62 +20,69 @@
     .btn-csv { background-color: #5cb85c; }
     .btn-refresh { background-color: var(--main-blue); }
     
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
-    th, td { border: 1px solid #ddd; padding: 12px 8px; text-align: left; }
-    th { background-color: #f2f2f2; color: var(--main-blue); font-weight: bold; }
+    .table-responsive { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; min-width: 1000px; }
+    th, td { border: 1px solid #ddd; padding: 10px 6px; text-align: left; }
+    th { background-color: #f2f2f2; color: var(--main-blue); font-weight: bold; white-space: nowrap; }
     tr:nth-child(even) { background-color: #f9f9f9; }
     tr:hover { background-color: #f1f1f1; }
 
-    .tag { padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; color: white; }
+    .tag { padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; color: white; text-transform: uppercase; }
     .tag-research { background-color: #5bc0de; }
     .tag-edu { background-color: #f0ad4e; }
+    .tag-other { background-color: #999; }
     
     #loading { text-align: center; padding: 50px; font-weight: bold; color: #666; }
     #access-denied { display: none; text-align: center; padding: 100px 20px; color: #d9534f; }
+    .user-info { font-size: 11px; color: #555; }
   </style>
 </head>
 <body>
-  <!-- 접근 거부 메시지 영역 -->
   <div id="access-denied">
     <h1>Access Denied</h1>
     <p id="denied-message">이 페이지는 관리자만 접근할 수 있습니다.</p>
     <a href="signin.html" style="color: var(--main-blue); font-weight: bold;">로그인 페이지로 이동</a>
   </div>
 
-  <!-- 관리자 뷰 영역 -->
   <div class="container" id="admin-view" style="display:none;">
     <div class="header">
-      <h1>KoFlux Data Download Logs</h1>
+      <h1>KoFlux Admin Dashboard (User & Download Logs)</h1>
       <div id="admin-info" style="font-size: 14px; color: #666;"></div>
     </div>
 
     <div class="controls">
       <button class="btn btn-refresh" onclick="location.reload()">Refresh Data</button>
-      <button class="btn btn-csv" id="download-csv">Export to Excel (CSV)</button>
+      <button class="btn btn-csv" id="download-csv">Export Detailed Excel (CSV)</button>
     </div>
 
-    <div id="loading">데이터를 불러오는 중입니다...</div>
+    <div id="loading">전체 데이터를 분석하여 불러오는 중입니다...</div>
     
-    <table id="log-table" style="display:none;">
-      <thead>
-        <tr>
-          <th>Time (KST)</th>
-          <th>User ID</th>
-          <th>Sites</th>
-          <th>Intended Use</th>
-          <th>Details</th>
-        </tr>
-      </thead>
-      <tbody id="log-body">
-        <!-- 데이터가 여기에 삽입됩니다 -->
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table id="log-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Time (KST)</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Country</th>
+            <th>Affiliation</th>
+            <th>Role</th>
+            <th>Sites</th>
+            <th>Intended Use</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody id="log-body">
+          <!-- 데이터가 여기에 삽입됩니다 -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, query, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const firebaseConfig = { 
       apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
@@ -91,108 +98,124 @@
     const db = getFirestore(app);
     const appId = "project0-a0afb";
 
-    // ************************************************************
-    // 1. 관리자 이메일 설정 (여기에 실제 관리자 이메일을 추가하세요)
-    // ************************************************************
+    // 관리자 이메일 목록
     const ADMIN_EMAILS = [
-      "impimp2412@gmail.com",  // 본인의 이메일 주소로 변경하세요
-      "imp2412@naver.com"         // 추가 관리자가 있다면 여기에 계속 추가 가능
+      "impimp2412@gmail.com", // 여기에 본인의 이메일을 넣으세요
+      "imp2412@naver.com"
     ];
 
     onAuthStateChanged(auth, (user) => {
-      const adminView = document.getElementById('admin-view');
-      const accessDenied = document.getElementById('access-denied');
-      const deniedMsg = document.getElementById('denied-message');
-
-      if (user) {
-        // 2. 로그인한 사용자의 이메일이 관리자 목록에 있는지 확인
-        if (ADMIN_EMAILS.includes(user.email)) {
-          adminView.style.display = 'block';
-          accessDenied.style.display = 'none';
-          document.getElementById('admin-info').textContent = `Admin: ${user.email}`;
-          fetchLogs();
-        } else {
-          // 로그인했지만 관리자가 아닌 경우
-          adminView.style.display = 'none';
-          accessDenied.style.display = 'block';
-          deniedMsg.textContent = `죄송합니다. ${user.email} 계정은 관리 권한이 없습니다.`;
-        }
+      if (user && ADMIN_EMAILS.includes(user.email)) {
+        document.getElementById('admin-view').style.display = 'block';
+        document.getElementById('access-denied').style.display = 'none';
+        document.getElementById('admin-info').textContent = `Logged in as: ${user.email}`;
+        fetchData();
       } else {
-        // 로그인하지 않은 경우
-        adminView.style.display = 'none';
-        accessDenied.style.display = 'block';
+        document.getElementById('admin-view').style.display = 'none';
+        document.getElementById('access-denied').style.display = 'block';
+        if (user) document.getElementById('denied-message').textContent = `계정(${user.email})에 관리 권한이 없습니다.`;
       }
     });
 
-    async function fetchLogs() {
+    async function fetchData() {
       const logBody = document.getElementById('log-body');
       const loading = document.getElementById('loading');
       const table = document.getElementById('log-table');
 
       try {
-        const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'download_requests'));
-        const querySnapshot = await getDocs(q);
-        
+        // 1. 다운로드 기록 가져오기
+        const logSnap = await getDocs(query(collection(db, 'artifacts', appId, 'public', 'data', 'download_requests')));
         const logs = [];
-        querySnapshot.forEach((doc) => {
-          logs.push({ id: doc.id, ...doc.data() });
-        });
-
+        logSnap.forEach(d => logs.push({ ...d.data() }));
         logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
+        // 2. 고유 사용자 UID 목록 추출 및 프로필 캐싱
+        const uniqueUids = [...new Set(logs.map(l => l.userId))];
+        const userCache = {};
+
+        // 모든 고유 사용자의 프로필 정보를 병렬로 가져옴
+        await Promise.all(uniqueUids.map(async (uid) => {
+          try {
+            const userDoc = await getDoc(doc(db, `artifacts/${appId}/users/${uid}/profile/info`));
+            userCache[uid] = userDoc.exists() ? userDoc.data() : null;
+          } catch (e) {
+            userCache[uid] = null;
+          }
+        }));
+
+        // 3. 데이터 결합 및 렌더링
         loading.style.display = 'none';
         table.style.display = 'table';
+        logBody.innerHTML = '';
 
-        if (logs.length === 0) {
-          logBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">기록이 없습니다.</td></tr>';
-          return;
-        }
+        const fullData = logs.map(log => {
+          const profile = userCache[log.userId] || {};
+          return {
+            ...log,
+            userName: profile.name || "Anonymous/Deleted",
+            userEmail: profile.email || "N/A",
+            userCountry: profile.country || "N/A",
+            userAffiliation: profile.affiliation || "N/A",
+            userRole: profile.role || "N/A"
+          };
+        });
 
-        logs.forEach(log => {
+        fullData.forEach(item => {
           const row = document.createElement('tr');
-          const date = new Date(log.timestamp);
-          const kstTime = date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+          const kstTime = new Date(item.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+          const tagClass = item.intendedUse === 'research' ? 'tag-research' : (item.intendedUse === 'education' ? 'tag-edu' : 'tag-other');
 
           row.innerHTML = `
             <td style="white-space:nowrap;">${kstTime}</td>
-            <td title="${log.userId}">${log.userId.substring(0, 8)}...</td>
-            <td>${log.sites ? log.sites.join(', ') : ''}</td>
-            <td><span class="tag ${log.intendedUse === 'research' ? 'tag-research' : 'tag-edu'}">${log.intendedUse}</span></td>
-            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${log.details}">${log.details}</td>
+            <td style="font-weight:bold;">${item.userName}</td>
+            <td>${item.userEmail}</td>
+            <td>${item.userCountry}</td>
+            <td>${item.userAffiliation}</td>
+            <td>${item.userRole}</td>
+            <td>${item.sites ? item.sites.join(', ') : ''}</td>
+            <td><span class="tag ${tagClass}">${item.intendedUse}</span></td>
+            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.details}">${item.details}</td>
           `;
           logBody.appendChild(row);
         });
 
-        document.getElementById('download-csv').onclick = () => exportToCSV(logs);
+        document.getElementById('download-csv').onclick = () => exportToCSV(fullData);
 
       } catch (err) {
-        console.error("Error fetching logs:", err);
-        loading.textContent = "데이터를 불러오는 중 오류가 발생했습니다: " + err.message;
+        console.error("Data fetch error:", err);
+        loading.textContent = "Error: " + err.message;
       }
     }
 
     function exportToCSV(data) {
       if (data.length === 0) return;
-      const headers = ["Time(KST)", "UserID", "Sites", "IntendedUse", "Details"];
+      const headers = ["Time(KST)", "Name", "Email", "Country", "Affiliation", "Role", "Sites", "IntendedUse", "Details"];
       const csvRows = [headers.join(",")];
 
       data.forEach(item => {
         const date = new Date(item.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-        const sites = item.sites ? `"${item.sites.join(', ')}"` : "";
-        const details = `"${item.details.replace(/"/g, '""')}"`;
-        csvRows.push([`"${date}"`, `"${item.userId}"`, sites, `"${item.intendedUse}"`, details].join(","));
+        const sites = `"${(item.sites || []).join(', ')}"`;
+        const details = `"${(item.details || '').replace(/"/g, '""')}"`;
+        const row = [
+          `"${date}"`,
+          `"${item.userName}"`,
+          `"${item.userEmail}"`,
+          `"${item.userCountry}"`,
+          `"${item.userAffiliation}"`,
+          `"${item.userRole}"`,
+          sites,
+          `"${item.intendedUse}"`,
+          details
+        ];
+        csvRows.push(row.join(","));
       });
 
       const csvContent = "\uFEFF" + csvRows.join("\n");
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", `KoFlux_Download_Logs_${new Date().toISOString().split('T')[0]}.csv`);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
+      link.href = URL.createObjectURL(blob);
+      link.download = `KoFlux_Master_Log_${new Date().toISOString().split('T')[0]}.csv`;
       link.click();
-      document.body.removeChild(link);
     }
   </script>
 </body>
