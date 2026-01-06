@@ -35,12 +35,14 @@
   </style>
 </head>
 <body>
+  <!-- 접근 거부 메시지 영역 -->
   <div id="access-denied">
     <h1>Access Denied</h1>
-    <p>이 페이지는 관리자만 접근할 수 있습니다. 로그인을 확인해 주세요.</p>
+    <p id="denied-message">이 페이지는 관리자만 접근할 수 있습니다.</p>
     <a href="signin.html" style="color: var(--main-blue); font-weight: bold;">로그인 페이지로 이동</a>
   </div>
 
+  <!-- 관리자 뷰 영역 -->
   <div class="container" id="admin-view" style="display:none;">
     <div class="header">
       <h1>KoFlux Data Download Logs</h1>
@@ -65,7 +67,7 @@
         </tr>
       </thead>
       <tbody id="log-body">
-        <!-- Data rows will be inserted here -->
+        <!-- 데이터가 여기에 삽입됩니다 -->
       </tbody>
     </table>
   </div>
@@ -73,7 +75,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, query, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const firebaseConfig = { 
       apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
@@ -89,15 +91,36 @@
     const db = getFirestore(app);
     const appId = "project0-a0afb";
 
-    // 관리자 여부 확인 (특정 이메일만 허용하거나 로그인 상태만 확인)
+    // ************************************************************
+    // 1. 관리자 이메일 설정 (여기에 실제 관리자 이메일을 추가하세요)
+    // ************************************************************
+    const ADMIN_EMAILS = [
+      "impimp2412@gmail.com",  // 본인의 이메일 주소로 변경하세요
+      "admin@koflux.org"         // 추가 관리자가 있다면 여기에 계속 추가 가능
+    ];
+
     onAuthStateChanged(auth, (user) => {
+      const adminView = document.getElementById('admin-view');
+      const accessDenied = document.getElementById('access-denied');
+      const deniedMsg = document.getElementById('denied-message');
+
       if (user) {
-        // 실제 운영 시에는 여기서 특정 관리자 이메일 리스트를 대조하는 것이 좋습니다.
-        document.getElementById('admin-view').style.display = 'block';
-        document.getElementById('admin-info').textContent = `Admin: ${user.email}`;
-        fetchLogs();
+        // 2. 로그인한 사용자의 이메일이 관리자 목록에 있는지 확인
+        if (ADMIN_EMAILS.includes(user.email)) {
+          adminView.style.display = 'block';
+          accessDenied.style.display = 'none';
+          document.getElementById('admin-info').textContent = `Admin: ${user.email}`;
+          fetchLogs();
+        } else {
+          // 로그인했지만 관리자가 아닌 경우
+          adminView.style.display = 'none';
+          accessDenied.style.display = 'block';
+          deniedMsg.textContent = `죄송합니다. ${user.email} 계정은 관리 권한이 없습니다.`;
+        }
       } else {
-        document.getElementById('access-denied').style.display = 'block';
+        // 로그인하지 않은 경우
+        adminView.style.display = 'none';
+        accessDenied.style.display = 'block';
       }
     });
 
@@ -107,7 +130,6 @@
       const table = document.getElementById('log-table');
 
       try {
-        // download_requests 컬렉션 가져오기
         const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'download_requests'));
         const querySnapshot = await getDocs(q);
         
@@ -116,7 +138,6 @@
           logs.push({ id: doc.id, ...doc.data() });
         });
 
-        // 시간순 정렬 (최신순)
         logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
         loading.style.display = 'none';
@@ -129,8 +150,6 @@
 
         logs.forEach(log => {
           const row = document.createElement('tr');
-          
-          // 시간 변환 (KST)
           const date = new Date(log.timestamp);
           const kstTime = date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
 
@@ -144,7 +163,6 @@
           logBody.appendChild(row);
         });
 
-        // CSV 다운로드 기능 연결
         document.getElementById('download-csv').onclick = () => exportToCSV(logs);
 
       } catch (err) {
@@ -155,29 +173,20 @@
 
     function exportToCSV(data) {
       if (data.length === 0) return;
-
       const headers = ["Time(KST)", "UserID", "Sites", "IntendedUse", "Details"];
       const csvRows = [headers.join(",")];
 
       data.forEach(item => {
         const date = new Date(item.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
         const sites = item.sites ? `"${item.sites.join(', ')}"` : "";
-        const details = `"${item.details.replace(/"/g, '""')}"`; // 따옴표 이스케이프
-        
-        csvRows.push([
-          `"${date}"`,
-          `"${item.userId}"`,
-          sites,
-          `"${item.intendedUse}"`,
-          details
-        ].join(","));
+        const details = `"${item.details.replace(/"/g, '""')}"`;
+        csvRows.push([`"${date}"`, `"${item.userId}"`, sites, `"${item.intendedUse}"`, details].join(","));
       });
 
-      const csvContent = "\uFEFF" + csvRows.join("\n"); // UTF-8 BOM 추가 (한글 깨짐 방지)
+      const csvContent = "\uFEFF" + csvRows.join("\n");
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
-      
       link.setAttribute("href", url);
       link.setAttribute("download", `KoFlux_Download_Logs_${new Date().toISOString().split('T')[0]}.csv`);
       link.style.visibility = 'hidden';
