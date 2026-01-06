@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KoFlux - Admin Dashboard</title>
+  <style>
+    :root {
+      --main-blue: rgba(51, 85, 127, 1);
+      --light-blue: #5bc0de;
+      --page-background: #f8f8f8;
+      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+    }
+    body { background-color: var(--page-background); color: #333; font-family: var(--font-family); margin: 0; }
+    .container { max-width: 1200px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); padding: 20px; min-height: 100vh; }
+    
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-blue); padding-bottom: 10px; margin-bottom: 20px; }
+    .header h1 { color: var(--main-blue); margin: 0; font-size: 24px; }
+    
+    .controls { margin-bottom: 20px; display: flex; gap: 10px; }
+    .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
+    .btn-csv { background-color: #5cb85c; }
+    .btn-refresh { background-color: var(--main-blue); }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+    th, td { border: 1px solid #ddd; padding: 12px 8px; text-align: left; }
+    th { background-color: #f2f2f2; color: var(--main-blue); font-weight: bold; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    tr:hover { background-color: #f1f1f1; }
+
+    .tag { padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; color: white; }
+    .tag-research { background-color: #5bc0de; }
+    .tag-edu { background-color: #f0ad4e; }
+    
+    #loading { text-align: center; padding: 50px; font-weight: bold; color: #666; }
+    #access-denied { display: none; text-align: center; padding: 100px 20px; color: #d9534f; }
+  </style>
+</head>
+<body>
+  <div id="access-denied">
+    <h1>Access Denied</h1>
+    <p>이 페이지는 관리자만 접근할 수 있습니다. 로그인을 확인해 주세요.</p>
+    <a href="signin.html" style="color: var(--main-blue); font-weight: bold;">로그인 페이지로 이동</a>
+  </div>
+
+  <div class="container" id="admin-view" style="display:none;">
+    <div class="header">
+      <h1>KoFlux Data Download Logs</h1>
+      <div id="admin-info" style="font-size: 14px; color: #666;"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-refresh" onclick="location.reload()">Refresh Data</button>
+      <button class="btn btn-csv" id="download-csv">Export to Excel (CSV)</button>
+    </div>
+
+    <div id="loading">데이터를 불러오는 중입니다...</div>
+    
+    <table id="log-table" style="display:none;">
+      <thead>
+        <tr>
+          <th>Time (KST)</th>
+          <th>User ID</th>
+          <th>Sites</th>
+          <th>Intended Use</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody id="log-body">
+        <!-- Data rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, query, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = { 
+      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
+      authDomain: "project0-a0afb.firebaseapp.com", 
+      projectId: "project0-a0afb",
+      storageBucket: "project0-a0afb.firebasestorage.app",
+      messagingSenderId: "498452008968",
+      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const appId = "project0-a0afb";
+
+    // 관리자 여부 확인 (특정 이메일만 허용하거나 로그인 상태만 확인)
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // 실제 운영 시에는 여기서 특정 관리자 이메일 리스트를 대조하는 것이 좋습니다.
+        document.getElementById('admin-view').style.display = 'block';
+        document.getElementById('admin-info').textContent = `Admin: ${user.email}`;
+        fetchLogs();
+      } else {
+        document.getElementById('access-denied').style.display = 'block';
+      }
+    });
+
+    async function fetchLogs() {
+      const logBody = document.getElementById('log-body');
+      const loading = document.getElementById('loading');
+      const table = document.getElementById('log-table');
+
+      try {
+        // download_requests 컬렉션 가져오기
+        const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'download_requests'));
+        const querySnapshot = await getDocs(q);
+        
+        const logs = [];
+        querySnapshot.forEach((doc) => {
+          logs.push({ id: doc.id, ...doc.data() });
+        });
+
+        // 시간순 정렬 (최신순)
+        logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        loading.style.display = 'none';
+        table.style.display = 'table';
+
+        if (logs.length === 0) {
+          logBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">기록이 없습니다.</td></tr>';
+          return;
+        }
+
+        logs.forEach(log => {
+          const row = document.createElement('tr');
+          
+          // 시간 변환 (KST)
+          const date = new Date(log.timestamp);
+          const kstTime = date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+
+          row.innerHTML = `
+            <td style="white-space:nowrap;">${kstTime}</td>
+            <td title="${log.userId}">${log.userId.substring(0, 8)}...</td>
+            <td>${log.sites ? log.sites.join(', ') : ''}</td>
+            <td><span class="tag ${log.intendedUse === 'research' ? 'tag-research' : 'tag-edu'}">${log.intendedUse}</span></td>
+            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${log.details}">${log.details}</td>
+          `;
+          logBody.appendChild(row);
+        });
+
+        // CSV 다운로드 기능 연결
+        document.getElementById('download-csv').onclick = () => exportToCSV(logs);
+
+      } catch (err) {
+        console.error("Error fetching logs:", err);
+        loading.textContent = "데이터를 불러오는 중 오류가 발생했습니다: " + err.message;
+      }
+    }
+
+    function exportToCSV(data) {
+      if (data.length === 0) return;
+
+      const headers = ["Time(KST)", "UserID", "Sites", "IntendedUse", "Details"];
+      const csvRows = [headers.join(",")];
+
+      data.forEach(item => {
+        const date = new Date(item.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+        const sites = item.sites ? `"${item.sites.join(', ')}"` : "";
+        const details = `"${item.details.replace(/"/g, '""')}"`; // 따옴표 이스케이프
+        
+        csvRows.push([
+          `"${date}"`,
+          `"${item.userId}"`,
+          sites,
+          `"${item.intendedUse}"`,
+          details
+        ].join(","));
+      });
+
+      const csvContent = "\uFEFF" + csvRows.join("\n"); // UTF-8 BOM 추가 (한글 깨짐 방지)
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute("href", url);
+      link.setAttribute("download", `KoFlux_Download_Logs_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
