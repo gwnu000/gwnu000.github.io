@@ -2,9 +2,7 @@
 <html>
 <head>
   <title>KoFlux - Download Data</title>
-  
   <style>
-    /* 1. 디자인 테마 정의 */
     :root {
       --main-blue: rgba(51, 85, 127, 1);
       --light-blue: #5bc0de;
@@ -14,13 +12,9 @@
     }
     body { background-color: var(--page-background); color: #333333; font-family: var(--font-family); margin: 0; }
     .container { max-width: 1000px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding-top: 1px; min-height: 100vh; }
-    
-    /* 2. 상단 헤더 및 로고 (28px 반영) */
     .header-top { background-color: var(--main-blue); color: white; padding: 10px 20px; }
     .header-top h2 { margin: 0; font-size: 28px; display: inline-block; }
     .header-top span { font-size: 14px; margin-left: 10px; }
-
-    /* 3. 네비게이션 바 */
     .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
     .navbar-item { float: left; position: relative; }
     .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
@@ -30,50 +24,40 @@
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
     .navbar-item:hover .dropdown-content { display: block; }
 
-    /* 4. 본문 레이아웃 */
     .content-area { padding: 0 20px 20px 20px; display: flex; }
     .main-content { flex: 3; padding-right: 20px; }
     .sidebar { flex: 1; padding-left: 20px; border-left: 1px solid #eee; font-size: 14px; }
     .sidebar h4 { color: var(--main-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
     .sidebar .site-map-link img { width: 100%; margin: 5px 0; border: 1px solid #ddd; }
 
-    /* 5. 폼 섹션 스타일 */
     .form-section { margin-bottom: 25px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9; }
     .form-section h3 { margin-top: 0; color: var(--main-blue); font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
     
-    /* 사이트 선택기 */
     .site-selector { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
     .list-container { flex: 1; }
     .list-container label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; }
     .site-selector select { width: 100%; height: 250px; border: 1px solid #ccc; border-radius: 4px; padding: 5px; font-family: var(--font-family); font-size: 13px; }
     .site-selector-buttons { display: flex; flex-direction: column; justify-content: center; height: 250px; padding: 0 5px; }
     .site-selector-buttons button { background-color: var(--main-blue); color: white; border: none; padding: 10px; margin: 5px 0; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .site-selector-buttons button:hover { background-color: var(--light-blue); color: black; }
 
-    /* 입력 필드 */
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
-    .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: var(--font-family); }
+    .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     .form-group textarea { height: 100px; resize: vertical; }
 
-    /* 상태 메시지 및 버튼 */
-    #download-button { background-color: #5cb85c; color: white; font-weight: bold; padding: 15px 25px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-    #download-button:hover { background-color: #449d44; }
+    #download-button { background-color: #5cb85c; color: white; font-weight: bold; padding: 15px 25px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
     #download-button:disabled { background-color: #ccc; cursor: not-allowed; }
-    
     #char-count-warning { color: #d9534f; font-size: 13px; margin-top: 5px; display: none; }
     #form-status { margin-top: 15px; font-weight: bold; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header-top">
       <h2>KoFlux</h2>
       <span>The Data Portal serving the KoFlux Community</span>
     </div>
     
-    <!-- Navbar -->
     <div class="navbar">
       <div class="navbar-item"><a href="index.html">Home</a></div>
       <div class="navbar-item">
@@ -102,14 +86,11 @@
       <div class="navbar-item" style="float: right;"><a href="signin.html" id="nav-auth-text">Sign In</a></div>
     </div>
 
-    <!-- Main Content -->
     <div class="content-area">
       <div class="main-content">
         <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Home / Data / Download Data</p>
-        <h1 style="margin-top: 0; color: #333;">Download Data</h1>
-        <p>Please complete the steps below to access KoFlux data products.</p>
-
-        <!-- Step 1: Select Sites -->
+        <h1>Download Data</h1>
+        
         <div class="form-section">
           <h3>1. Select Sites</h3>
           <div class="site-selector">
@@ -123,12 +104,11 @@
                 <option value="GCK">GCK: Gwangreung Coniferous forest</option>
                 <option value="GDK">GDK: Gwangreung Deciduous forest</option>
                 <option value="GRK_1">GRK: Gimje Rice Paddy</option>
-                <option value="GRK_2">GRK: Gimje Rice-barley double cropping Paddy Field</option>
                 <option value="HC">HC: Hongcheon Mixed forest</option>
                 <option value="HFK">HFK: Haenam Farmland</option>
                 <option value="HPK">HPK: Haenam Paddy-field</option>
                 <option value="JJ">JJ: Jeju Mixed forest</option>
-                <option value="NRK1_2">NRK1, 2: Naju Rice Paddy</option>
+                <option value="NRK1_2">NRK: Naju Rice Paddy</option>
                 <option value="PYC">PYC: Pyeongchang Deciduous forest</option>
                 <option value="SC">SC: Samcheok Coniferous forest</option>
                 <option value="SMK">SMK: Seolmacheon Mixed forest</option>
@@ -140,8 +120,8 @@
               </select>
             </div>
             <div class="site-selector-buttons">
-              <button id="add-site" title="Add Selected">&gt;</button>
-              <button id="remove-site" title="Remove Selected">&lt;</button>
+              <button id="add-site">&gt;</button>
+              <button id="remove-site">&lt;</button>
             </div>
             <div class="list-container">
               <label>Selected Sites:</label>
@@ -150,29 +130,26 @@
           </div>
         </div>
 
-        <!-- Step 2: Intended Use -->
         <div class="form-section">
           <h3>2. Define Intended Use</h3>
           <div class="form-group">
-            <label for="intended-use">Intended Use *</label>
+            <label>Intended Use *</label>
             <select id="intended-use">
-              <option value="">Select an option...</option>
-              <option value="research">Research (General)</option>
-              <option value="modeling">Modeling Study</option>
+              <option value="">Select...</option>
+              <option value="research">Research</option>
               <option value="education">Education</option>
               <option value="other">Other</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="intended-use-details">Describe your affiliation and usage (Min. 20 chars) *</label>
+            <label>Describe your affiliation and usage (Min. 20 chars) *</label>
             <textarea id="intended-use-details" placeholder="Please provide details about how you plan to use the data."></textarea>
             <div id="char-count-warning">Current count: 0. Need at least 20 characters.</div>
           </div>
         </div>
 
-        <!-- Step 3: Download -->
         <div class="form-section">
-          <h3>3. Agree to Policy & Download</h3>
+          <h3>3. Agree & Download</h3>
           <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
             <input type="checkbox" id="agree-policy" style="width: auto;">
             <label for="agree-policy" style="margin-bottom: 0; font-weight: normal;">
@@ -184,12 +161,9 @@
         </div>
       </div>
 
-      <!-- Sidebar -->
       <div class="sidebar">
         <h4>KoFlux Sites</h4>
-        <a href="site_list.html" class="site-map-link">
-          <img src="picture4.png" alt="KoFlux Sites Map">
-        </a>
+        <a href="site_list.html" class="site-map-link"><img src="picture4.png" alt="KoFlux Sites Map"></a>
       </div>
     </div>
   </div>
@@ -202,18 +176,13 @@
     const firebaseConfig = { 
       apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
       authDomain: "project0-a0afb.firebaseapp.com", 
-      projectId: "project0-a0afb",
-      storageBucket: "project0-a0afb.firebasestorage.app",
-      messagingSenderId: "498452008968",
-      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
+      projectId: "project0-a0afb"
     };
     
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const appId = "project0-a0afb";
 
-    // Update navigation based on auth state
     onAuthStateChanged(auth, (user) => {
       document.getElementById('nav-auth-text').textContent = user && !user.isAnonymous ? "Profile" : "Sign In";
     });
@@ -222,91 +191,68 @@
     const details = document.getElementById('intended-use-details');
     const agree = document.getElementById('agree-policy');
     const use = document.getElementById('intended-use');
-    const warning = document.getElementById('char-count-warning');
 
-    // Validation
     function validate() {
-      const len = details.value.trim().length;
-      const isDetailsValid = len >= 20;
+      const isLenValid = details.value.trim().length >= 20;
       const hasSites = document.getElementById('selected-sites').options.length > 0;
-      
-      downloadBtn.disabled = !(agree.checked && use.value && isDetailsValid && hasSites);
-      
-      if (len > 0 && !isDetailsValid) {
-        warning.textContent = `Current count: ${len}. Need at least 20 characters.`;
-        warning.style.display = 'block';
-      } else {
-        warning.style.display = 'none';
-      }
+      downloadBtn.disabled = !(agree.checked && use.value && isLenValid && hasSites);
+      const warn = document.getElementById('char-count-warning');
+      warn.style.display = (details.value.trim().length > 0 && !isLenValid) ? 'block' : 'none';
+      warn.textContent = `Current count: ${details.value.trim().length}. Need at least 20 characters.`;
     }
     
     details.oninput = validate;
     agree.onchange = validate;
     use.onchange = validate;
 
-    // Site selection buttons
     document.getElementById('add-site').onclick = () => {
-      Array.from(document.getElementById('all-sites').selectedOptions).forEach(opt => {
-        document.getElementById('selected-sites').appendChild(opt);
-      });
+      Array.from(document.getElementById('all-sites').selectedOptions).forEach(opt => document.getElementById('selected-sites').appendChild(opt));
       validate();
     };
-    
     document.getElementById('remove-site').onclick = () => {
-      Array.from(document.getElementById('selected-sites').selectedOptions).forEach(opt => {
-        document.getElementById('all-sites').appendChild(opt);
-      });
+      Array.from(document.getElementById('selected-sites').selectedOptions).forEach(opt => document.getElementById('all-sites').appendChild(opt));
       validate();
     };
 
-    // Download action
     downloadBtn.onclick = async () => {
       const status = document.getElementById('form-status');
       status.innerHTML = "Processing...";
       
-      // If not logged in, sign in anonymously for log tracking
-      if (!auth.currentUser) {
-        try {
-          await signInAnonymously(auth);
-        } catch (e) {
-          status.innerHTML = "<span style='color:red'>Auth Error. Please check connection.</span>";
-          return;
-        }
-      }
+      if (!auth.currentUser) await signInAnonymously(auth);
 
-      const selectedSiteOptions = Array.from(document.getElementById('selected-sites').options);
-      const siteCodes = selectedSiteOptions.map(o => o.value);
+      const sites = Array.from(document.getElementById('selected-sites').options).map(o => o.value);
 
       try {
-        // Log request to Firestore
-        await addDoc(collection(db, `artifacts/${appId}/public/data/download_requests`), {
+        await addDoc(collection(db, `artifacts/project0-a0afb/public/data/download_requests`), {
           userId: auth.currentUser.uid,
           userEmail: auth.currentUser.email || "anonymous",
-          sites: siteCodes,
-          intendedUse: use.value,
+          sites: sites,
           details: details.value.trim(),
+          intendedUse: use.value,
           timestamp: new Date().toISOString()
         });
 
-        status.innerHTML = "<span style='color:green'>Request recorded. Starting downloads...</span>";
+        status.innerHTML = "<span style='color:green'>Recording request... Starting downloads.</span>";
         
-        // Trigger downloads
-        siteCodes.forEach((code, i) => {
+        sites.forEach((code, i) => {
           setTimeout(() => {
-            const baseCode = code.split('_')[0]; // Handle GRK_1 etc.
+            const baseCode = code.split('_')[0]; 
+            
+            // 사용자의 요청대로 파일명 규칙을 다시 단순하게 변경함
             const fileName = `FLX_KR-${baseCode}_KoFlux.zip`;
+            const timestamp = new Date().getTime();
+            
             const a = document.createElement('a');
-            a.href = `https://gwnu000.github.io/data/${fileName}`;
+            // 캐시 방지를 위해 뒤에 시간값을 붙여 최신 파일을 가져오게 함
+            a.href = `https://gwnu000.github.io/data/${fileName}?v=${timestamp}`;
             a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-          }, i * 1000); // 1 sec delay between downloads
+          }, i * 1000);
         });
-
       } catch (err) {
-        console.error(err);
-        status.innerHTML = "<span style='color:red'>Failed to log request. Please check permissions.</span>";
+        status.innerHTML = "<span style='color:red'>Log Error. Please check connection.</span>";
       }
     };
   </script>
