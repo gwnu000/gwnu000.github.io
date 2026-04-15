@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KoFlux - Sign In</title>
+  <style>
+    :root {
+      --main-blue: rgba(51, 85, 127, 1);
+      --light-blue: #5bc0de;
+      --page-background: #f8f8f8;
+      --link-color: #337ab7;
+      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+    }
+    body { background-color: var(--page-background); color: #333333; font-family: var(--font-family); margin: 0; }
+    .container { max-width: 1000px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding-top: 1px; min-height: 100vh; }
+    .header-top { background-color: var(--main-blue); color: white; padding: 10px 20px; }
+    .header-top h2 { margin: 0; font-size: 28px; display: inline-block; }
+    .header-top span { font-size: 14px; margin-left: 10px; }
+
+    .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
+    .navbar-item { float: left; position: relative; }
+    .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
+    .navbar-item.active > a { background-color: var(--light-blue); color: black; }
+    .navbar-item:hover > a { background-color: var(--light-blue); color: black; }
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; left: 0; top: 100%; }
+    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
+    .navbar-item:hover .dropdown-content { display: block; }
+
+    /* Auth Card Styles */
+    .auth-card { max-width: 400px; margin: 60px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .auth-card h1 { color: var(--main-blue); font-size: 24px; margin-top: 0; margin-bottom: 20px; text-align: center; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+    .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    .btn-auth { width: 100%; padding: 12px; background-color: var(--main-blue); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+    .btn-auth:hover { background-color: #264161; }
+    .btn-auth:disabled { background-color: #ccc; cursor: not-allowed; }
+    
+    .auth-links { margin-top: 20px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
+    .auth-links a { color: var(--link-color); text-decoration: none; font-weight: bold; }
+    .auth-links p { margin: 8px 0; }
+
+    .status-msg { margin-top: 15px; padding: 10px; border-radius: 4px; display: none; font-size: 14px; text-align: center; }
+    .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+    /* Profile View Styles */
+    #profile-view { display: none; text-align: center; }
+    .user-avatar { width: 80px; height: 80px; background: #eee; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #888; border: 2px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-top">
+      <h2>KoFlux</h2>
+      <span>The Data Portal serving the KoFlux Community</span>
+    </div>
+    
+    <div class="navbar">
+      <div class="navbar-item"><a href="index.html">Home</a></div>
+      <div class="navbar-item">
+        <a href="about_koflux.html">About</a>
+        <div class="dropdown-content">
+          <a href="about_koflux.html">About KoFlux</a>
+          <a href="regional_networks.html">Regional Networks</a>
+        </div>
+      </div>
+      <div class="navbar-item"><a href="community.html">Community</a></div>
+      <div class="navbar-item">
+        <a href="#">Sites</a>
+        <div class="dropdown-content">
+          <a href="sites_info.html">Site Summary</a>
+          <a href="site_list.html">Site List</a>
+        </div>
+      </div>
+      <div class="navbar-item"><a href="#">Education</a></div>
+      <div class="navbar-item">
+        <a href="#">Data</a>
+        <div class="dropdown-content">
+          <a href="about_data.html">About Data</a>
+          <a href="download_data.html">Download Data</a>
+        </div>
+      </div>
+      <div class="navbar-item active" style="float: right;"><a href="signin.html" id="nav-auth-text">Sign In</a></div>
+    </div>
+
+    <!-- Login Form Section -->
+    <div id="login-section" class="auth-card">
+      <h1>Sign In</h1>
+      <form id="signin-form">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" required placeholder="example@email.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" id="btn-login" class="btn-auth">Login</button>
+      </form>
+      <div id="status-msg" class="status-msg"></div>
+      
+      <div class="auth-links">
+        <p><a href="forgot_password.html">Forgot your password?</a></p>
+        <p>Don't have an account? <a href="signup.html">Register now</a></p>
+      </div>
+    </div>
+
+    <!-- Profile/Dashboard Section (로그인 시 보임) -->
+    <div id="profile-view" class="auth-card">
+      <div class="user-avatar" id="p-initial">?</div>
+      <h2 id="p-name">Loading...</h2>
+      <p id="p-email" style="color: #666; margin-bottom: 5px;"></p>
+      <p id="p-affiliation" style="font-style: italic; color: #888;"></p>
+      <button id="btn-logout" class="btn-auth" style="background-color: #d9534f; margin-top: 20px;">Sign Out</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Firebase 구성 (download_data.html과 동일한 최신 정보 적용)
+    const firebaseConfig = { 
+      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU", 
+      authDomain: "project0-a0afb.firebaseapp.com", 
+      projectId: "project0-a0afb",
+      storageBucket: "project0-a0afb.firebasestorage.app",
+      messagingSenderId: "498452008968",
+      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginSec = document.getElementById('login-section');
+    const profileSec = document.getElementById('profile-view');
+    const statusEl = document.getElementById('status-msg');
+    const loginBtn = document.getElementById('btn-login');
+
+    // 상태 메시지 표시 함수
+    function showStatus(msg, isError = false) {
+      statusEl.textContent = msg;
+      statusEl.className = "status-msg " + (isError ? "error" : "success");
+      statusEl.style.display = "block";
+    }
+
+    // 로그인 로직
+    document.getElementById('signin-form').onsubmit = async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      statusEl.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Checking...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // 성공 시 onAuthStateChanged가 호출되어 화면이 전환됩니다.
+      } catch (err) {
+        console.error("Login failed:", err);
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+        
+        let errorMsg = "Login failed. Please check your email and password.";
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+            errorMsg = "Invalid email or password.";
+        } else if (err.code === 'auth/invalid-credential') {
+            errorMsg = "Invalid login credentials.";
+        }
+        showStatus(errorMsg, true);
+      }
+    };
+
+    // 로그아웃 로직
+    document.getElementById('btn-logout').onclick = async () => {
+      try {
+        await signOut(auth);
+        window.location.reload(); // 로그아웃 시 페이지 새로고침으로 상태 초기화
+      } catch (err) {
+        console.error("Logout failed:", err);
+      }
+    };
+
+    // 인증 상태 감시자 (핵심: 로그인 성공/실패 시 화면 전환 담당)
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // UI 즉시 전환 (데이터 로딩 전이라도 로그인 폼은 숨김)
+        loginSec.style.display = 'none';
+        profileSec.style.display = 'block';
+        document.getElementById('nav-auth-text').textContent = "Profile";
+        
+        // 기본 정보 표시
+        document.getElementById('p-name').textContent = user.displayName || "User";
+        document.getElementById('p-email').textContent = user.email;
+        document.getElementById('p-initial').textContent = (user.displayName || user.email || "U").charAt(0).toUpperCase();
+
+        // Firestore에서 추가 정보(소속 등) 가져오기
+        try {
+          const userDoc = await getDoc(doc(db, `artifacts/project0-a0afb/users/${user.uid}/profile/info`));
+          if (userDoc.exists()) {
+            document.getElementById('p-affiliation').textContent = userDoc.data().affiliation || "";
+          } else {
+            document.getElementById('p-affiliation').textContent = "No affiliation info found.";
+          }
+        } catch (dbErr) {
+          console.warn("Could not fetch Firestore profile:", dbErr);
+          // DB 오류가 나도 로그인은 유지되도록 처리
+          document.getElementById('p-affiliation').textContent = "Profile data restricted.";
+        }
+      } else {
+        // 로그아웃 상태
+        loginSec.style.display = 'block';
+        profileSec.style.display = 'none';
+        document.getElementById('nav-auth-text').textContent = "Sign In";
+      }
+    });
+  </script>
+</body>
+</html>

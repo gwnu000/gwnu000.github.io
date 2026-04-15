@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html> 
+<html>
 <head>
   <title>KoFlux - About KoFlux</title>
-  
   <style>
-    /* 1. FLUXNET 디자인 테마 색상 정의 */
     :root {
       --main-blue: rgba(51, 85, 127, 1);
       --light-blue: #5bc0de;
@@ -12,235 +10,93 @@
       --link-color: #337ab7;
       --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
+    body { background-color: var(--page-background); color: #333333; font-family: var(--font-family); margin: 0; }
+    .container { max-width: 1000px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding-top: 1px; min-height: 100vh; }
+    .header-top { background-color: var(--main-blue); color: white; padding: 10px 20px; }
+    .header-top h2 { margin: 0; font-size: 28px; display: inline-block; }
+    .header-top span { font-size: 14px; margin-left: 10px; }
 
-    /* 2. Full Page Base Design and Center Container Setup */
-    body {
-      background-color: var(--page-background); 
-      color: #333333;
-      font-family: var(--font-family);
-      margin: 0;
-    }
-
-    /* Center Alignment Container */
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background-color: white; 
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-      padding-top: 1px;
-      min-height: 100vh;
-    }
-
-    /* 3. Logo and Top Header Area */
-    .header-top {
-      background-color: var(--main-blue); 
-      color: white; 
-      padding: 10px 20px;
-    }
-    /* ***** 수정된 부분: 로고 텍스트 크기 증가 ***** */
-    .header-top h2 { 
-        margin: 0; 
-        font-size: 28px; /* 18px -> 28px로 변경 */
-        display: inline-block; 
-    }
-    .header-top span { 
-        font-size: 14px; /* 12px -> 14px로 변경 */
-        margin-left: 10px; /* 간격 추가 */
-    }
-    /* ******************************************* */
-
-
-    /* ***** Navigation Bar (Menu) Styles ***** */
-    .navbar {
-      background-color: var(--main-blue); 
-      overflow: visible; 
-      min-height: 50px;
-      padding: 0 20px;
-      margin-bottom: 20px;
-    }
-    .navbar-item {
-      float: left;
-      position: relative;
-    }
-    .navbar-item a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 15px 18px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    /* Set About item as active for this page */
-    .navbar-item.active > a {
-        background-color: var(--light-blue);
-        color: black;
-    }
-    .navbar-item:hover > a { /* 일반 호버 스타일 */
-        background-color: var(--light-blue);
-        color: black;
-    }
-    
-    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; left: 0; top: 100%; }
+    .navbar { background-color: var(--main-blue); overflow: visible; min-height: 50px; padding: 0 20px; margin-bottom: 20px; }
+    .navbar-item { float: left; position: relative; }
+    .navbar-item a { display: block; color: white; text-align: center; padding: 15px 18px; text-decoration: none; font-weight: bold; font-size: 14px; }
+    .navbar-item.active > a { background-color: var(--light-blue); color: black; }
+    .navbar-item:hover > a { background-color: var(--light-blue); color: black; }
+    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; left: 0; top: 100%; }
     .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
-    .dropdown-content a:hover { background-color: #f1f1f1; color: var(--main-blue); }
     .navbar-item:hover .dropdown-content { display: block; }
-    /* Keep active menu highlighted even when hovering dropdown */
-    .navbar-item.active:hover > a {
-        background-color: var(--light-blue);
-        color: black;
-    }
+
+    .content-area { padding: 0 20px 20px 20px; display: flex; }
+    .main-content { flex: 3; padding-right: 20px; }
+    .sidebar { flex: 1; padding-left: 20px; border-left: 1px solid #eee; font-size: 14px; }
+    .sidebar h4 { color: var(--main-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
     
-    /* ***** Body Content Styles ***** */
-    .content-area {
-        padding: 0 20px 20px 20px;
-        display: flex; /* 2단 레이아웃 */
-    }
-    .main-content {
-        flex: 3; /* 75% 너비 */
-        padding-right: 20px;
-    }
-    .sidebar {
-        flex: 1; /* 25% 너비 */
-        padding-left: 20px;
-        border-left: 1px solid #eee;
-        font-size: 14px;
-    }
-    .sidebar h4 {
-        color: var(--main-blue);
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-        margin-top: 0;
-    }
-    /* REMOVED: .sidebar ul, li, a styles (USEFUL LINKS 섹션 삭제됨) */
-    
-    /* Heading and Subheading */
-    .main-content h1 {
-        color: #333;
-        font-size: 28px;
-        padding: 0;
-        border: none;
-    }
-    .main-content h2 {
-        color: var(--main-blue);
-        font-size: 20px;
-        margin-top: 30px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-    }
-    .main-content p {
-        padding: 0;
-        margin-bottom: 15px;
-        line-height: 1.6;
-    }
-    
-    /* Image Style */
-    .main-content img {
-        max-width: 100%;
-        height: auto;
-        margin: 20px 0;
-        display: block;
-    }
-    /* Sidebar image link style */
-    .sidebar .site-map-link img {
-        margin: 5px 0 10px 0;
-    }
-    
+    .main-content h1 { color: #333; font-size: 28px; margin-top: 0; }
+    .main-content p { line-height: 1.6; margin-bottom: 15px; }
+    .main-content img { max-width: 100%; height: auto; margin: 20px 0; display: block; }
+    .sidebar .site-map-link img { margin: 5px 0 10px 0; width: 100%; }
   </style>
-  
 </head>
 <body>
-  
   <div class="container">
-      
-      <!-- ***** Logo and Top Header Area ***** -->
-      <div class="header-top">
-          <h2>KoFlux</h2>
-          <span>The Data Portal serving the KoFlux Community</span>
+    <div class="header-top">
+      <h2>KoFlux</h2>
+      <span>The Data Portal serving the KoFlux Community</span>
+    </div>
+    
+    <div class="navbar">
+      <div class="navbar-item"><a href="index.html">Home</a></div>
+      <div class="navbar-item active">
+        <a href="about_koflux.html">About</a>
+        <div class="dropdown-content">
+          <a href="about_koflux.html">About KoFlux</a>
+          <a href="regional_networks.html">Regional Networks</a>
+        </div>
+      </div>
+      <div class="navbar-item"><a href="community.html">Community</a></div>
+      <div class="navbar-item">
+        <a href="#">Sites</a>
+        <div class="dropdown-content">
+          <a href="sites_info.html">Site Summary</a>
+          <a href="site_list.html">Site List</a>
+        </div>
+      </div>
+      <div class="navbar-item"><a href="#">Education</a></div>
+      <div class="navbar-item">
+        <a href="#">Data</a>
+        <div class="dropdown-content">
+          <a href="about_data.html">About Data</a>
+          <a href="download_data.html">Download Data</a>
+        </div>
+      </div>
+      <div class="navbar-item" style="float: right;"><a href="signin.html" id="nav-auth-text">Sign In</a></div>
+    </div>
+
+    <div class="content-area">
+      <div class="main-content">
+        <h1>About the KoFlux Network</h1>
+        <p>KoFlux is an international "network of networks," tying together regional networks of earth system scientists. KoFlux scientists use the eddy covariance technique to measure the cycling of carbon, water, and energy between the biosphere and atmosphere.</p>
+        <p>Researchers working within regional networks process and analyze eddy covariance data, and then offer their data through regional network data portals. KoFlux links these regional networks together, collecting their datasets to create processed and harmonized eddy covariance data products.</p>
+        <img src="picture1.png" alt="KoFlux Network Structure">
       </div>
       
-      <!-- ***** Navigation Bar (Menu) Start ***** -->
-      <div class="navbar">
-          <div class="navbar-item"><a href="index.html">Home</a></div>
-
-          <!-- About (Dropdown Menu Item) - Active for this page -->
-          <div class="navbar-item active">
-              <a href="#about-menu">About</a>
-              <div class="dropdown-content">
-                  <a href="about_koflux.html">About KoFlux</a>
-                  <a href="regional_networks.html">Regional Networks</a>
-                  <a href="#history">History of KoFlux</a>
-              </div>
-          </div>
-
-          <div class="navbar-item"><a href="#community-page">Community</a></div>
-          
-          <!-- Sites (Dropdown Menu Item) -->
-          <div class="navbar-item">
-              <a href="#sites-menu">Sites</a>
-              <div class="dropdown-content">
-                  <a href="sites_info.html">Site Summary</a>
-                  <a href="site_list.html">Site List</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item"><a href="#education-page">Education</a></div>
-          
-          <!-- Data (Dropdown Menu Item) -->
-          <div class="navbar-item">
-              <a href="#data-menu">Data</a>
-              <div class="dropdown-content">
-                  <a href="about_data.html">About Data</a>
-                  <a href="download_data.html">Download Data</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item" style="float: right;"><a href="#signin-page">Sign In</a></div>
+      <div class="sidebar">
+        <h4>KoFlux Sites</h4>
+        <a href="site_list.html" class="site-map-link">
+          <img src="picture4.png" alt="KoFlux Sites Map">
+        </a>
       </div>
-      <!-- ***** Navigation Bar (Menu) End ***** -->
-      
-      <!-- ***** Body Content Area Start ***** -->
-      <div class="content-area">
-          
-          <!-- Main Content Area (Left) -->
-          <div class="main-content">
-              
-              <p style="font-size: 13px; color: #666; padding-left: 0;">Home / About / About KoFlux</p>
-              
-              <h1>About the KoFlux Network</h1>
-              
-              <p>KoFlux is an international "network of networks," tying together regional networks of earth system scientists. KoFlux scientists use the eddy covariance technique to measure the cycling of carbon, water, and energy between the biosphere and atmosphere. Scientists use these data to better understand ecosystem functioning, trace gas dynamics, and air pollution.</p>
-              
-              <p>Eddy covariance is the standard method that ecosystem scientists use to measure trace gas fluxes between ecosystems and the atmosphere. A key benefit of the eddy covariance method is its ability to measure fluxes directly (in situ), without disturbing the ecosystem. Gas exchanges of carbon dioxide, methane, water vapor, and more are measured at each individual site. Some eddy covariance sites have been collecting data for several decades, providing opportunities to study how ecosystems are changing over time.</p>
-              
-              <p>Researchers working within regional networks process and analyze eddy covariance data, and then offer their data through regional network data portals. KoFlux links these regional networks together, collecting their datasets to create processed and harmonized eddy covariance data products.</p>
-              
-              <p>The most recent KoFlux product, KoFlux2025, is hosted by the Seoul National University (SNU) and is publicly available for download. Currently there are over 1000 active and historic flux measurement sites, dispersed across most climate spaces and representative biomes.</p>
-              
-              <p>The KoFlux website offers documentation and support to KoFlux data users, and tools that enable idea sharing and engaging with the KoFlux community. KoFlux is one of the largest ecosystem networks in the world. The high level of collaboration among KoFlux scientists ensures the robustness of data, and optimizes the usefulness of this resource.</p>
-
-              <!-- picture1.png 추가 -->
-              <img src="picture1.png" alt="KoFlux Network Details">
-
-          </div>
-          
-          <!-- Sidebar Area (Right) -->
-          <div class="sidebar">
-              <!-- REMOVED: USEFUL LINKS SECTION -->
-
-              <!-- ***** 수정된 부분: 사이트맵 제목 및 이미지/링크 수정 ***** -->
-              <h4 style="margin-top: 0;">KoFlux Sites</h4> 
-              <!-- picture4.png 이미지 및 site_list.html 링크 -->
-              <a href="site_list.html" class="site-map-link">
-                  <img src="picture4.png" alt="KoFlux Sites Map" style="width: 100%;">
-              </a>
-              <!-- ************************************************* -->
-          </div>
-          
-      </div>
-      <!-- ***** Body Content Area End ***** -->
-      
+    </div>
   </div>
-  
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    const firebaseConfig = { authDomain: "project0-a0afb.firebaseapp.com", projectId: "project0-a0afb" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById('nav-auth-text').textContent = user ? "Profile" : "Sign In";
+    });
+  </script>
 </body>
 </html>
