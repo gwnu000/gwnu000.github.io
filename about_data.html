@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KoFlux — Download Data</title>
+<title>KoFlux — About Data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -184,26 +184,17 @@ footer{background:var(--paper);padding:34px 0 40px;border-top:1px solid var(--li
   html{scroll-behavior:auto}
 }
 
-.picker{display:grid;grid-template-columns:1fr 58px 1fr;gap:12px;align-items:start}
-.picker .col label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
-.picker select{width:100%;height:262px;border:1px solid var(--line-strong);border-radius:2px;padding:6px;font-family:var(--body);font-size:13.5px;background:var(--paper);color:var(--ink)}
-.picker select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,78,121,.12)}
-.picker option{padding:6px 7px;border-radius:2px}
-.movers{display:flex;flex-direction:column;justify-content:center;height:262px;gap:8px}
-.movers button{border:1px solid var(--line-strong);background:var(--paper);color:var(--dim);border-radius:2px;padding:11px 0;cursor:pointer;font-family:var(--mono);font-size:13px;transition:all .16s ease}
-.movers button:hover{border-color:var(--accent);background:var(--accent);color:#fff}
-.counter{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-top:12px}
-.agree{display:flex;align-items:flex-start;gap:11px;margin-bottom:20px}
-.agree input{width:17px;height:17px;margin-top:2px;accent-color:var(--accent);flex:none}
-.agree label{font-size:14.5px;line-height:1.6;color:#31393E}
-.agree a{color:var(--accent)}
-#char-warn{font-size:13px;color:var(--danger);margin-top:7px;display:none}
-@media (max-width:700px){
-  .picker{grid-template-columns:1fr}
-  .movers{flex-direction:row;height:auto}
-  .movers button{flex:1}
-  .picker select{height:190px}
-}
+.step{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.step:first-of-type{border-top:1px solid var(--line)}
+.step .idx{font-size:10.5px;color:var(--dim);padding-top:4px}
+.step strong{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.02em}
+.step p{font-size:14px;line-height:1.65;color:var(--dim);margin:5px 0 0}
+.flagbox{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:20px}
+.flagbox div{background:var(--paper);padding:18px 16px}
+.flagbox b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.13em;color:var(--accent);margin-bottom:6px}
+.flagbox p{font-size:13.5px;line-height:1.6;color:var(--dim);margin:0}
+.cite{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:20px 22px;margin-top:18px;font-family:var(--mono);font-size:12.5px;line-height:1.8;letter-spacing:0;text-transform:none;color:#31393E}
+@media (max-width:700px){.flagbox{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -249,83 +240,97 @@ footer{background:var(--paper);padding:34px 0 40px;border-top:1px solid var(--li
 </header>
 
 <section class="wrap">
-  <p class="crumb"><a href="index.html">Home</a> / Data / Download Data</p>
-  <h1 class="page">Download</h1>
-  <p class="lede">Choose the sites you need, tell us how you plan to use the data, and the archives will download one after another.</p>
+  <p class="crumb"><a href="index.html">Home</a> / Data / About Data</p>
+  <h1 class="page">What is in the files, and how it got there</h1>
+  <p class="lede">Every KoFlux record is half-hourly, processed with one documented chain, and released in a format compatible with the FLUXNET convention.</p>
+</section>
 
-  <div style="margin-top:38px;max-width:900px">
-    <div class="block">
-      <h3><span class="num">01</span>Select sites</h3>
-      <p class="hint">Pick one or more sites on the left and move them across. Ctrl-click or Shift-click to select several at once.</p>
-      <div class="picker">
-        <div class="col">
-          <label for="all-sites">Available</label>
-          <select id="all-sites" multiple size="12">
-                <option value="AMD">AMD &mdash; Anmyeondo Coniferous forest</option>
-                <option value="CFK">CFK &mdash; Cheongmicheon Farmland</option>
-                <option value="CRK">CRK &mdash; Cheorwon Rice paddy</option>
-                <option value="GBK">GBK &mdash; Gimje Soybean Field</option>
-                <option value="GCK">GCK &mdash; Gwangreung Coniferous forest</option>
-                <option value="GDK">GDK &mdash; Gwangreung Deciduous forest</option>
-                <option value="GRK">GRK &mdash; Gimje Rice Paddy</option>
-                <option value="GRK_2">GRK-2 &mdash; Gimje Rice-barley double cropping Paddy Field</option>
-                <option value="HC">HC &mdash; Hongcheon Mixed forest</option>
-                <option value="HFK">HFK &mdash; Haenam Farmland</option>
-                <option value="HPK">HPK &mdash; Haenam Paddy-field</option>
-                <option value="JJ">JJ &mdash; Jeju Mixed forest</option>
-                <option value="NRK1_2">NRK1, 2 &mdash; Naju Rice Paddy</option>
-                <option value="PYC">PYC &mdash; Pyeongchang Deciduous forest</option>
-                <option value="SC">SC &mdash; Samcheok Coniferous forest</option>
-                <option value="SMK">SMK &mdash; Seolmacheon Mixed forest</option>
-                <option value="SRK">SRK &mdash; Seocheon Reservoir</option>
-                <option value="TBK">TBK &mdash; Taehwa Broadleaf forest</option>
-                <option value="TCK">TCK &mdash; Taehwa Coniferous forest</option>
-                <option value="UOK">UOK &mdash; Uiseong Apple Orchard</option>
-                <option value="WD">WD &mdash; Wando Evergreen broadleaf forest</option>
-          </select>
-        </div>
-        <div class="movers">
-          <button type="button" id="add-site" aria-label="Add selected sites">&rarr;</button>
-          <button type="button" id="remove-site" aria-label="Remove selected sites">&larr;</button>
-        </div>
-        <div class="col">
-          <label for="selected-sites">Selected</label>
-          <select id="selected-sites" multiple size="12"></select>
-        </div>
+<div class="wrap cols" style="padding-bottom:clamp(46px,6vw,76px)">
+  <div class="prose">
+    <h2 class="sec">Processing chain</h2>
+    <p>The same seven steps run at every site, which is what makes records comparable. Differences between towers should reflect the ecosystems, not the software.</p>
+      <div class="step">
+        <span class="mo idx">01</span>
+        <div><strong>Raw acquisition</strong><p>High-frequency wind and gas concentration sampled at 10 Hz above the canopy.</p></div>
       </div>
-      <p class="counter" id="sel-count">0 sites selected</p>
+      <div class="step">
+        <span class="mo idx">02</span>
+        <div><strong>Flux computation</strong><p>Coordinate rotation, detrending, and covariance over each 30-minute block.</p></div>
+      </div>
+      <div class="step">
+        <span class="mo idx">03</span>
+        <div><strong>Corrections</strong><p>Frequency response, WPL density, and stationarity testing applied.</p></div>
+      </div>
+      <div class="step">
+        <span class="mo idx">04</span>
+        <div><strong>Quality control</strong><p>Each half hour flagged 0, 1 or 2 following the standardized KoFlux protocol.</p></div>
+      </div>
+      <div class="step">
+        <span class="mo idx">05</span>
+        <div><strong>u* filtering</strong><p>Nocturnal periods below the site-specific friction velocity threshold removed.</p></div>
+      </div>
+      <div class="step">
+        <span class="mo idx">06</span>
+        <div><strong>Gap filling</strong><p>Remaining gaps filled by marginal distribution sampling; filled values carry a flag.</p></div>
+      </div>
+      <div class="step">
+        <span class="mo idx">07</span>
+        <div><strong>Partitioning</strong><p>NEE separated into GPP and RECO using nighttime and daytime methods.</p></div>
+      </div>
+
+    <h2 class="sec" style="margin-top:48px">Quality flags</h2>
+    <p>Each half-hourly value carries a flag. Filter on it before analysis; the appropriate threshold depends on what you are doing.</p>
+    <div class="flagbox">
+      <div><b>Flag 0</b><p>Measured and passed every test. Suitable for any use, including fundamental research.</p></div>
+      <div><b>Flag 1</b><p>Measured but marginal, or gap-filled with high confidence. Suitable for budgets and model comparison.</p></div>
+      <div><b>Flag 2</b><p>Gap-filled with low confidence. Use for continuous time series only, and state that you did.</p></div>
     </div>
 
-    <div class="block">
-      <h3><span class="num">02</span>Intended use</h3>
-      <p class="hint">We log this to report back to the site teams who maintain the towers.</p>
-      <div class="field">
-        <label for="intended-use">Purpose</label>
-        <select id="intended-use">
-          <option value="">Select&hellip;</option>
-          <option value="research">Research</option>
-          <option value="education">Education</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div class="field" style="margin-bottom:0">
-        <label for="intended-use-details">Your affiliation and how you will use the data</label>
-        <textarea id="intended-use-details" placeholder="e.g. PhD student at Seoul National University, validating a land surface model over rice paddies."></textarea>
-        <div id="char-warn">0 characters. At least 20 needed.</div>
-      </div>
+    <h2 class="sec" style="margin-top:48px">Variables</h2>
+    <div class="scrollx">
+      <table class="data">
+        <thead><tr><th>Name</th><th>Description</th><th>Units</th></tr></thead>
+        <tbody>
+      <tr><td class="c">NEE</td><td>Net ecosystem exchange of CO&#8322;</td><td class="c">&micro;mol m&#8315;&#178; s&#8315;&#185;</td></tr>
+      <tr><td class="c">GPP</td><td>Gross primary production</td><td class="c">&micro;mol m&#8315;&#178; s&#8315;&#185;</td></tr>
+      <tr><td class="c">RECO</td><td>Ecosystem respiration</td><td class="c">&micro;mol m&#8315;&#178; s&#8315;&#185;</td></tr>
+      <tr><td class="c">LE</td><td>Latent heat flux</td><td class="c">W m&#8315;&#178;</td></tr>
+      <tr><td class="c">H</td><td>Sensible heat flux</td><td class="c">W m&#8315;&#178;</td></tr>
+      <tr><td class="c">Rn</td><td>Net radiation</td><td class="c">W m&#8315;&#178;</td></tr>
+      <tr><td class="c">TA</td><td>Air temperature</td><td class="c">&deg;C</td></tr>
+      <tr><td class="c">RH</td><td>Relative humidity</td><td class="c">%</td></tr>
+      <tr><td class="c">WS</td><td>Wind speed</td><td class="c">m s&#8315;&#185;</td></tr>
+      <tr><td class="c">P</td><td>Precipitation</td><td class="c">mm</td></tr>
+      <tr><td class="c">SWC</td><td>Soil water content</td><td class="c">%</td></tr>
+      <tr><td class="c">USTAR</td><td>Friction velocity</td><td class="c">m s&#8315;&#185;</td></tr>
+        </tbody>
+      </table>
     </div>
+    <p class="note">The full variable list, including replicate sensors and site-specific channels, is documented in the metadata file bundled with each download.</p>
 
-    <div class="block">
-      <h3><span class="num">03</span>Agree and download</h3>
-      <div class="agree">
-        <input type="checkbox" id="agree-policy">
-        <label for="agree-policy">I have read and agree to the <a href="about_data.html">KoFlux data policy</a>, and I will credit the dataset and its site principal investigators in any publication.</label>
-      </div>
-      <button class="btn btn-solid" id="download-button" disabled>Download selected data</button>
-      <div class="status" id="form-status"></div>
+    <h2 class="sec" style="margin-top:48px">File format</h2>
+    <p>Records are delivered as a ZIP archive per site, named <code>FLX_KR-&lt;CODE&gt;_KoFlux.zip</code>. Inside are comma-separated files with one row per half hour, timestamps in local standard time, and <code>-9999</code> for missing values.</p>
+
+    <h2 class="sec" style="margin-top:48px">Licence and citation</h2>
+    <p>The dataset is released under CC BY 4.0. You may use, adapt and redistribute it, including commercially, provided you give credit. Site teams invested years in these towers, so please also acknowledge the individual site principal investigators named in the metadata.</p>
+    <div class="cite">KoFlux (2025). Integrated eddy covariance dataset for Korean flux tower sites, 2011&ndash;2024. Korea Flux Network Database. Retrieved from https://gwnu000.github.io/</div>
+    <p class="note">Replace with the DOI once the dataset is registered.</p>
+
+    <div style="margin-top:34px">
+      <a class="btn btn-solid" href="download_data.html">Go to downloads &rarr;</a>
     </div>
   </div>
-</section>
+      <aside class="rail">
+        <h4>KoFlux sites</h4>
+        <a class="thumb" href="site_list.html"><img src="picture4.png" alt="Map of KoFlux observation sites"></a>
+        <ul class="links">
+          <li><a href="site_list.html">Site list</a></li>
+          <li><a href="sites_info.html">Site summary</a></li>
+          <li><a href="about_data.html">About the data</a></li>
+          <li><a href="download_data.html">Download data</a></li>
+        </ul>
+      </aside>
+</div>
 
 <footer>
   <div class="wrap foot">
@@ -356,11 +361,10 @@ footer{background:var(--paper);padding:34px 0 40px;border-top:1px solid var(--li
     });
   });
 </script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-  import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
   const firebaseConfig = {
     apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
     authDomain: "project0-a0afb.firebaseapp.com",
@@ -372,102 +376,13 @@ footer{background:var(--paper);padding:34px 0 40px;border-top:1px solid var(--li
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
-
   onAuthStateChanged(auth, (user) => {
     const el = document.getElementById('nav-auth-text');
     if (!el) return;
     const signedIn = user && !user.isAnonymous;
     el.textContent = signedIn ? "Profile" : "Sign In";
+    el.href = signedIn ? "signin.html" : "signin.html";
   });
-
-  const btn      = document.getElementById('download-button');
-  const details  = document.getElementById('intended-use-details');
-  const agree    = document.getElementById('agree-policy');
-  const use      = document.getElementById('intended-use');
-  const allSel   = document.getElementById('all-sites');
-  const pickSel  = document.getElementById('selected-sites');
-  const warn     = document.getElementById('char-warn');
-  const counter  = document.getElementById('sel-count');
-  const status   = document.getElementById('form-status');
-
-  function validate() {
-    const len = details.value.trim().length;
-    const lenOK = len >= 20;
-    const n = pickSel.options.length;
-    counter.textContent = n + (n === 1 ? ' site selected' : ' sites selected');
-    warn.style.display = (len > 0 && !lenOK) ? 'block' : 'none';
-    warn.textContent = len + ' characters. At least 20 needed.';
-    btn.disabled = !(agree.checked && use.value && lenOK && n > 0);
-  }
-
-  details.addEventListener('input', validate);
-  agree.addEventListener('change', validate);
-  use.addEventListener('change', validate);
-
-  function move(from, to) {
-    Array.from(from.selectedOptions).forEach(function (o) { to.appendChild(o); o.selected = false; });
-    validate();
-  }
-  document.getElementById('add-site').addEventListener('click', function () { move(allSel, pickSel); });
-  document.getElementById('remove-site').addEventListener('click', function () { move(pickSel, allSel); });
-  allSel.addEventListener('dblclick', function () { move(allSel, pickSel); });
-  pickSel.addEventListener('dblclick', function () { move(pickSel, allSel); });
-
-  function show(msg, kind) {
-    status.textContent = msg;
-    status.className = 'status ' + kind;
-    status.style.display = 'block';
-  }
-
-  btn.addEventListener('click', async function () {
-    btn.disabled = true;
-    show('Recording your request\u2026', 'success');
-
-    try {
-      if (!auth.currentUser) await signInAnonymously(auth);
-    } catch (e) {
-      show('Could not start a session. Check your connection and try again.', 'error');
-      btn.disabled = false;
-      return;
-    }
-
-    const sites = Array.from(pickSel.options).map(function (o) { return o.value; });
-
-    try {
-      await addDoc(collection(db, 'artifacts/project0-a0afb/public/data/download_requests'), {
-        userId: auth.currentUser.uid,
-        userEmail: auth.currentUser.email || 'anonymous',
-        sites: sites,
-        details: details.value.trim(),
-        intendedUse: use.value,
-        timestamp: new Date().toISOString()
-      });
-
-      show('Request recorded. ' + sites.length + ' archive' + (sites.length === 1 ? '' : 's') + ' will download one at a time \u2014 allow multiple downloads if your browser asks.', 'success');
-
-      sites.forEach(function (code, i) {
-        setTimeout(function () {
-          const baseCode = code.split('_')[0];
-          const fileName = 'FLX_KR-' + baseCode + '_KoFlux.zip';
-          const a = document.createElement('a');
-          a.href = 'https://gwnu000.github.io/data/' + fileName + '?v=' + new Date().getTime();
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }, i * 1000);
-      });
-
-      setTimeout(function () { btn.disabled = false; }, sites.length * 1000 + 500);
-    } catch (err) {
-      console.error(err);
-      show('Could not record the request, so the download was not started. Check your connection and try again.', 'error');
-      btn.disabled = false;
-    }
-  });
-
-  validate();
 </script>
 </body>
 </html>
