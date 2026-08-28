@@ -1,323 +1,401 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>KoFlux - Site List</title>
-  
-  <!-- Leaflet Map CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KoFlux — Site List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+:root{
+  --paper:#FFFFFF;
+  --panel:#F5F6F4;
+  --ink:#15181A;
+  --dim:#5F6B72;
+  --accent:#1F4E79;
+  --accent-hi:#2C6DA6;
+  --danger:#B3261E;
+  --ok:#1E6B47;
+  --line:rgba(21,24,26,.13);
+  --line-strong:rgba(21,24,26,.26);
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue','Apple SD Gothic Neo','Pretendard','Malgun Gothic',Arial,sans-serif;
+  --display:var(--sf);
+  --body:var(--sf);
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,'Inter',monospace;
+  --veil-1:.90;
+  --veil-2:.85;
+  --veil-3:.56;
+  --veil-4:.40;
+  --pad:clamp(20px,5vw,60px);
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;letter-spacing:-.011em;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;height:auto}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.dis{font-family:var(--display);font-weight:600;letter-spacing:-.021em}
+.mo{font-family:var(--mono);letter-spacing:.13em;text-transform:uppercase}
 
-  <style>
-    /* CSS는 모든 페이지에 걸쳐 일관성을 유지합니다. */
-    :root {
-      --main-blue: rgba(51, 85, 127, 1);
-      --light-blue: #5bc0de;
-      --page-background: #f8f8f8;
-      --link-color: #337ab7;
-      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
-    }
+/* ---------- banner ---------- */
+header{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--line-strong)}
+header .wrap{display:flex;align-items:center;gap:22px;padding-top:15px;padding-bottom:15px}
+.mark{display:flex;align-items:baseline;gap:12px;text-decoration:none;flex:0 0 auto}
+.mark b{font-family:var(--display);font-weight:600;font-size:25px;line-height:1;letter-spacing:-.022em}
+.mark b i{font-style:normal;color:var(--accent)}
+.mark span{font-family:var(--mono);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim)}
+nav{margin-left:auto}
+.menu{list-style:none;display:flex;align-items:center;gap:2px;margin:0;padding:0}
+.menu>li{position:relative}
+.menu>li>a{display:block;padding:9px 13px;text-decoration:none;font-size:13.5px;color:var(--dim);border-radius:2px;transition:color .16s ease,background .16s ease}
+.menu>li>a:hover,.menu>li>a:focus-visible{color:var(--ink);background:var(--panel)}
+.menu>li.on>a{color:var(--ink);font-weight:500}
+.menu>li.on>a::after{content:"";display:block;height:2px;background:var(--accent);margin-top:5px;margin-bottom:-7px}
+.menu .auth{border:1px solid var(--line-strong);color:var(--ink);margin-left:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px}
+.menu .auth:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.sub{position:absolute;top:100%;left:0;min-width:214px;background:var(--paper);border:1px solid var(--line-strong);border-radius:3px;box-shadow:0 14px 32px rgba(15,25,35,.13);padding:5px;margin:0;list-style:none;opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .15s ease,transform .15s ease,visibility .15s}
+.sub a{display:block;padding:9px 12px;text-decoration:none;border-radius:2px;font-size:13.5px;color:var(--ink)}
+.sub a:hover{background:var(--panel);color:var(--accent)}
+li.has-sub:hover .sub,li.has-sub:focus-within .sub,li.has-sub.open .sub{opacity:1;visibility:visible;transform:translateY(0)}
+.burger{display:none;margin-left:auto;background:none;border:1px solid var(--line-strong);color:var(--ink);border-radius:2px;padding:9px 12px;cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
 
-    body {
-      background-color: var(--page-background); 
-      color: #333333;
-      font-family: var(--font-family);
-      margin: 0;
-    }
+/* ---------- shared page furniture ---------- */
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:0 0 16px}
+.crumb{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:0 0 18px}
+.crumb a{text-decoration:none}
+.crumb a:hover{color:var(--accent)}
+section{padding-top:clamp(46px,6vw,76px);padding-bottom:clamp(46px,6vw,76px)}
+.band{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+h1.page{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.1;letter-spacing:-.028em;margin:0;max-width:22ch}
+h2.sec{font-family:var(--display);font-weight:600;font-size:clamp(21px,2.6vw,28px);letter-spacing:-.022em;line-height:1.2;margin:0 0 26px}
+h3.sub{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.02em;margin:34px 0 12px}
+p.lede{font-size:clamp(15px,1.4vw,17px);line-height:1.7;color:#3F4B52;margin:20px 0 0;max-width:62ch}
+.prose{max-width:70ch}
+.prose p{font-size:15.5px;line-height:1.75;color:#31393E;margin:0 0 16px}
+.prose ul{padding-left:20px;margin:0 0 18px}
+.prose li{font-size:15.5px;line-height:1.8;color:#31393E}
+.prose a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(31,78,121,.35)}
+.prose a:hover{border-bottom-color:var(--accent)}
+.prose figure{margin:26px 0}
+.prose figure img{display:block;border:1px solid var(--line);border-radius:3px}
+.prose figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-top:9px}
+.note{font-size:13.5px;line-height:1.7;color:var(--dim);margin:18px 0 0;max-width:70ch}
 
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background-color: white; 
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-      padding-top: 1px;
-      min-height: 100vh;
-    }
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;padding:13px 20px;border-radius:2px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:0;cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease}
+.btn-solid{background:var(--accent);color:#fff}
+.btn-solid:hover{background:var(--accent-hi);transform:translateY(-1px)}
+.btn-ghost{border:1px solid var(--line-strong);background:rgba(255,255,255,.7);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.btn:disabled{background:#C9CFD3;color:#fff;cursor:not-allowed;transform:none}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#8E1D17}
 
-    /* Logo and Top Header Area */
-    .header-top {
-      background-color: var(--main-blue); 
-      color: white; 
-      padding: 10px 20px;
-    }
-    .header-top h2 { 
-        margin: 0; 
-        font-size: 28px; /* 28px 유지 */
-        display: inline-block; 
-    }
-    .header-top span { 
-        font-size: 14px; 
-        margin-left: 10px; 
-    }
+/* two-column layout with rail */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:clamp(28px,4vw,56px);align-items:start}
+.rail{border-left:1px solid var(--line);padding-left:24px;position:sticky;top:96px}
+.rail h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 12px;font-weight:400}
+.rail a.thumb{display:block;text-decoration:none;border:1px solid var(--line);border-radius:3px;overflow:hidden;transition:border-color .2s ease}
+.rail a.thumb:hover{border-color:var(--accent)}
+.rail a.thumb img{display:block}
+.rail .links{list-style:none;margin:18px 0 0;padding:0}
+.rail .links li{border-top:1px solid var(--line)}
+.rail .links a{display:block;padding:11px 0;text-decoration:none;font-size:14px;color:var(--dim);transition:color .16s ease,padding-left .16s ease}
+.rail .links a:hover{color:var(--accent);padding-left:5px}
 
+/* forms */
+.field{margin-bottom:18px}
+.field label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;padding:12px 13px;border:1px solid var(--line-strong);border-radius:2px;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;transition:border-color .16s ease,box-shadow .16s ease}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,78,121,.12)}
+.field textarea{min-height:118px;resize:vertical}
+.card-form{max-width:460px;margin:0 auto;border:1px solid var(--line-strong);border-radius:4px;padding:34px 32px}
+.card-form h1{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.024em;margin:0 0 6px}
+.card-form .sub{font-size:14px;color:var(--dim);margin:0 0 24px}
+.altlinks{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:13.5px;color:var(--dim);text-align:center}
+.altlinks a{color:var(--accent);text-decoration:none}
+.altlinks a:hover{text-decoration:underline}
+.status{margin-top:16px;padding:12px 14px;border-radius:2px;font-size:14px;line-height:1.55;display:none;white-space:pre-wrap}
+.status.error{background:#FBEDEC;color:#8E1D17;border:1px solid #EBC9C6}
+.status.success{background:#EAF4EE;color:#155238;border:1px solid #C4E0D0}
 
-    /* Navigation Bar (Menu) Styles */
-    .navbar {
-      background-color: var(--main-blue); 
-      overflow: visible; 
-      min-height: 50px;
-      padding: 0 20px;
-      margin-bottom: 20px;
-    }
-    .navbar-item {
-      float: left;
-      position: relative;
-    }
-    .navbar-item a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 15px 18px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    
-    .navbar-item.active > a {
-        background-color: var(--light-blue);
-        color: black;
-    }
-    .navbar-item:hover > a { 
-        background-color: var(--light-blue);
-        color: black;
-    }
-    
-    .dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; left: 0; top: 100%; }
-    .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; text-align: left; float: none; font-weight: normal; }
-    
-    .navbar-item:hover .dropdown-content { display: block; } 
-    .navbar-item:hover .dropdown-content a:hover {
-        background-color: #f1f1f1;
-        color: var(--main-blue);
-    }
-    .navbar-item.active:hover > a {
-        background-color: var(--light-blue);
-        color: black;
-    }
+/* fieldset block */
+.block{border:1px solid var(--line-strong);border-radius:4px;padding:26px 24px;margin-bottom:22px}
+.block>h3{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em;margin:0 0 4px}
+.block>h3 .num{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);margin-right:9px}
+.block>p.hint{font-size:13.5px;color:var(--dim);margin:0 0 20px}
 
-    /* Body Content Styles */
-    .content-area {
-        padding: 0 20px 20px 20px;
-    }
-    
-    .main-content h1 {
-        color: #333;
-        font-size: 28px;
-        padding: 0;
-        border: none;
-        margin-top: 0;
-    }
-    .main-content p {
-        padding: 0;
-        margin-bottom: 15px;
-        line-height: 1.6;
-    }
-    
-    /* Map Container */
-    #map {
-        width: 100%;
-        height: 500px; 
-        margin: 20px 0;
-        z-index: 1;
-    }
+/* tables */
+table.data{width:100%;border-collapse:collapse;font-size:14px}
+table.data th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:400;color:var(--dim);padding:11px 12px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+table.data td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.data td.c{font-family:var(--mono);font-size:12.5px}
+table.data tbody tr{transition:background .15s ease}
+table.data tbody tr:hover{background:var(--panel)}
+.scrollx{width:100%;overflow-x:auto}
 
-    /* Site Table Style */
-    .site-table-container {
-        margin-top: 30px;
-        font-family: Arial, sans-serif;
-    }
-    .site-entry {
-        border: 1px solid #e0e0e0;
-        margin-bottom: 15px;
-        background: #f9f9f9;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-    .site-entry-row {
-        padding: 10px 15px;
-        display: flex;
-        border-bottom: 1px solid #e0e0e0;
-    }
-    .site-entry-row:last-child {
-        border-bottom: none;
-    }
-    .site-label {
-        font-weight: bold;
-        color: #555;
-        flex: 0 0 150px; 
-    }
-    .site-value {
-        flex: 1;
-        color: #333;
-    }
-    
-    .breadcrumb {
-        font-size: 13px; color: #666; padding-left: 0;
-    }
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tags span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:2px;padding:8px 12px;transition:border-color .16s ease,color .16s ease}
+.tags span:hover{border-color:var(--accent);color:var(--accent)}
+.pill{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:2px;color:#fff}
+.pill-research{background:var(--accent)}
+.pill-education{background:#8A5A11}
+.pill-other{background:#6B7378}
 
-  </style>
-  
-  <!-- Leaflet Map JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
+/* cards row */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.card{background:var(--paper);padding:30px 26px 28px;text-decoration:none;display:block;transition:background .2s ease}
+.card .mo{display:block;font-size:10.5px;color:var(--dim);transition:color .2s ease}
+.card h3{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.02em;margin:11px 0 0;transition:color .2s ease}
+.card p{font-size:13.5px;line-height:1.65;color:var(--dim);margin:9px 0 0}
+.card .go{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);transition:color .2s ease}
+.card:hover,.card:focus-visible{background:#EDF2F7}
+.card:hover .mo,.card:hover h3,.card:hover .go,.card:focus-visible .mo,.card:focus-visible h3,.card:focus-visible .go{color:var(--accent)}
 
+/* footer */
+footer{background:var(--paper);padding:34px 0 40px;border-top:1px solid var(--line)}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--accent)}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media (max-width:980px){
+  .cols{grid-template-columns:1fr}
+  .rail{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:24px;position:static}
+  .rail a.thumb{max-width:320px}
+}
+@media (max-width:880px){
+  .burger{display:block}
+  nav{position:absolute;top:100%;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line-strong);display:none;padding:8px var(--pad) 20px}
+  nav.open{display:block}
+  .menu{flex-direction:column;align-items:stretch;gap:0}
+  .menu>li>a{padding:12px 0}
+  .menu>li.on>a::after{width:24px}
+  .sub{position:static;opacity:1;visibility:visible;transform:none;border:0;box-shadow:none;padding:0 0 6px 14px;min-width:0}
+  .sub a{padding:8px 0;font-size:13px;color:var(--dim)}
+  .menu .auth{margin:14px 0 0;text-align:center}
+  .cards{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+#map{width:100%;height:min(60vh,540px);border:1px solid var(--line-strong);border-radius:3px;margin:26px 0 0;z-index:1}
+.leaflet-container{font-family:var(--body)}
+.leaflet-popup-content{font-family:var(--body);font-size:13.5px;margin:12px 14px}
+.leaflet-popup-content b{font-family:var(--mono);font-size:11px;letter-spacing:.12em}
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin-top:26px}
+.filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-strong);background:var(--paper);color:var(--dim);border-radius:2px;padding:8px 13px;cursor:pointer;transition:all .16s ease}
+.filters button:hover{border-color:var(--accent);color:var(--accent)}
+.filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+#count{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:18px 0 0}
+table.data td .nm{display:block;color:var(--dim);font-size:13px;margin-top:2px}
+tr.hidden{display:none}
+</style>
 </head>
 <body>
-  
-  <div class="container">
-      
-      <div class="header-top">
-          <h2>KoFlux</h2>
-          <span>The Data Portal serving the KoFlux Community</span>
-      </div>
-      
-      <div class="navbar">
-          <div class="navbar-item">
-              <a href="index.html">Home</a>
-          </div>
-          
-          <div class="navbar-item">
-              <a href="about_koflux.html">About</a>
-              <div class="dropdown-content">
-                  <a href="about_koflux.html">About KoFlux</a>
-                  <a href="regional_networks.html">Regional Networks</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item">
-              <a href="community.html">Community</a>
-          </div>
-          
-          <div class="navbar-item active">
-              <a href="#">Sites</a>
-              <div class="dropdown-content">
-                  <a href="sites_info.html">Site Summary</a>
-                  <a href="site_list.html">Site List</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item">
-              <a href="#">Education</a>
-          </div>
-          
-          <div class="navbar-item">
-              <a href="#">Data</a>
-              <div class="dropdown-content">
-                  <a href="about_data.html">About Data</a>
-                  <a href="download_data.html">Download Data</a>
-              </div>
-          </div>
-          
-          <div class="navbar-item" style="float: right;">
-              <!-- Sign In 링크를 signin.html로 연결 -->
-              <a href="signin.html" id="nav-auth-text">Sign In</a>
-          </div>
-      </div>
-      
-      <div class="content-area">
-          <div class="main-content">
-              <p class="breadcrumb">Home / Sites / Site List</p>
-              <h1>Site List</h1>
-              <p>As of 2025, numerous sites are registered in the KoFlux network. The map below shows the locations of registered observation sites across South Korea.</p>
-              
-              <div id="map"></div>
+<header>
+  <div class="wrap">
+    <a class="mark" href="index.html">
+      <b>Ko<i>Flux</i></b>
+      <span>Korea flux network database</span>
+    </a>
 
-              <div class="site-table-container" id="site-table-area">
-                  <h2>Site Details</h2>
-              </div>
-          </div>
-      </div>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Menu</button>
+
+    <nav id="nav">
+      <ul class="menu">
+        <li class=""><a href="index.html">Home</a></li>
+        <li class="has-sub">
+          <a href="about_koflux.html">About</a>
+          <ul class="sub">
+            <li><a href="about_koflux.html">About KoFlux</a></li>
+            <li><a href="regional_networks.html">Regional Networks</a></li>
+          </ul>
+        </li>
+        <li class=""><a href="community.html">Community</a></li>
+        <li class="has-sub on">
+          <a href="sites_info.html">Sites</a>
+          <ul class="sub">
+            <li><a href="sites_info.html">Site Summary</a></li>
+            <li><a href="site_list.html">Site List</a></li>
+          </ul>
+        </li>
+        <li class=""><a href="#">Education</a></li>
+        <li class="has-sub">
+          <a href="about_data.html">Data</a>
+          <ul class="sub">
+            <li><a href="about_data.html">About Data</a></li>
+            <li><a href="download_data.html">Download Data</a></li>
+          </ul>
+        </li>
+        <li><a class="auth" href="signin.html" id="nav-auth-text">Sign In</a></li>
+      </ul>
+    </nav>
   </div>
+</header>
 
-  <script type="module">
-    // Firebase 인증 연동
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    
-    // Firebase 구성에 유효한 apiKey를 추가했습니다.
-    const firebaseConfig = { 
-        apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU", 
-        authDomain: "project0-a0afb.firebaseapp.com", 
-        projectId: "project0-a0afb",
-        storageBucket: "project0-a0afb.firebasestorage.app",
-        messagingSenderId: "498452008968",
-        appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
-        measurementId: "G-M542BRK99Z"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
-      document.getElementById('nav-auth-text').textContent = user ? "Profile" : "Sign In";
+<section class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Sites / Site List</p>
+  <h1 class="page">Twenty-one towers, from Cheorwon to Jeju</h1>
+  <p class="lede">Click a marker to see the site, or use the filters to narrow the table by land cover.</p>
+
+  <div id="map"></div>
+
+  <div class="filters" id="filters">
+    <button data-f="ALL" aria-pressed="true">All</button>
+    <button data-f="CRO" aria-pressed="false">Cropland</button>
+    <button data-f="ENF" aria-pressed="false">Conifer</button>
+    <button data-f="DBF" aria-pressed="false">Deciduous</button>
+    <button data-f="MF" aria-pressed="false">Mixed</button>
+    <button data-f="EBF" aria-pressed="false">Evergreen broadleaf</button>
+    <button data-f="WET" aria-pressed="false">Wetland</button>
+  </div>
+  <p id="count">Showing 21 of 21 sites</p>
+
+  <div class="scrollx" style="margin-top:14px">
+    <table class="data">
+      <thead>
+        <tr><th>Code</th><th>Site</th><th>Land cover</th><th>Latitude</th><th>Longitude</th><th>Data period</th></tr>
+      </thead>
+      <tbody id="site-rows"></tbody>
+    </table>
+  </div>
+  <p class="note">Coordinates are approximate tower positions. Data period reflects the years present in the current release.</p>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>A member of AsiaFlux and FLUXNET</span>
+    <span><a href="community.html">Contact</a> &middot; <a href="about_data.html">Licence</a></span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('nav');
+  if (burger && nav) {
+    burger.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+      burger.textContent = open ? 'Close' : 'Menu';
     });
-
-    // 1. Define Site Data
-    const sites = [
-        { code: "AMD", name: "Anmyeondo Coniferous forest", type: "Coniferous forest", lat: 36.53, lng: 126.32 },
-        { code: "CFK", name: "Cheongmicheon Farmland", type: "Rice Paddy", lat: 37.16, lng: 127.65 },
-        { code: "CRK", name: "Cheorwon Rice paddy", type: "Rice Paddy", lat: 38.20, lng: 127.25 },
-        { code: "GBK", name: "Gimje Soybean Field", type: "Soybean Field", lat: 35.80, lng: 126.88 },
-        { code: "GCK", name: "Gwangreung Coniferous forest", type: "Coniferous forest", lat: 37.75, lng: 127.17 },
-        { code: "GDK", name: "Gwangreung Deciduous forest", type: "Deciduous forest", lat: 37.76, lng: 127.18 },
-        { code: "GRK", name: "Gimje Rice Paddy", type: "Rice Paddy", lat: 35.81, lng: 126.89 },
-        { code: "GRK", name: "Gimje Rice-barley double cropping Paddy Field", type: "Rice Paddy", lat: 35.82, lng: 126.90 },
-        { code: "HC", name: "Hongcheon Mixed forest", type: "Mixed forest", lat: 37.69, lng: 127.88 },
-        { code: "HFK", name: "Haenam Farmland", type: "Farmland", lat: 34.55, lng: 126.58 },
-        { code: "HPK", name: "Haenam Paddy-field", type: "Rice Paddy", lat: 34.57, lng: 126.60 },
-        { code: "JJ", name: "Jeju Mixed forest", type: "Mixed forest", lat: 33.36, lng: 126.53 },
-        { code: "NRK1, 2", name: "Naju Rice Paddy", type: "Rice Paddy", lat: 35.01, lng: 126.71 },
-        { code: "PYC", name: "Pyeongchang Deciduous forest", type: "Deciduous forest", lat: 37.37, lng: 128.39 },
-        { code: "SC", name: "Samcheok Coniferous forest", type: "Coniferous forest", lat: 37.44, lng: 129.16 },
-        { code: "SMK", name: "Seolmacheon Mixed forest", type: "Mixed forest", lat: 37.93, lng: 126.95 },
-        { code: "SRK", name: "Seocheon Reservoir", type: "Reservoir", lat: 36.08, lng: 126.69 },
-        { code: "TBK", name: "Taehwa Broadleaf forest", type: "Broadleaf forest", lat: 37.31, lng: 127.31 },
-        { code: "TCK", name: "Taehwa Coniferous forest", type: "Coniferous forest", lat: 37.32, lng: 127.32 },
-        { code: "UOK", name: "Uiseong Apple Orchard", type: "Apple Orchard", lat: 36.35, lng: 128.69 },
-        { code: "WD", name: "Wando Evergreen broadleaf forest", type: "broadleaf forest", lat: 34.31, lng: 126.71 }
-    ];
-
-    // 2. Initialize Leaflet Map
-    const map = L.map('map').setView([36.5, 127.8], 7); 
-
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    }).addTo(map);
-
-    // 3. Add Markers and Build Table
-    const tableContainer = document.getElementById('site-table-area');
-
-    sites.forEach(site => {
-        L.marker([site.lat, site.lng])
-         .addTo(map)
-         .bindPopup(`<b>${site.code}</b><br>${site.name}`);
-
-        const entryDiv = document.createElement('div');
-        entryDiv.className = 'site-entry';
-        entryDiv.innerHTML = `
-            <div class="site-entry-row">
-                <span class="site-label">Site Code:</span>
-                <span class="site-value">${site.code}</span>
-            </div>
-            <div class="site-entry-row">
-                <span class="site-label">Site Name:</span>
-                <span class="site-value">${site.name}</span>
-            </div>
-            <div class="site-entry-row">
-                <span class="site-label">Type:</span>
-                <span class="site-value">${site.type}</span>
-            </div>
-            <div class="site-entry-row">
-                <span class="site-label">Status:</span>
-                <span class="site-value">Continuous</span>
-            </div>
-            <div class="site-entry-row">
-                <span class="site-label">Details:</span>
-                <span class="site-value"></span>
-            </div>
-        `;
-        tableContainer.appendChild(entryDiv);
+  }
+  document.querySelectorAll('.has-sub > a').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      if (window.matchMedia('(hover: hover)').matches) return;
+      var li = link.parentElement;
+      if (!li.classList.contains('open')) {
+        e.preventDefault();
+        document.querySelectorAll('.has-sub.open').forEach(function (o) { o.classList.remove('open'); });
+        li.classList.add('open');
+      }
     });
-  </script>
+  });
+</script>
+<script>
+  var sites = [
+      { code: "AMD", name: "Anmyeondo Coniferous forest", cover: "ENF", period: "2015–2018", lat: 36.53, lng: 126.32 },
+      { code: "CFK", name: "Cheongmicheon Farmland", cover: "CRO", period: "2012–2019", lat: 37.16, lng: 127.65 },
+      { code: "CRK", name: "Cheorwon Rice paddy", cover: "CRO", period: "2015–2021", lat: 38.2, lng: 127.25 },
+      { code: "GBK", name: "Gimje Soybean Field", cover: "CRO", period: "2017–2019", lat: 35.8, lng: 126.88 },
+      { code: "GCK", name: "Gwangreung Coniferous forest", cover: "ENF", period: "2016–2020", lat: 37.75, lng: 127.17 },
+      { code: "GDK", name: "Gwangreung Deciduous forest", cover: "DBF", period: "2016–2020", lat: 37.76, lng: 127.18 },
+      { code: "GRK", name: "Gimje Rice Paddy", cover: "CRO", period: "2017–2019", lat: 35.81, lng: 126.89 },
+      { code: "GRK-2", name: "Gimje Rice-barley double cropping Paddy Field", cover: "CRO", period: "2011–2014", lat: 35.82, lng: 126.9 },
+      { code: "HC", name: "Hongcheon Mixed forest", cover: "MF", period: "2015–2018", lat: 37.69, lng: 127.88 },
+      { code: "HFK", name: "Haenam Farmland", cover: "CRO", period: "2016–2019", lat: 34.55, lng: 126.58 },
+      { code: "HPK", name: "Haenam Paddy-field", cover: "CRO", period: "2016–2018", lat: 34.57, lng: 126.6 },
+      { code: "JJ", name: "Jeju Mixed forest", cover: "MF", period: "2015–2018", lat: 33.36, lng: 126.53 },
+      { code: "NRK1, 2", name: "Naju Rice Paddy", cover: "CRO", period: "2023–2024", lat: 35.01, lng: 126.71 },
+      { code: "PYC", name: "Pyeongchang Deciduous forest", cover: "DBF", period: "2015–2018", lat: 37.37, lng: 128.39 },
+      { code: "SC", name: "Samcheok Coniferous forest", cover: "ENF", period: "2015–2018", lat: 37.44, lng: 129.16 },
+      { code: "SMK", name: "Seolmacheon Mixed forest", cover: "MF", period: "2015–2021", lat: 37.93, lng: 126.95 },
+      { code: "SRK", name: "Seocheon Reservoir", cover: "WET", period: "2023–2024", lat: 36.08, lng: 126.69 },
+      { code: "TBK", name: "Taehwa Broadleaf forest", cover: "DBF", period: "2024", lat: 37.31, lng: 127.31 },
+      { code: "TCK", name: "Taehwa Coniferous forest", cover: "ENF", period: "2024", lat: 37.32, lng: 127.32 },
+      { code: "UOK", name: "Uiseong Apple Orchard", cover: "CRO", period: "2017–2019", lat: 36.35, lng: 128.69 },
+      { code: "WD", name: "Wando Evergreen broadleaf forest", cover: "EBF", period: "2015–2018", lat: 34.31, lng: 126.71 }
+  ];
+
+  var map = L.map('map', { scrollWheelZoom: false }).setView([36.4, 127.8], 7);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 17
+  }).addTo(map);
+
+  var tbody = document.getElementById('site-rows');
+  var markers = {};
+  var rows = {};
+
+  sites.forEach(function (s, i) {
+    var m = L.circleMarker([s.lat, s.lng], {
+      radius: 7, color: '#ffffff', weight: 2, fillColor: '#1F4E79', fillOpacity: 1
+    }).addTo(map).bindPopup('<b>' + s.code + '</b><br>' + s.name + '<br>' + s.cover + ' &middot; ' + s.period);
+    markers[i] = m;
+
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="c">' + s.code + '</td>' +
+      '<td>' + s.name + '</td>' +
+      '<td class="c">' + s.cover + '</td>' +
+      '<td class="c">' + s.lat.toFixed(2) + '</td>' +
+      '<td class="c">' + s.lng.toFixed(2) + '</td>' +
+      '<td class="c">' + s.period + '</td>';
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', function () {
+      map.setView([s.lat, s.lng], 11);
+      m.openPopup();
+      document.getElementById('map').scrollIntoView({ block: 'center' });
+    });
+    tbody.appendChild(tr);
+    rows[i] = tr;
+  });
+
+  document.getElementById('filters').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var f = btn.dataset.f;
+    this.querySelectorAll('button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    var shown = 0;
+    sites.forEach(function (s, i) {
+      var keep = (f === 'ALL' || s.cover === f);
+      rows[i].classList.toggle('hidden', !keep);
+      if (keep) { markers[i].addTo(map); shown++; } else { map.removeLayer(markers[i]); }
+    });
+    document.getElementById('count').textContent = 'Showing ' + shown + ' of ' + sites.length + ' sites';
+  });
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
+    authDomain: "project0-a0afb.firebaseapp.com",
+    projectId: "project0-a0afb",
+    storageBucket: "project0-a0afb.firebasestorage.app",
+    messagingSenderId: "498452008968",
+    appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
+    measurementId: "G-M542BRK99Z"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  onAuthStateChanged(auth, (user) => {
+    const el = document.getElementById('nav-auth-text');
+    if (!el) return;
+    const signedIn = user && !user.isAnonymous;
+    el.textContent = signedIn ? "Profile" : "Sign In";
+    el.href = signedIn ? "signin.html" : "signin.html";
+  });
+</script>
 </body>
 </html>
