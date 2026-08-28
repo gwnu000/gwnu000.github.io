@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KoFlux — Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF;
+  --panel:#F5F6F4;
+  --ink:#15181A;
+  --dim:#5F6B72;
+  --accent:#1F4E79;
+  --accent-hi:#2C6DA6;
+  --line:rgba(21,24,26,.13);
+  --line-strong:rgba(21,24,26,.26);
+  --ok:#2F7D5B;
+  --danger:#B23A20;
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue','Apple SD Gothic Neo','Pretendard','Malgun Gothic',Arial,sans-serif;
+  --display:var(--sf);
+  --body:var(--sf);
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,'Inter',monospace;
+  --pad:clamp(20px,5vw,60px);
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;letter-spacing:-.011em;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;height:auto}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.dis{font-family:var(--display);font-weight:600;letter-spacing:-.021em}
+.mo{font-family:var(--mono);letter-spacing:.13em;text-transform:uppercase}
+
+/* banner */
+header{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--line-strong)}
+header .wrap{display:flex;align-items:center;gap:22px;padding-top:15px;padding-bottom:15px}
+.mark{display:flex;align-items:baseline;gap:12px;text-decoration:none;flex:0 0 auto}
+.mark b{font-family:var(--display);font-weight:600;font-size:25px;line-height:1;letter-spacing:-.022em}
+.mark b i{font-style:normal;color:var(--accent)}
+.mark span{font-family:var(--mono);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim)}
+nav{margin-left:auto}
+.menu{list-style:none;display:flex;align-items:center;gap:2px;margin:0;padding:0}
+.menu>li{position:relative}
+.menu>li>a{display:block;padding:9px 13px;text-decoration:none;font-size:13.5px;color:var(--dim);border-radius:2px;transition:color .16s ease,background .16s ease}
+.menu>li>a:hover,.menu>li>a:focus-visible{color:var(--ink);background:var(--panel)}
+.menu>li.on>a{color:var(--ink);font-weight:500}
+.menu>li.on>a::after{content:"";display:block;height:2px;background:var(--accent);margin-top:5px;margin-bottom:-7px}
+.menu .auth{border:1px solid var(--line-strong);color:var(--ink);margin-left:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px}
+.menu .auth:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.sub{position:absolute;top:100%;left:0;min-width:214px;background:var(--paper);border:1px solid var(--line-strong);border-radius:3px;box-shadow:0 14px 32px rgba(15,25,35,.13);padding:5px;margin:0;list-style:none;opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .15s ease,transform .15s ease,visibility .15s}
+.sub a{display:block;padding:9px 12px;text-decoration:none;border-radius:2px;font-size:13.5px;color:var(--ink)}
+.sub a:hover{background:var(--panel);color:var(--accent)}
+li.has-sub:hover .sub,li.has-sub:focus-within .sub,li.has-sub.open .sub{opacity:1;visibility:visible;transform:translateY(0)}
+.burger{display:none;margin-left:auto;background:none;border:1px solid var(--line-strong);color:var(--ink);border-radius:2px;padding:9px 12px;cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+
+/* page head */
+.phead{border-bottom:1px solid var(--line);background:var(--panel)}
+.phead .wrap{padding-top:clamp(30px,4vw,52px);padding-bottom:clamp(30px,4vw,52px)}
+.crumb{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 14px}
+.crumb a{text-decoration:none}
+.crumb a:hover{color:var(--accent)}
+h1.page{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,42px);line-height:1.12;letter-spacing:-.028em;margin:0;max-width:22ch}
+.phead .sub-lede{font-size:clamp(14.5px,1.4vw,16.5px);line-height:1.7;color:#3F4B52;margin:16px 0 0;max-width:58ch}
+
+/* layout */
+main{padding-top:clamp(34px,4.5vw,60px);padding-bottom:clamp(48px,6vw,84px)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:clamp(28px,4vw,56px);align-items:start}
+.prose h2{font-family:var(--display);font-weight:600;font-size:clamp(19px,2.3vw,25px);letter-spacing:-.022em;margin:38px 0 14px}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em;margin:26px 0 10px}
+.prose p{margin:0 0 15px;line-height:1.75}
+.prose ul{margin:0 0 18px;padding-left:20px}
+.prose li{margin-bottom:8px;line-height:1.7}
+.prose a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(31,78,121,.3)}
+.prose a:hover{border-bottom-color:var(--accent)}
+.prose img{display:block;margin:24px 0;border:1px solid var(--line)}
+.prose figure{margin:26px 0}
+.prose figcaption{font-size:12.5px;color:var(--dim);margin-top:8px}
+
+aside{position:sticky;top:96px}
+aside h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 12px;font-weight:400}
+aside .maplink{display:block;border:1px solid var(--line);text-decoration:none;transition:border-color .18s ease}
+aside .maplink:hover{border-color:var(--accent)}
+aside .maplink img{display:block;width:100%}
+aside .side-nav{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+aside .side-nav li{border-bottom:1px solid var(--line)}
+aside .side-nav a{display:block;padding:11px 2px;text-decoration:none;font-size:13.5px;color:var(--dim);transition:color .16s ease,padding-left .16s ease}
+aside .side-nav a:hover{color:var(--accent);padding-left:6px}
+aside .side-nav a.on{color:var(--ink);font-weight:500}
+aside .note{font-size:12.5px;line-height:1.65;color:var(--dim);margin:14px 0 0}
+
+/* buttons + forms */
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;padding:13px 20px;border-radius:2px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:0;cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease}
+.btn-solid{background:var(--accent);color:#fff}
+.btn-solid:hover:not(:disabled){background:var(--accent-hi);transform:translateY(-1px)}
+.btn-ghost{border:1px solid var(--line-strong);background:transparent;color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn:disabled{background:#C9CFD3;color:#fff;cursor:not-allowed;transform:none}
+.card{border:1px solid var(--line);border-radius:3px;padding:26px 24px;background:var(--paper)}
+.card+.card{margin-top:18px}
+.card h3{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.02em;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.card h3 .num{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);margin-right:9px}
+.fg{margin-bottom:16px}
+.fg>label{display:block;font-size:13px;font-weight:500;margin-bottom:7px}
+.fg .hint{font-size:12.5px;color:var(--dim);margin:6px 0 0}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line-strong);border-radius:2px;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:14.5px;letter-spacing:-.011em;transition:border-color .16s ease,box-shadow .16s ease}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,78,121,.12)}
+textarea{min-height:110px;resize:vertical;line-height:1.6}
+select[multiple]{height:260px;padding:6px}
+select[multiple] option{padding:6px 8px;border-radius:2px}
+.msg{margin-top:16px;padding:12px 14px;border-radius:2px;font-size:13.5px;line-height:1.6;display:none;white-space:pre-wrap}
+.msg.err{background:#FBEDEA;color:#8A2C14;border:1px solid #E9C6BC}
+.msg.ok{background:#EAF3EE;color:#215C42;border:1px solid #BFD9CC}
+
+table.data{width:100%;border-collapse:collapse;font-size:13.5px}
+table.data th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:400;color:var(--dim);padding:11px 12px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+table.data td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.data tbody tr:hover{background:var(--panel)}
+table.data td.c{font-family:var(--mono);font-size:12px;letter-spacing:.06em}
+.scroll{width:100%;overflow-x:auto}
+
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:2px;border:1px solid var(--line-strong);color:var(--dim)}
+.tag.research{border-color:rgba(31,78,121,.4);color:var(--accent)}
+.tag.education{border-color:rgba(184,114,15,.45);color:#8A5309}
+.tag.other{border-color:var(--line-strong);color:var(--dim)}
+
+/* footer */
+footer{background:var(--paper);border-top:1px solid var(--line);padding:34px 0 44px}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media (max-width:940px){
+  .cols{grid-template-columns:1fr}
+  aside{position:static;border-top:1px solid var(--line);padding-top:26px}
+}
+@media (max-width:880px){
+  .burger{display:block}
+  nav{position:absolute;top:100%;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line-strong);display:none;padding:8px var(--pad) 20px}
+  nav.open{display:block}
+  .menu{flex-direction:column;align-items:stretch;gap:0}
+  .menu>li>a{padding:12px 0}
+  .menu>li.on>a::after{width:24px}
+  .sub{position:static;opacity:1;visibility:visible;transform:none;border:0;box-shadow:none;padding:0 0 6px 14px;min-width:0}
+  .sub a{padding:8px 0;font-size:13px;color:var(--dim)}
+  .menu .auth{margin:14px 0 0;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="mark" href="index.html">
+      <b>Ko<i>Flux</i></b>
+      <span>Korea flux network database</span>
+    </a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav">
+      <ul class="menu">
+        <li><a href="index.html">Home</a></li>
+        <li class="has-sub">
+          <a href="about_koflux.html">About</a>
+          <ul class="sub">
+            <li><a href="about_koflux.html">About KoFlux</a></li>
+            <li><a href="regional_networks.html">Regional Networks</a></li>
+          </ul>
+        </li>
+        <li class="on"><a href="community.html">Community</a></li>
+        <li class="has-sub">
+          <a href="sites_info.html">Sites</a>
+          <ul class="sub">
+            <li><a href="sites_info.html">Site Summary</a></li>
+            <li><a href="site_list.html">Site List</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Education</a></li>
+        <li class="has-sub">
+          <a href="about_data.html">Data</a>
+          <ul class="sub">
+            <li><a href="about_data.html">About Data</a></li>
+            <li><a href="download_data.html">Download Data</a></li>
+          </ul>
+        </li>
+        <li><a class="auth" href="signin.html" id="nav-auth-text">Sign In</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="phead">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> / Community</p>
+    <h1 class="page">Community</h1>
+      <p class="sub-lede">Who runs the network, how to reach us, and how to contribute a tower.</p>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="cols">
+    <div class="prose">
+      <p>KoFlux is run by the people who build and maintain the towers. Data users, site principal investigators and students all take part in keeping the record consistent and usable.</p>
+
+      <h2>Contact</h2>
+      <p>For questions about the dataset, corrections to site information, or requests to contribute a new tower, please get in touch with the portal maintainers.</p>
+      <div class="card">
+        <p style="margin:0 0 8px"><span class="mo" style="font-size:10.5px;color:var(--dim)">Portal</span><br>KoFlux data portal &mdash; site information, downloads, accounts</p>
+        <p style="margin:0"><span class="mo" style="font-size:10.5px;color:var(--dim)">Data</span><br>Questions about processing, quality flags or a specific site record</p>
+      </div>
+
+      <h2>Contributing a site</h2>
+      <p>If you operate an eddy covariance tower in Korea and would like to include it in the shared dataset, we ask for half-hourly records, site metadata (coordinates, canopy height, instrument height, land cover) and a contact for the site team. Files are reformatted to the FLUXNET convention in consultation with you before release.</p>
+
+      <h2>Acknowledgement</h2>
+      <p>This work was supported by the Rural Development Administration's programme for the new agricultural climate change response system (RS-2024-00401659) and by the National Institute of Forest Science's 2025 programme for the maintenance and quality management of forest ecosystem flux tower networks.</p>
+
+      <h2>Citing the dataset</h2>
+      <p>When you publish work based on these data, cite the dataset and acknowledge the principal investigators of every site you used. The <a href="about_data.html">About Data</a> page has the current citation format.</p>
+    </div>
+    <aside>
+  <h4>KoFlux sites</h4>
+  <a class="maplink" href="site_list.html"><img src="picture4.png" alt="Map of KoFlux observation sites"></a>
+  <p class="note">21 towers across South Korea. Click the map for the full site list with coordinates and years of record.</p>
+</aside>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>A member of AsiaFlux and FLUXNET</span>
+    <span><a href="community.html">Contact</a> &middot; <a href="about_data.html">Licence</a></span>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('nav');
+  if (burger && nav) {
+    burger.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+      burger.textContent = open ? 'Close' : 'Menu';
+    });
+  }
+  document.querySelectorAll('.has-sub > a').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      if (window.matchMedia('(hover: hover)').matches) return;
+      var li = link.parentElement;
+      if (!li.classList.contains('open')) {
+        e.preventDefault();
+        document.querySelectorAll('.has-sub.open').forEach(function (o) { o.classList.remove('open'); });
+        li.classList.add('open');
+      }
+    });
+  });
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
+    authDomain: "project0-a0afb.firebaseapp.com",
+    projectId: "project0-a0afb",
+    storageBucket: "project0-a0afb.firebasestorage.app",
+    messagingSenderId: "498452008968",
+    appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
+    measurementId: "G-M542BRK99Z"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  onAuthStateChanged(auth, (user) => {
+    const el = document.getElementById('nav-auth-text');
+    if (!el) return;
+    const signedIn = user && !user.isAnonymous;
+    el.textContent = signedIn ? "Profile" : "Sign In";
+    el.href = signedIn ? "signin.html" : "signin.html";
+  });
+</script>
+</body>
+</html>
