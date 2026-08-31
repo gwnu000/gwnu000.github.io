@@ -1,222 +1,458 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>KoFlux - Admin Dashboard</title>
-  <style>
-    :root {
-      --main-blue: rgba(51, 85, 127, 1);
-      --light-blue: #5bc0de;
-      --page-background: #f8f8f8;
-      --font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
-    }
-    body { background-color: var(--page-background); color: #333; font-family: var(--font-family); margin: 0; }
-    .container { max-width: 1400px; margin: 0 auto; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); padding: 20px; min-height: 100vh; }
-    
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-blue); padding-bottom: 10px; margin-bottom: 20px; }
-    .header h1 { color: var(--main-blue); margin: 0; font-size: 24px; }
-    
-    .controls { margin-bottom: 20px; display: flex; gap: 10px; }
-    .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
-    .btn-csv { background-color: #5cb85c; }
-    .btn-refresh { background-color: var(--main-blue); }
-    
-    .table-responsive { width: 100%; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; min-width: 1000px; }
-    th, td { border: 1px solid #ddd; padding: 10px 6px; text-align: left; }
-    th { background-color: #f2f2f2; color: var(--main-blue); font-weight: bold; white-space: nowrap; }
-    tr:nth-child(even) { background-color: #f9f9f9; }
-    tr:hover { background-color: #f1f1f1; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KoFlux — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF;
+  --panel:#F5F6F4;
+  --ink:#15181A;
+  --dim:#5F6B72;
+  --accent:#1F4E79;
+  --accent-hi:#2C6DA6;
+  --danger:#B3261E;
+  --ok:#1E6B47;
+  --line:rgba(21,24,26,.13);
+  --line-strong:rgba(21,24,26,.26);
+  --sf:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue','Apple SD Gothic Neo','Pretendard','Malgun Gothic',Arial,sans-serif;
+  --display:var(--sf);
+  --body:var(--sf);
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,'Inter',monospace;
+  --veil-1:.90;
+  --veil-2:.85;
+  --veil-3:.56;
+  --veil-4:.40;
+  --pad:clamp(20px,5vw,60px);
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;letter-spacing:-.011em;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;height:auto}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.dis{font-family:var(--display);font-weight:600;letter-spacing:-.021em}
+.mo{font-family:var(--mono);letter-spacing:.13em;text-transform:uppercase}
 
-    .tag { padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; color: white; text-transform: uppercase; }
-    .tag-research { background-color: #5bc0de; }
-    .tag-edu { background-color: #f0ad4e; }
-    .tag-other { background-color: #999; }
-    
-    #loading { text-align: center; padding: 50px; font-weight: bold; color: #666; }
-    #access-denied { display: none; text-align: center; padding: 100px 20px; color: #d9534f; }
-    .user-info { font-size: 11px; color: #555; }
-  </style>
+/* ---------- banner ---------- */
+header{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--line-strong)}
+header .wrap{display:flex;align-items:center;gap:22px;padding-top:15px;padding-bottom:15px}
+.mark{display:flex;align-items:baseline;gap:12px;text-decoration:none;flex:0 0 auto}
+.mark b{font-family:var(--display);font-weight:600;font-size:25px;line-height:1;letter-spacing:-.022em}
+.mark b i{font-style:normal;color:var(--accent)}
+.mark span{font-family:var(--mono);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim)}
+nav{margin-left:auto}
+.menu{list-style:none;display:flex;align-items:center;gap:2px;margin:0;padding:0}
+.menu>li{position:relative}
+.menu>li>a{display:block;padding:9px 13px;text-decoration:none;font-size:13.5px;color:var(--dim);border-radius:2px;transition:color .16s ease,background .16s ease}
+.menu>li>a:hover,.menu>li>a:focus-visible{color:var(--ink);background:var(--panel)}
+.menu>li.on>a{color:var(--ink);font-weight:500}
+.menu>li.on>a::after{content:"";display:block;height:2px;background:var(--accent);margin-top:5px;margin-bottom:-7px}
+.menu .auth{border:1px solid var(--line-strong);color:var(--ink);margin-left:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px}
+.menu .auth:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.sub{position:absolute;top:100%;left:0;min-width:214px;background:var(--paper);border:1px solid var(--line-strong);border-radius:3px;box-shadow:0 14px 32px rgba(15,25,35,.13);padding:5px;margin:0;list-style:none;opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .15s ease,transform .15s ease,visibility .15s}
+.sub a{display:block;padding:9px 12px;text-decoration:none;border-radius:2px;font-size:13.5px;color:var(--ink)}
+.sub a:hover{background:var(--panel);color:var(--accent)}
+li.has-sub:hover .sub,li.has-sub:focus-within .sub,li.has-sub.open .sub{opacity:1;visibility:visible;transform:translateY(0)}
+.burger{display:none;margin-left:auto;background:none;border:1px solid var(--line-strong);color:var(--ink);border-radius:2px;padding:9px 12px;cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+
+/* ---------- shared page furniture ---------- */
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:0 0 16px}
+.crumb{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:0 0 18px}
+.crumb a{text-decoration:none}
+.crumb a:hover{color:var(--accent)}
+section{padding-top:clamp(46px,6vw,76px);padding-bottom:clamp(46px,6vw,76px)}
+.band{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+h1.page{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.1;letter-spacing:-.028em;margin:0;max-width:22ch}
+h2.sec{font-family:var(--display);font-weight:600;font-size:clamp(21px,2.6vw,28px);letter-spacing:-.022em;line-height:1.2;margin:0 0 26px}
+h3.sub{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.02em;margin:34px 0 12px}
+p.lede{font-size:clamp(15px,1.4vw,17px);line-height:1.7;color:#3F4B52;margin:20px 0 0;max-width:62ch}
+.prose{max-width:70ch}
+.prose p{font-size:15.5px;line-height:1.75;color:#31393E;margin:0 0 16px}
+.prose ul{padding-left:20px;margin:0 0 18px}
+.prose li{font-size:15.5px;line-height:1.8;color:#31393E}
+.prose a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(31,78,121,.35)}
+.prose a:hover{border-bottom-color:var(--accent)}
+.prose figure{margin:26px 0}
+.prose figure img{display:block;border:1px solid var(--line);border-radius:3px}
+.prose figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-top:9px}
+.note{font-size:13.5px;line-height:1.7;color:var(--dim);margin:18px 0 0;max-width:70ch}
+
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;padding:13px 20px;border-radius:2px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:0;cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease}
+.btn-solid{background:var(--accent);color:#fff}
+.btn-solid:hover{background:var(--accent-hi);transform:translateY(-1px)}
+.btn-ghost{border:1px solid var(--line-strong);background:rgba(255,255,255,.7);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.btn:disabled{background:#C9CFD3;color:#fff;cursor:not-allowed;transform:none}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#8E1D17}
+
+/* two-column layout with rail */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:clamp(28px,4vw,56px);align-items:start}
+.rail{border-left:1px solid var(--line);padding-left:24px;position:sticky;top:96px}
+.rail h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 12px;font-weight:400}
+.rail a.thumb{display:block;text-decoration:none;border:1px solid var(--line);border-radius:3px;overflow:hidden;transition:border-color .2s ease}
+.rail a.thumb:hover{border-color:var(--accent)}
+.rail a.thumb img{display:block}
+.rail .links{list-style:none;margin:18px 0 0;padding:0}
+.rail .links li{border-top:1px solid var(--line)}
+.rail .links a{display:block;padding:11px 0;text-decoration:none;font-size:14px;color:var(--dim);transition:color .16s ease,padding-left .16s ease}
+.rail .links a:hover{color:var(--accent);padding-left:5px}
+
+/* forms */
+.field{margin-bottom:18px}
+.field label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;padding:12px 13px;border:1px solid var(--line-strong);border-radius:2px;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;transition:border-color .16s ease,box-shadow .16s ease}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,78,121,.12)}
+.field textarea{min-height:118px;resize:vertical}
+.card-form{max-width:460px;margin:0 auto;border:1px solid var(--line-strong);border-radius:4px;padding:34px 32px}
+.card-form h1{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.024em;margin:0 0 6px}
+.card-form .sub{font-size:14px;color:var(--dim);margin:0 0 24px}
+.altlinks{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:13.5px;color:var(--dim);text-align:center}
+.altlinks a{color:var(--accent);text-decoration:none}
+.altlinks a:hover{text-decoration:underline}
+.status{margin-top:16px;padding:12px 14px;border-radius:2px;font-size:14px;line-height:1.55;display:none;white-space:pre-wrap}
+.status.error{background:#FBEDEC;color:#8E1D17;border:1px solid #EBC9C6}
+.status.success{background:#EAF4EE;color:#155238;border:1px solid #C4E0D0}
+
+/* fieldset block */
+.block{border:1px solid var(--line-strong);border-radius:4px;padding:26px 24px;margin-bottom:22px}
+.block>h3{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em;margin:0 0 4px}
+.block>h3 .num{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);margin-right:9px}
+.block>p.hint{font-size:13.5px;color:var(--dim);margin:0 0 20px}
+
+/* tables */
+table.data{width:100%;border-collapse:collapse;font-size:14px}
+table.data th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:400;color:var(--dim);padding:11px 12px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+table.data td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.data td.c{font-family:var(--mono);font-size:12.5px}
+table.data tbody tr{transition:background .15s ease}
+table.data tbody tr:hover{background:var(--panel)}
+.scrollx{width:100%;overflow-x:auto}
+
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tags span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:2px;padding:8px 12px;transition:border-color .16s ease,color .16s ease}
+.tags span:hover{border-color:var(--accent);color:var(--accent)}
+.pill{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:2px;color:#fff}
+.pill-research{background:var(--accent)}
+.pill-education{background:#8A5A11}
+.pill-other{background:#6B7378}
+
+/* cards row */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.card{background:var(--paper);padding:30px 26px 28px;text-decoration:none;display:block;transition:background .2s ease}
+.card .mo{display:block;font-size:10.5px;color:var(--dim);transition:color .2s ease}
+.card h3{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.02em;margin:11px 0 0;transition:color .2s ease}
+.card p{font-size:13.5px;line-height:1.65;color:var(--dim);margin:9px 0 0}
+.card .go{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);transition:color .2s ease}
+.card:hover,.card:focus-visible{background:#EDF2F7}
+.card:hover .mo,.card:hover h3,.card:hover .go,.card:focus-visible .mo,.card:focus-visible h3,.card:focus-visible .go{color:var(--accent)}
+
+/* footer */
+footer{background:var(--paper);padding:34px 0 40px;border-top:1px solid var(--line)}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--accent)}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media (max-width:980px){
+  .cols{grid-template-columns:1fr}
+  .rail{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:24px;position:static}
+  .rail a.thumb{max-width:320px}
+}
+@media (max-width:880px){
+  .burger{display:block}
+  nav{position:absolute;top:100%;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line-strong);display:none;padding:8px var(--pad) 20px}
+  nav.open{display:block}
+  .menu{flex-direction:column;align-items:stretch;gap:0}
+  .menu>li>a{padding:12px 0}
+  .menu>li.on>a::after{width:24px}
+  .sub{position:static;opacity:1;visibility:visible;transform:none;border:0;box-shadow:none;padding:0 0 6px 14px;min-width:0}
+  .sub a{padding:8px 0;font-size:13px;color:var(--dim)}
+  .menu .auth{margin:14px 0 0;text-align:center}
+  .cards{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+.admbar{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.admbar .who{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-left:auto}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:26px}
+.stats div{background:var(--paper);padding:18px 18px 16px}
+.stats b{display:block;font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.024em}
+.stats span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+#loading,#empty{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);padding:44px 0;text-align:center}
+#empty{display:none}
+#gate{display:none;text-align:center;padding:clamp(70px,12vw,140px) 0}
+#gate h1{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-.026em;margin:0 0 10px}
+#gate p{color:var(--dim);margin:0 0 26px}
+#admin-view{display:none}
+table.data td.trunc{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+table.data td.nm{font-weight:500}
+@media (max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
-  <div id="access-denied">
-    <h1>Access Denied</h1>
-    <p id="denied-message">이 페이지는 관리자만 접근할 수 있습니다.</p>
-    <a href="signin.html" style="color: var(--main-blue); font-weight: bold;">로그인 페이지로 이동</a>
+<header>
+  <div class="wrap">
+    <a class="mark" href="index.html">
+      <b>Ko<i>Flux</i></b>
+      <span>Korea flux network database</span>
+    </a>
+
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Menu</button>
+
+    <nav id="nav">
+      <ul class="menu">
+        <li class=""><a href="index.html">Home</a></li>
+        <li class="has-sub">
+          <a href="about_koflux.html">About</a>
+          <ul class="sub">
+            <li><a href="about_koflux.html">About KoFlux</a></li>
+            <li><a href="regional_networks.html">Regional Networks</a></li>
+          </ul>
+        </li>
+        <li class=""><a href="community.html">Community</a></li>
+        <li class="has-sub">
+          <a href="sites_info.html">Sites</a>
+          <ul class="sub">
+            <li><a href="sites_info.html">Site Summary</a></li>
+            <li><a href="site_list.html">Site List</a></li>
+          </ul>
+        </li>
+        <li class=""><a href="#">Education</a></li>
+        <li class="has-sub">
+          <a href="about_data.html">Data</a>
+          <ul class="sub">
+            <li><a href="about_data.html">About Data</a></li>
+            <li><a href="download_data.html">Download Data</a></li>
+          </ul>
+        </li>
+        <li><a class="auth" href="signin.html" id="nav-auth-text">Sign In</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap" id="gate">
+  <h1>Access denied</h1>
+  <p id="gate-msg">This page is restricted to portal administrators.</p>
+  <a class="btn btn-solid" href="signin.html">Go to sign in</a>
+</section>
+
+<section class="wrap" id="admin-view">
+  <p class="crumb"><a href="index.html">Home</a> / Admin / Download log</p>
+  <div class="admbar">
+    <h1 class="page" style="font-size:clamp(24px,3vw,34px)">Download requests</h1>
+    <span class="who" id="admin-info"></span>
   </div>
 
-  <div class="container" id="admin-view" style="display:none;">
-    <div class="header">
-      <h1>KoFlux Admin Dashboard (User & Download Logs)</h1>
-      <div id="admin-info" style="font-size: 14px; color: #666;"></div>
-    </div>
-
-    <div class="controls">
-      <button class="btn btn-refresh" onclick="location.reload()">Refresh Data</button>
-      <button class="btn btn-csv" id="download-csv">Export Detailed Excel (CSV)</button>
-    </div>
-
-    <div id="loading">전체 데이터를 분석하여 불러오는 중입니다...</div>
-    
-    <div class="table-responsive">
-      <table id="log-table" style="display:none;">
-        <thead>
-          <tr>
-            <th>Time (KST)</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Country</th>
-            <th>Affiliation</th>
-            <th>Role</th>
-            <th>Sites</th>
-            <th>Intended Use</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-        <tbody id="log-body">
-          <!-- 데이터가 여기에 삽입됩니다 -->
-        </tbody>
-      </table>
-    </div>
+  <div class="stats" id="stats">
+    <div><b id="s-total">&ndash;</b><span>Requests</span></div>
+    <div><b id="s-users">&ndash;</b><span>Unique users</span></div>
+    <div><b id="s-sites">&ndash;</b><span>Site downloads</span></div>
+    <div><b id="s-recent">&ndash;</b><span>Last 30 days</span></div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, query, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  <div class="tools">
+    <button class="btn btn-ghost" onclick="location.reload()">Refresh</button>
+    <button class="btn btn-solid" id="download-csv">Export CSV</button>
+  </div>
 
-    const firebaseConfig = { 
-      apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
-      authDomain: "project0-a0afb.firebaseapp.com", 
-      projectId: "project0-a0afb",
-      storageBucket: "project0-a0afb.firebasestorage.app",
-      messagingSenderId: "498452008968",
-      appId: "1:498452008968:web:c7c162b4e8354cd37441bd"
-    };
+  <div id="loading">Loading request log&hellip;</div>
+  <div id="empty">No download requests recorded yet</div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const appId = "project0-a0afb";
+  <div class="scrollx">
+    <table class="data" id="log-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Time (KST)</th><th>Name</th><th>Email</th><th>Country</th>
+          <th>Affiliation</th><th>Role</th><th>Sites</th><th>Use</th><th>Details</th>
+        </tr>
+      </thead>
+      <tbody id="log-body"></tbody>
+    </table>
+  </div>
+</section>
 
-    // 관리자 이메일 목록
-    const ADMIN_EMAILS = [
-      "impimp2412@gmail.com", // 여기에 본인의 이메일을 넣으세요
-      "imp2412@naver.com"
-    ];
+<footer>
+  <div class="wrap foot">
+    <span>A member of AsiaFlux and FLUXNET</span>
+    <span><a href="community.html">Contact</a> &middot; <a href="about_data.html">Licence</a></span>
+  </div>
+</footer>
 
-    onAuthStateChanged(auth, (user) => {
-      if (user && ADMIN_EMAILS.includes(user.email)) {
-        document.getElementById('admin-view').style.display = 'block';
-        document.getElementById('access-denied').style.display = 'none';
-        document.getElementById('admin-info').textContent = `Logged in as: ${user.email}`;
-        fetchData();
-      } else {
-        document.getElementById('admin-view').style.display = 'none';
-        document.getElementById('access-denied').style.display = 'block';
-        if (user) document.getElementById('denied-message').textContent = `계정(${user.email})에 관리 권한이 없습니다.`;
+<script>
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('nav');
+  if (burger && nav) {
+    burger.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+      burger.textContent = open ? 'Close' : 'Menu';
+    });
+  }
+  document.querySelectorAll('.has-sub > a').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      if (window.matchMedia('(hover: hover)').matches) return;
+      var li = link.parentElement;
+      if (!li.classList.contains('open')) {
+        e.preventDefault();
+        document.querySelectorAll('.has-sub.open').forEach(function (o) { o.classList.remove('open'); });
+        li.classList.add('open');
       }
     });
+  });
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  import { getFirestore, collection, query, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    async function fetchData() {
-      const logBody = document.getElementById('log-body');
-      const loading = document.getElementById('loading');
-      const table = document.getElementById('log-table');
+  const firebaseConfig = {
+    apiKey: "AIzaSyDmsWgnQqeojm3cNobdTUQSt0m3IE3lKJU",
+    authDomain: "project0-a0afb.firebaseapp.com",
+    projectId: "project0-a0afb",
+    storageBucket: "project0-a0afb.firebasestorage.app",
+    messagingSenderId: "498452008968",
+    appId: "1:498452008968:web:c7c162b4e8354cd37441bd",
+    measurementId: "G-M542BRK99Z"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const appId = 'project0-a0afb';
 
-      try {
-        // 1. 다운로드 기록 가져오기
-        const logSnap = await getDocs(query(collection(db, 'artifacts', appId, 'public', 'data', 'download_requests')));
-        const logs = [];
-        logSnap.forEach(d => logs.push({ ...d.data() }));
-        logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const ADMIN_EMAILS = [
+    "impimp2412@gmail.com",
+    "imp2412@naver.com"
+  ];
 
-        // 2. 고유 사용자 UID 목록 추출 및 프로필 캐싱
-        const uniqueUids = [...new Set(logs.map(l => l.userId))];
-        const userCache = {};
+  onAuthStateChanged(auth, (user) => {
+    const navEl = document.getElementById('nav-auth-text');
+    if (navEl) navEl.textContent = (user && !user.isAnonymous) ? 'Profile' : 'Sign In';
 
-        // 모든 고유 사용자의 프로필 정보를 병렬로 가져옴
-        await Promise.all(uniqueUids.map(async (uid) => {
-          try {
-            const userDoc = await getDoc(doc(db, `artifacts/${appId}/users/${uid}/profile/info`));
-            userCache[uid] = userDoc.exists() ? userDoc.data() : null;
-          } catch (e) {
-            userCache[uid] = null;
-          }
-        }));
-
-        // 3. 데이터 결합 및 렌더링
-        loading.style.display = 'none';
-        table.style.display = 'table';
-        logBody.innerHTML = '';
-
-        const fullData = logs.map(log => {
-          const profile = userCache[log.userId] || {};
-          return {
-            ...log,
-            userName: profile.name || "Anonymous/Deleted",
-            userEmail: profile.email || "N/A",
-            userCountry: profile.country || "N/A",
-            userAffiliation: profile.affiliation || "N/A",
-            userRole: profile.role || "N/A"
-          };
-        });
-
-        fullData.forEach(item => {
-          const row = document.createElement('tr');
-          const kstTime = new Date(item.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-          const tagClass = item.intendedUse === 'research' ? 'tag-research' : (item.intendedUse === 'education' ? 'tag-edu' : 'tag-other');
-
-          row.innerHTML = `
-            <td style="white-space:nowrap;">${kstTime}</td>
-            <td style="font-weight:bold;">${item.userName}</td>
-            <td>${item.userEmail}</td>
-            <td>${item.userCountry}</td>
-            <td>${item.userAffiliation}</td>
-            <td>${item.userRole}</td>
-            <td>${item.sites ? item.sites.join(', ') : ''}</td>
-            <td><span class="tag ${tagClass}">${item.intendedUse}</span></td>
-            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.details}">${item.details}</td>
-          `;
-          logBody.appendChild(row);
-        });
-
-        document.getElementById('download-csv').onclick = () => exportToCSV(fullData);
-
-      } catch (err) {
-        console.error("Data fetch error:", err);
-        loading.textContent = "Error: " + err.message;
-      }
+    if (user && ADMIN_EMAILS.includes(user.email)) {
+      document.getElementById('admin-view').style.display = 'block';
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('admin-info').textContent = user.email;
+      fetchData();
+    } else {
+      document.getElementById('admin-view').style.display = 'none';
+      document.getElementById('gate').style.display = 'block';
+      if (user) document.getElementById('gate-msg').textContent =
+        'The account ' + user.email + ' does not have administrator access.';
     }
+  });
 
-    function exportToCSV(data) {
-      if (data.length === 0) return;
-      const headers = ["Time(KST)", "Name", "Email", "Country", "Affiliation", "Role", "Sites", "IntendedUse", "Details"];
-      const csvRows = [headers.join(",")];
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
-      data.forEach(item => {
-        const date = new Date(item.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-        const sites = `"${(item.sites || []).join(', ')}"`;
-        const details = `"${(item.details || '').replace(/"/g, '""')}"`;
-        const row = [
-          `"${date}"`,
-          `"${item.userName}"`,
-          `"${item.userEmail}"`,
-          `"${item.userCountry}"`,
-          `"${item.userAffiliation}"`,
-          `"${item.userRole}"`,
-          sites,
-          `"${item.intendedUse}"`,
-          details
-        ];
-        csvRows.push(row.join(","));
+  async function fetchData() {
+    const body    = document.getElementById('log-body');
+    const loading = document.getElementById('loading');
+    const table   = document.getElementById('log-table');
+    const empty   = document.getElementById('empty');
+
+    try {
+      const snap = await getDocs(query(collection(db, 'artifacts', appId, 'public', 'data', 'download_requests')));
+      const logs = [];
+      snap.forEach(d => logs.push(d.data()));
+      logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      if (!logs.length) {
+        loading.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      const uids = [...new Set(logs.map(l => l.userId))];
+      const cache = {};
+      await Promise.all(uids.map(async (uid) => {
+        try {
+          const d = await getDoc(doc(db, 'artifacts/' + appId + '/users/' + uid + '/profile/info'));
+          cache[uid] = d.exists() ? d.data() : null;
+        } catch (e) { cache[uid] = null; }
+      }));
+
+      const rows = logs.map(log => {
+        const p = cache[log.userId] || {};
+        return {
+          ...log,
+          userName:        p.name        || 'Anonymous',
+          userEmail:       p.email       || log.userEmail || 'N/A',
+          userCountry:     p.country     || 'N/A',
+          userAffiliation: p.affiliation || 'N/A',
+          userRole:        p.role        || 'N/A'
+        };
       });
 
-      const csvContent = "\uFEFF" + csvRows.join("\n");
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `KoFlux_Master_Log_${new Date().toISOString().split('T')[0]}.csv`;
-      link.click();
+      const cutoff = Date.now() - 30 * 864e5;
+      document.getElementById('s-total').textContent  = rows.length;
+      document.getElementById('s-users').textContent  = uids.length;
+      document.getElementById('s-sites').textContent  = rows.reduce((n, r) => n + (r.sites ? r.sites.length : 0), 0);
+      document.getElementById('s-recent').textContent = rows.filter(r => new Date(r.timestamp).getTime() > cutoff).length;
+
+      loading.style.display = 'none';
+      table.style.display = 'table';
+      body.innerHTML = '';
+
+      rows.forEach(r => {
+        const kst = new Date(r.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+        const use = (r.intendedUse || 'other').toLowerCase();
+        const cls = ['research','education'].includes(use) ? 'pill-' + use : 'pill-other';
+        const tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="c" style="white-space:nowrap">' + esc(kst) + '</td>' +
+          '<td class="nm">' + esc(r.userName) + '</td>' +
+          '<td>' + esc(r.userEmail) + '</td>' +
+          '<td>' + esc(r.userCountry) + '</td>' +
+          '<td>' + esc(r.userAffiliation) + '</td>' +
+          '<td>' + esc(r.userRole) + '</td>' +
+          '<td class="c">' + esc((r.sites || []).join(', ')) + '</td>' +
+          '<td><span class="pill ' + cls + '">' + esc(use) + '</span></td>' +
+          '<td class="trunc" title="' + esc(r.details) + '">' + esc(r.details) + '</td>';
+        body.appendChild(tr);
+      });
+
+      document.getElementById('download-csv').onclick = () => exportCSV(rows);
+    } catch (err) {
+      console.error(err);
+      loading.textContent = 'Could not load the log: ' + err.message;
     }
-  </script>
+  }
+
+  function exportCSV(rows) {
+    const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const head = ['Time(KST)','Name','Email','Country','Affiliation','Role','Sites','IntendedUse','Details'];
+    const lines = [head.join(',')];
+    rows.forEach(r => {
+      lines.push([
+        q(new Date(r.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })),
+        q(r.userName), q(r.userEmail), q(r.userCountry),
+        q(r.userAffiliation), q(r.userRole),
+        q((r.sites || []).join(', ')), q(r.intendedUse), q(r.details)
+      ].join(','));
+    });
+    const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'KoFlux_download_log_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+</script>
 </body>
 </html>
