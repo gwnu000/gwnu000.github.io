@@ -242,7 +242,7 @@ tr.hidden{display:none}
 
 <section class="wrap">
   <p class="crumb"><a href="index.html">Home</a> / Sites / Site List</p>
-  <h1 class="page">Twenty-one towers, from Cheorwon to Jeju</h1>
+  <h1 class="page">Observation sites in the KoFlux network</h1>
   <p class="lede">Click a marker to see the site, or use the filters to narrow the table by land cover.</p>
 
   <div id="map"></div>
@@ -324,7 +324,7 @@ tr.hidden{display:none}
       { code: "WD", name: "Wando Evergreen broadleaf forest", cover: "EBF", period: "2015–2018", lat: 34.31, lng: 126.71 }
   ];
 
-  var map = L.map('map', { scrollWheelZoom: false }).setView([36.4, 127.8], 7);
+  var map = L.map('map').setView([36.4, 127.8], 7);
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
     maxZoom: 17
